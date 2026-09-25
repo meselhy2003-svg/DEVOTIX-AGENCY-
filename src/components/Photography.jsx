@@ -1,8 +1,9 @@
-import React from 'react';
 import TitleAccent from './TitleAccent';
-import { ArrowUpRight, Layers } from 'lucide-react';
+import { ArrowUpRight, Layers, Clock } from 'lucide-react';
 import { PHOTOGRAPHY_GALLERIES } from '../data/photographyData';
 import { useThemeLanguage } from '../context/ThemeLanguageContext';
+import CloudImg from './CloudImg';
+import { cldCover } from '../utils/cloudinaryUrl';
 
 export default function Photography({ onSelectGallery }) {
   const { isRtl, isDark, t } = useThemeLanguage();
@@ -16,6 +17,7 @@ export default function Photography({ onSelectGallery }) {
       onSelectGallery(gallery);
     }
   };
+
 
   return (
     <section
@@ -38,10 +40,12 @@ export default function Photography({ onSelectGallery }) {
             onClick={() => handleCoverClick(cover1)}
             className="col-span-2 md:col-span-6 group relative rounded-lg sm:rounded-xl overflow-hidden bg-neutral-900 dark:bg-[#111116] border border-neutral-200/90 dark:border-white/10 cursor-pointer transition-all duration-300 hover:border-brand-red/60 hover:shadow-xl hover:-translate-y-0.5 flex flex-col h-[200px] sm:h-[260px] md:h-[450px]"
           >
-            <img
-              src={cover1.coverImage}
+            <CloudImg
+              src={cldCover(cover1.coverImage)}
               alt={cover1.title}
-              className="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
+              className="absolute inset-0 w-full h-full"
+              imgClass="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
+              loading="eager"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-90 group-hover:opacity-95 transition-opacity" />
 
@@ -76,12 +80,24 @@ export default function Photography({ onSelectGallery }) {
               onClick={() => handleCoverClick(cover2)}
               className="col-span-1 group relative rounded-lg sm:rounded-xl overflow-hidden bg-neutral-900 dark:bg-[#111116] border border-neutral-200/90 dark:border-white/10 cursor-pointer transition-all duration-300 hover:border-brand-red/60 hover:shadow-lg hover:-translate-y-0.5 flex flex-col h-[160px] sm:h-[180px] md:h-auto md:flex-1 min-h-0"
             >
-              <img
-                src={cover2.coverImage}
+              <CloudImg
+                src={cldCover(cover2.coverImage)}
                 alt={cover2.title}
-                className="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
+                className="absolute inset-0 w-full h-full"
+                imgClass="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
+                loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-90 group-hover:opacity-95 transition-opacity" />
+
+              {/* COMING SOON overlay for mock galleries */}
+              {cover2.isMock && (
+                <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/70 backdrop-blur-md border border-amber-400/40 shadow-lg">
+                    <Clock className="w-3 h-3 text-amber-400" />
+                    <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-amber-400">Coming Soon</span>
+                  </div>
+                </div>
+              )}
 
               {/* Gallery Badge Top Right */}
               <div className="absolute top-2 sm:top-2.5 right-2 sm:right-2.5 rtl:right-auto rtl:left-2 rtl:sm:left-2.5 z-10">
@@ -102,7 +118,7 @@ export default function Photography({ onSelectGallery }) {
                   {cover2.title}
                 </h4>
                 <p className="text-[7.5px] sm:text-[8.5px] text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
-                  <span>{cover2.photos.length} {t('photography.photoCount', 'Photos')}</span>
+                  <span>{cover2.isMock ? '— Images coming soon —' : `${cover2.photos.length} ${t('photography.photoCount', 'Photos')}`}</span>
                 </p>
               </div>
             </div>
@@ -112,12 +128,24 @@ export default function Photography({ onSelectGallery }) {
               onClick={() => handleCoverClick(cover3)}
               className="col-span-1 group relative rounded-lg sm:rounded-xl overflow-hidden bg-neutral-900 dark:bg-[#111116] border border-neutral-200/90 dark:border-white/10 cursor-pointer transition-all duration-300 hover:border-brand-red/60 hover:shadow-lg hover:-translate-y-0.5 flex flex-col h-[160px] sm:h-[180px] md:h-auto md:flex-1 min-h-0"
             >
-              <img
-                src={cover3.coverImage}
+              <CloudImg
+                src={cldCover(cover3.coverImage)}
                 alt={cover3.title}
-                className="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
+                className="absolute inset-0 w-full h-full"
+                imgClass="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
+                loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-90 group-hover:opacity-95 transition-opacity" />
+
+              {/* COMING SOON overlay for mock galleries */}
+              {cover3.isMock && (
+                <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/70 backdrop-blur-md border border-amber-400/40 shadow-lg">
+                    <Clock className="w-3 h-3 text-amber-400" />
+                    <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-amber-400">Coming Soon</span>
+                  </div>
+                </div>
+              )}
 
               {/* Gallery Badge Top Right */}
               <div className="absolute top-2 sm:top-2.5 right-2 sm:right-2.5 rtl:right-auto rtl:left-2 rtl:sm:left-2.5 z-10">
@@ -138,7 +166,7 @@ export default function Photography({ onSelectGallery }) {
                   {cover3.title}
                 </h4>
                 <p className="text-[7.5px] sm:text-[8.5px] text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
-                  <span>{cover3.photos.length} {t('photography.photoCount', 'Photos')}</span>
+                  <span>{cover3.isMock ? '— Images coming soon —' : `${cover3.photos.length} ${t('photography.photoCount', 'Photos')}`}</span>
                 </p>
               </div>
             </div>

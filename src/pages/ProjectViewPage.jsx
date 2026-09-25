@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { ArrowLeft, Play, ExternalLink, Maximize2 } from 'lucide-react';
 import Footer from '../components/Footer';
 import { useThemeLanguage } from '../context/ThemeLanguageContext';
+import CloudImg from '../components/CloudImg';
+import { cldGrid } from '../utils/cloudinaryUrl';
 
 export default function ProjectViewPage({ project, onBackToPortfolio, onPlayVideo, onOpenLightbox, onOpenPolicy }) {
   const { t, isRtl } = useThemeLanguage();
@@ -184,10 +186,12 @@ export default function ProjectViewPage({ project, onBackToPortfolio, onPlayVide
                 onClick={() => onOpenLightbox && onOpenLightbox(photos, index)}
                 className="group relative aspect-square max-h-[190px] sm:max-h-[240px] rounded-lg overflow-hidden bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 cursor-pointer shadow-sm transition-all hover:shadow-md"
               >
-                <img
-                  src={photo.image}
+                <CloudImg
+                  src={cldGrid(photo.image)}
                   alt={photo.title}
-                  className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                  className="absolute inset-0 w-full h-full"
+                  imgClass="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
                   <div className="w-7 h-7 rounded-full bg-black/60 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
@@ -214,10 +218,12 @@ export default function ProjectViewPage({ project, onBackToPortfolio, onPlayVide
                 onClick={() => onOpenLightbox && onOpenLightbox(backstagePhotos, index)}
                 className="group relative aspect-square max-h-[190px] sm:max-h-[240px] rounded-lg overflow-hidden bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 cursor-pointer shadow-sm transition-all hover:shadow-md"
               >
-                <img
-                  src={photo.image}
+                <CloudImg
+                  src={cldGrid(photo.image)}
                   alt={`Backstage ${photo.title}`}
-                  className="w-full h-full object-cover object-center filter contrast-105 transition-transform duration-500 group-hover:scale-105"
+                  className="absolute inset-0 w-full h-full"
+                  imgClass="w-full h-full object-cover object-center filter contrast-105 transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
                   <div className="w-7 h-7 rounded-full bg-black/60 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">

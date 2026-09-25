@@ -4,10 +4,29 @@ import { useThemeLanguage } from '../context/ThemeLanguageContext';
 
 export default function VideoModal({ video, onClose }) {
   const { t, isRtl } = useThemeLanguage();
+  const [isVertical, setIsVertical] = React.useState(Boolean(video?.isVertical));
+  const videoRef = React.useRef(null);
+
+  useEffect(() => {
+    setIsVertical(Boolean(video?.isVertical));
+  }, [video]);
+
+  const handleClose = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (videoRef.current) {
+      try {
+        videoRef.current.pause();
+      } catch (err) { }
+    }
+    if (onClose) onClose();
+  };
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') handleClose(e);
     };
     window.addEventListener('keydown', handleKeyDown);
     document.body.style.overflow = 'hidden';
@@ -20,36 +39,59 @@ export default function VideoModal({ video, onClose }) {
   if (!video) return null;
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 sm:p-6 lg:p-8 bg-black/90 backdrop-blur-xl animate-fadeIn">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 lg:p-8 bg-black/95 backdrop-blur-2xl animate-fadeIn select-none">
       {/* Click outside to close backdrop */}
-      <div className="absolute inset-0" onClick={onClose} />
+      <div
+        className="absolute inset-0 z-0 cursor-pointer"
+        onClick={handleClose}
+        aria-label="Backdrop"
+      />
 
       {/* Modal Card */}
-      <div className="relative z-10 w-full max-w-5xl bg-neutral-950 border border-neutral-800 rounded-2xl overflow-hidden shadow-2xl">
-        {/* Floating Close Button */}
+      <div className={`relative z-10 ${isVertical ? 'w-auto max-w-[min(380px,calc(82vh*9/16))]' : 'w-full max-w-5xl'} mx-auto bg-neutral-950 border border-neutral-800 rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 pointer-events-auto`}>
+        {/* Floating Close Button on Card */}
         <button
-          onClick={onClose}
-          className="absolute top-4 right-4 rtl:right-auto rtl:left-4 z-30 w-10 h-10 rounded-full bg-black/70 hover:bg-brand-red text-white/80 hover:text-white border border-white/20 flex items-center justify-center transition-all cursor-pointer shadow-lg backdrop-blur-md"
+          type="button"
+          onClick={handleClose}
+          onPointerDown={(e) => e.stopPropagation()}
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 rtl:right-auto rtl:left-3 sm:rtl:left-4 z-[60] w-10 h-10 rounded-full bg-black/80 hover:bg-brand-red text-white flex items-center justify-center transition-all cursor-pointer shadow-xl backdrop-blur-md border border-white/25 hover:scale-110 active:scale-95 touch-manipulation pointer-events-auto"
           aria-label="Close modal"
         >
-          <X className="w-5 h-5" />
+          <X className="w-5 h-5 pointer-events-none" />
         </button>
 
         {/* Video Player Display Container */}
-        <div className="relative aspect-video bg-black flex items-center justify-center overflow-hidden">
-          {video.videoSrc || video.videoUrl ? (
+        <div dir="ltr" className={`relative ${isVertical ? 'aspect-[9/16] max-h-[82vh]' : 'aspect-video'} bg-black flex items-center justify-center overflow-hidden`}>
+          {video.youtubeId || (video.url && video.url.includes('youtu')) || (video.videoUrl && video.videoUrl.includes('youtu')) ? (
+            <iframe
+              key={video.youtubeId || video.url || video.videoUrl}
+              src={`https://www.youtube.com/embed/${video.youtubeId || (video.url || video.videoUrl).match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/)?.[1]}?autoplay=1&rel=0&modestbranding=1&playsinline=1`}
+              title={video.title || 'Video Player'}
+              className="w-full h-full border-0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+          ) : video.videoSrc || video.videoUrl ? (
             <video
               key={video.videoSrc || video.videoUrl}
               controls
               autoPlay
               playsInline
               preload="auto"
-              ref={(el) => {
-                if (el) {
-                  el.play().catch(() => {});
+              onLoadedMetadata={(e) => {
+                if (e.currentTarget.videoWidth && e.currentTarget.videoHeight) {
+                  if (e.currentTarget.videoHeight > e.currentTarget.videoWidth) {
+                    setIsVertical(true);
+                  }
                 }
               }}
-              className="video-modal-player w-full h-full object-cover"
+              ref={(el) => {
+                videoRef.current = el;
+                if (el) {
+                  el.play().catch(() => { });
+                }
+              }}
+              className="video-modal-player w-full h-full object-cover object-center"
             >
               <source
                 src={video.videoSrc || video.videoUrl}

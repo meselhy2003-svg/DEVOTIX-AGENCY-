@@ -1,11 +1,11 @@
 export const GRAPHICS_DATA = [
   {
-    id: 'carhub-digital-cover',
-    title: 'CAR HUB DIGITAL BRAND COVER',
+    id: 'aselectric-digital-cover',
+    title: 'ASELECTRIC DIGITAL BRAND COVER',
     category: 'AUTOMOTIVE BRANDING & UI/UX',
-    client: 'CAR HUB EGYPT',
-    image: '/assets/graphic/og/carhub-cover.png',
-    thumb: '/assets/graphic/og/carhub-cover.png',
+    client: 'ASELECTRIC EGYPT',
+    image: '/assets/graphic/og/aselectric-cover.png',
+    thumb: '/assets/graphic/og/aselectric-cover.png',
     tag: 'BRANDING & UI/UX',
     categoryFilter: 'branding',
     description: 'High-impact digital cover, automotive art direction, and dealership identity presentation.',

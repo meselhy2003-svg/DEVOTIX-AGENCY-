@@ -1,223 +1,393 @@
 import React, { useState, useEffect } from 'react';
 import TitleAccent from './TitleAccent';
-import { Play, X, Film, ArrowUpRight } from 'lucide-react';
+import { Play, X, Film, ArrowUpRight, Maximize2 } from 'lucide-react';
 import { useThemeLanguage } from '../context/ThemeLanguageContext';
 
-// 4 Distinct Video Galleries, matching the 3-column portal design
+// 4 Distinct Video Galleries matching the requested sections:
+// Reals, Proms, Edits Videos, Idas & ADS
 const PRODUCTION_GALLERIES = [
   {
-    id: 'automotive-cinema',
+    id: 'reals',
     coverId: 'cover-1',
-    title: 'AUTOMOTIVE & CGI FILMS',
-    titleAr: 'أفلام وإعلانات السيارات والـ 3D CGI',
-    category: 'COMMERCIAL CINEMA • 4K',
-    categoryAr: 'إنتاج سينمائي • 4K',
-    tag: 'GALLERY 1 • 4 FILMS',
-    coverImage: '/assets/production/featured-car.png',
-    description: 'Cinema-grade commercial productions, high-speed camera tracking, and photorealistic 3D CGI automotive films.',
-    descriptionAr: 'تصوير إعلانات سينمائية للسيارات بكاميرات فائقة السرعة وتتبع حركي ومحاكاة 3D واقعية متطورة.',
+    title: 'REELS',
+    titleAr: 'ريلز وشورتس',
+    category: 'VERTICAL REELS • 9:16',
+    categoryAr: 'فيديوهات ريلز عمودية • 9:16',
+    tag: 'GALLERY 1 • 9 REELS',
+    coverImage: 'https://img.youtube.com/vi/X7y6WTEykGw/hqdefault.jpg',
+    description: 'Dynamic vertical videos, YouTube Shorts, and high-converting social media reels.',
+    descriptionAr: 'فيديوهات عمودية سريعة وشورتس مخصصة لمنصات التواصل الاجتماعي بتصوير سينمائي جذاب.',
+    isVertical: true,
     videos: [
       {
-        id: 'neon-echoes',
-        title: 'NEON ECHOES',
-        category: 'AUTOMOTIVE COMMERCIAL • 4K CINEMA',
-        duration: '02:45',
-        client: 'LAMBORGHINI CONCEPT',
-        image: '/assets/production/featured-car.png',
-        videoSrc: '/assets/production/video2.mp4',
-        description: 'An executive cinematic cut shot with high-speed camera tracking and anamorphic prime lenses.',
+        id: 'reel-1',
+        youtubeId: 'X7y6WTEykGw',
+        url: 'https://youtube.com/shorts/X7y6WTEykGw',
+        title: 'Tameez Aluminum Factory | Advanced Manufacturing',
+        titleAr: 'مصنع تميز للألمنيوم | صناعة وإنتاج الألمنيوم المتقدم',
+        client: 'TAMEEZ ALUMINUM',
+        category: 'FACTORY REEL • 9:16',
+        duration: '00:50',
+        image: 'https://img.youtube.com/vi/X7y6WTEykGw/hqdefault.jpg',
+        isVertical: true,
+        description: 'Fast-paced vertical reel showing cutting-edge aluminum cutting, extrusion, and assembly operations.',
       },
       {
-        id: 'hyperion-gt',
-        title: 'HYPERION GT',
-        category: '3D CGI SIMULATION',
-        duration: '02:30',
-        client: 'DEVOTIX CINEMA',
-        image: '/assets/production/featured-car.png',
-        videoSrc: '/assets/production/video2.mp4',
-        description: 'Photorealistic CGI automotive simulation rendered in Unreal Engine 5 with dynamic ray tracing.',
+        id: 'reel-2',
+        youtubeId: 'TA-q_k0g6_8',
+        url: 'https://youtube.com/shorts/TA-q_k0g6_8',
+        title: 'Tameez Steel | Sawaed Al Riyadh – Strength & Excellence',
+        titleAr: 'مصنع تميز للحديد | سواعد الرياض – قوة وجودة وتميز',
+        client: 'TAMEEZ STEEL FACTORY',
+        category: 'INDUSTRIAL SHORT',
+        duration: '00:45',
+        image: 'https://img.youtube.com/vi/TA-q_k0g6_8/hqdefault.jpg',
+        isVertical: true,
+        description: 'High-energy vertical short capturing heavy steel fabrication, welding sparks, and skilled craftsmanship.',
       },
       {
-        id: 'kinetic-drive',
-        title: 'KINETIC DRIVE',
-        category: 'BRAND COMMERCIAL',
-        duration: '01:45',
-        client: 'AURA SOUND',
-        image: '/assets/production/kinetic.png',
-        videoSrc: '/assets/production/video2.mp4',
-        description: 'High-energy motion graphics combined with precision engine sound design.',
+        id: 'reel-3',
+        youtubeId: 'mUfk_v38C6U',
+        url: 'https://youtube.com/shorts/mUfk_v38C6U',
+        title: 'Tameez Steel | Steel Manufacturing at Al-Tamimi Market',
+        titleAr: 'مصنع تميز للحديد | جولة في تصنيع وتوريد الحديد',
+        client: 'TAMEEZ STEEL FACTORY',
+        category: 'LOGISTICS SHORT',
+        duration: '00:40',
+        image: 'https://img.youtube.com/vi/mUfk_v38C6U/hqdefault.jpg',
+        isVertical: true,
+        description: 'Behind-the-scenes vertical showcase of structural steel distribution and on-site engineering.',
       },
       {
-        id: 'apex-speed',
-        title: 'MONOLITH RACING',
-        category: 'TRACK FILM',
-        duration: '01:55',
-        client: 'MONOLITH',
-        image: '/assets/production/apex.png',
-        videoSrc: '/assets/production/video2.mp4',
-        description: 'Night track filming with custom chase car camera rig and neon atmosphere lighting.',
+        id: 'reel-4',
+        youtubeId: 'Iem_JFdBt10',
+        url: 'https://youtube.com/shorts/Iem_JFdBt10',
+        title: 'Butterfly Shrimp | Al Shaeery',
+        titleAr: 'جمبري باترفلاي المقرمش | أسماك الشعيري',
+        client: 'AL SHAEERY SEAFOOD',
+        category: 'FOOD REEL • 9:16',
+        duration: '00:30',
+        image: 'https://img.youtube.com/vi/Iem_JFdBt10/hqdefault.jpg',
+        isVertical: true,
+        description: 'Sizzling vertical food reel focusing on crispy golden butterfly shrimp dipping action.',
+      },
+      {
+        id: 'reel-5',
+        youtubeId: '-sUvX3XFF2g',
+        url: 'https://youtube.com/shorts/-sUvX3XFF2g',
+        title: 'Spicy Seafood Harissa | Al Shaeery 🔥',
+        titleAr: 'هريسة سي فود حارة ومشبعة | أسماك الشعيري 🔥',
+        client: 'AL SHAEERY SEAFOOD',
+        category: 'HOT GOURMET SHORT',
+        duration: '00:35',
+        image: 'https://img.youtube.com/vi/-sUvX3XFF2g/hqdefault.jpg',
+        isVertical: true,
+        description: 'Vibrant vertical reel capturing spicy bubbling seafood harissa straight from the flame.',
+      },
+      {
+        id: 'reel-6',
+        youtubeId: 'eN2vBWxqXsU',
+        url: 'https://youtube.com/shorts/eN2vBWxqXsU',
+        title: 'Grilled & Seasoned Shrimp | Al Shaeery 🦐',
+        titleAr: 'جمبري مشوي ومتبل بالخلطة السرية | أسماك الشعيري 🦐',
+        client: 'AL SHAEERY SEAFOOD',
+        category: 'CULINARY REEL',
+        duration: '00:30',
+        image: 'https://img.youtube.com/vi/eN2vBWxqXsU/hqdefault.jpg',
+        isVertical: true,
+        description: 'Succulent seasoned grilled shrimp skewers sizzling with lemon dressing.',
+      },
+      {
+        id: 'reel-7',
+        youtubeId: 'Wj__2-dxsjg',
+        url: 'https://youtube.com/shorts/Wj__2-dxsjg',
+        title: 'Al Shaeery — A Taste of the Sea 🦞',
+        titleAr: 'أسماك الشعيري — طعم البحر الحقيقي 🦞',
+        client: 'AL SHAEERY SEAFOOD',
+        category: 'RESTAURANT HIGHLIGHT',
+        duration: '00:45',
+        image: 'https://img.youtube.com/vi/Wj__2-dxsjg/hqdefault.jpg',
+        isVertical: true,
+        description: 'Dynamic overview of fresh daily catch selection, customer dining, and signature seafood platters.',
+      },
+      {
+        id: 'reel-8',
+        youtubeId: 'Qi8-eAoEdKc',
+        url: 'https://youtube.com/shorts/Qi8-eAoEdKc',
+        title: 'MILA — Moments Worth Experiencing',
+        titleAr: 'ميلا — لحظات تستحق أن تعاش وتتكرر',
+        client: 'MILA',
+        category: 'LIFESTYLE SHORT',
+        duration: '00:30',
+        image: 'https://img.youtube.com/vi/Qi8-eAoEdKc/hqdefault.jpg',
+        isVertical: true,
+        description: 'Vibe check short showing cozy seating, chilled drinks, and memorable social gatherings.',
+      },
+      {
+        id: 'reel-9',
+        youtubeId: 'A4PPzU8uksg',
+        url: 'https://youtube.com/shorts/A4PPzU8uksg',
+        title: 'MILA — Where the Day Begins ☀️',
+        titleAr: 'ميلا — حيث تبدأ صباحاتك بأجمل إطلالة ☀️',
+        client: 'MILA',
+        category: 'MORNING REEL',
+        duration: '00:35',
+        image: 'https://img.youtube.com/vi/A4PPzU8uksg/hqdefault.jpg',
+        isVertical: true,
+        description: 'Golden morning light, freshly brewed espresso, and serene start of day ambiance.',
       },
     ],
   },
   {
-    id: 'tech-hardware',
+    id: 'proms',
     coverId: 'cover-2',
-    title: 'TECH & HARDWARE SHOWCASE',
-    titleAr: 'أفلام التقنية والأجهزة الذكية',
-    category: 'VFX & INTERACTIVE',
-    categoryAr: 'إنتاج تقني وتفاعلي',
-    tag: 'GALLERY 2 • 4 FILMS',
-    coverImage: '/assets/production/spectrum.png',
-    description: 'Futuristic product launches, robotic arm macro cinematography, and clean industrial lighting aesthetics.',
-    descriptionAr: 'تصوير احترافي لإطلاق المنتجات التقنية، روبوتات التصوير الدقيق، والإضاءات المعمارية الحديثة.',
+    title: 'PROMOS',
+    titleAr: 'إعلانات ترويجية وبرومو',
+    category: 'COMMERCIAL CINEMA • 16:9 4K',
+    categoryAr: 'إنتاج سينمائي • 4K',
+    tag: 'GALLERY 2 • 8 FILMS',
+    coverImage: 'https://img.youtube.com/vi/7xkk1GqBHi4/maxresdefault.jpg',
+    description: 'Cinema-grade commercial productions, industrial films, and luxury brand showcases.',
+    descriptionAr: 'تصوير إعلانات سينمائية عالية الجودة للشركات والمصانع والمطاعم الفاخرة.',
+    isVertical: false,
     videos: [
       {
-        id: 'spectrum-core',
-        title: 'SPECTRUM CORE',
-        category: 'HARDWARE TEASER',
-        duration: '01:20',
-        client: 'NEXUS HARDWARE',
-        image: '/assets/production/spectrum.png',
-        videoSrc: '/assets/production/video2.mp4',
-        description: 'Macro robotic arm cinematography showcasing internal semiconductor architecture.',
-      },
-      {
-        id: 'lumina-vision',
-        title: 'LUMINA VISION',
-        category: 'PRODUCT FILM',
-        duration: '01:40',
-        client: 'LUMINA OPTRONICS',
-        image: '/assets/production/kinetic.png',
-        videoSrc: '/assets/production/video2.mp4',
-        description: 'Optical lens engineering breakdown with transparent holographic overlays.',
-      },
-      {
-        id: 'quantum-link',
-        title: 'QUANTUM LINK',
-        category: 'COMMERCIAL VFX',
-        duration: '02:10',
-        client: 'QUANTUM NETWORKS',
-        image: '/assets/production/featured-car.png',
-        videoSrc: '/assets/production/video2.mp4',
-        description: 'Global cloud connectivity visualized through fluid particle physics animations.',
-      },
-      {
-        id: 'titan-rig',
-        title: 'TITAN RIG',
-        category: 'INDUSTRIAL LAUNCH',
-        duration: '01:15',
-        client: 'TITAN ROBOTICS',
-        image: '/assets/production/apex.png',
-        videoSrc: '/assets/production/video2.mp4',
-        description: 'Heavy machinery precision engineering rendered in dramatic dark warehouse aesthetics.',
-      },
-    ],
-  },
-  {
-    id: 'fashion-lifestyle',
-    coverId: 'cover-3',
-    title: 'FASHION & LIFESTYLE EDITORIALS',
-    titleAr: 'أفلام الموضة والأزياء الراقية',
-    category: 'EDITORIAL & DIRECTING',
-    categoryAr: 'إخراج وأزياء راقية',
-    tag: 'GALLERY 3 • 4 FILMS',
-    coverImage: '/assets/production/artisan.png',
-    description: 'High-end runway visual mood films, monochrome luxury aesthetics, and cinematic fashion commercial direction.',
-    descriptionAr: 'أفلام استعراضية لعروض الأزياء الراقية واللايف ستايل بهوية بصرية مميزة وإخراج سينمائي.',
-    videos: [
-      {
-        id: 'vogue-noir',
-        title: 'VOGUE NOIR',
-        category: 'FASHION EDITORIAL',
-        duration: '02:00',
-        client: 'HAUTE COUTURE',
-        image: '/assets/production/vogue.png',
-        videoSrc: '/assets/production/video2.mp4',
-        description: 'High-fashion editorial cut shot on Arri Alexa with vintage prime lenses and dynamic strobe lighting.',
-      },
-      {
-        id: 'aura-atelier',
-        title: 'AURA ATELIER',
-        category: 'RUNWAY FILM',
+        id: 'promo-1',
+        youtubeId: '7xkk1GqBHi4',
+        url: 'https://youtu.be/7xkk1GqBHi4',
+        title: 'Tameez Steel Factory | Excellence in Steel Manufacturing',
+        titleAr: 'مصنع تميز للحديد | قمة التميز في صناعة وتوريد الحديد',
+        client: 'TAMEEZ STEEL FACTORY',
+        category: 'INDUSTRIAL COMMERCIAL',
         duration: '01:30',
-        client: 'AURA PARIS',
-        image: '/assets/production/artisan.png',
-        videoSrc: '/assets/production/video2.mp4',
-        description: 'Runway movement study featuring custom choreography and ambient acoustic score.',
+        image: 'https://img.youtube.com/vi/7xkk1GqBHi4/maxresdefault.jpg',
+        isVertical: false,
+        description: 'Cinematic commercial highlighting advanced steel manufacturing and production standards at Tameez Steel Factory.',
       },
       {
-        id: 'monochrome-line',
-        title: 'MONOCHROME LINE',
-        category: 'LIFESTYLE CAMPAIGN',
-        duration: '02:15',
-        client: 'STUDIO NOIR',
-        image: '/assets/production/vogue.png',
-        videoSrc: '/assets/production/video2.mp4',
-        description: 'Minimalist architectural wardrobe exploration captured in 35mm film grain format.',
+        id: 'promo-2',
+        youtubeId: 'of_fy33UpmM',
+        url: 'https://youtu.be/of_fy33UpmM',
+        title: 'Tameez Steel Factory | Quality Steel Manufacturing',
+        titleAr: 'مصنع تميز للحديد | جودة التصنيع والإنتاج المتقن',
+        client: 'TAMEEZ STEEL FACTORY',
+        category: 'PRODUCTION SHOWCASE',
+        duration: '01:15',
+        image: 'https://img.youtube.com/vi/of_fy33UpmM/maxresdefault.jpg',
+        isVertical: false,
+        description: 'Comprehensive industrial film showcasing precision machinery, fabrication capabilities, and quality assurance.',
       },
       {
-        id: 'solstice-silk',
-        title: 'SOLSTICE SILK',
-        category: 'LUXURY TEASER',
-        duration: '01:50',
-        client: 'SOLSTICE',
-        image: '/assets/production/artisan.png',
-        videoSrc: '/assets/production/video2.mp4',
-        description: 'Slow-motion silk fabric flow dynamics filmed with Phantom Flex 4K high-speed camera.',
+        id: 'promo-3',
+        youtubeId: 'j8Qj8WpHbYg',
+        url: 'https://youtu.be/j8Qj8WpHbYg',
+        title: 'Seafood Pasta with Red Sauce | Al Shaeery',
+        titleAr: 'باستا سي فود بالصلصة الحمراء | أسماك الشعيري',
+        client: 'AL SHAEERY SEAFOOD',
+        category: 'CULINARY CINEMA',
+        duration: '01:00',
+        image: 'https://img.youtube.com/vi/j8Qj8WpHbYg/maxresdefault.jpg',
+        isVertical: false,
+        description: 'Sensory macro food cinematography featuring rich seafood pasta, sizzling textures, and vibrant gourmet plating.',
+      },
+      {
+        id: 'promo-4',
+        youtubeId: '4s32Y_X5yT8',
+        url: 'https://youtu.be/4s32Y_X5yT8',
+        title: 'Perfectly Grilled Salmon | Al Shaeery',
+        titleAr: 'سلمون مشوي على أصوله | أسماك الشعيري',
+        client: 'AL SHAEERY SEAFOOD',
+        category: 'GOURMET COMMERCIAL',
+        duration: '01:10',
+        image: 'https://img.youtube.com/vi/4s32Y_X5yT8/maxresdefault.jpg',
+        isVertical: false,
+        description: 'Close-up grill cinematography capturing golden salmon sear, aromatic herbs, and fresh oceanic ingredients.',
+      },
+      {
+        id: 'promo-5',
+        youtubeId: 'v0fG2V3AV8I',
+        url: 'https://youtu.be/v0fG2V3AV8I',
+        title: 'Creamy Shrimp Pasta | Al Shaeery 🍤',
+        titleAr: 'باستا بالجمبري والوايت صوص | أسماك الشعيري 🍤',
+        client: 'AL SHAEERY SEAFOOD',
+        category: 'CULINARY CINEMA',
+        duration: '01:05',
+        image: 'https://img.youtube.com/vi/v0fG2V3AV8I/maxresdefault.jpg',
+        isVertical: false,
+        description: 'Delicate sauce swirls and succulent shrimp captured with cinematic lighting and mouth-watering slow motion.',
+      },
+      {
+        id: 'promo-6',
+        youtubeId: '1BpeGDK-Ots',
+        url: 'https://youtu.be/1BpeGDK-Ots',
+        title: 'A Fresh Moment at MILA 🧊🌴',
+        titleAr: 'لحظات منعشة وأجواء ساحرة في ميلا 🧊🌴',
+        client: 'MILA',
+        category: 'LIFESTYLE & HOSPITALITY',
+        duration: '01:20',
+        image: 'https://img.youtube.com/vi/1BpeGDK-Ots/maxresdefault.jpg',
+        isVertical: false,
+        description: 'Vibrant summer vibes, refreshing signature beverages, and luxury lounge atmosphere visual commercial.',
+      },
+      {
+        id: 'promo-7',
+        youtubeId: '6tvHbZz_DUw',
+        url: 'https://youtu.be/6tvHbZz_DUw',
+        title: 'When Day Turns Into Night — MILA 🌙',
+        titleAr: 'عندما يتحول النهار إلى ليل ساحر — ميلا 🌙',
+        client: 'MILA',
+        category: 'ATMOSPHERE CINEMA',
+        duration: '01:15',
+        image: 'https://img.youtube.com/vi/6tvHbZz_DUw/maxresdefault.jpg',
+        isVertical: false,
+        description: 'Atmospheric visual storytelling capturing the sunset-to-night ambiance, warm neon lighting, and serene music.',
+      },
+      {
+        id: 'promo-8',
+        youtubeId: 'nVX6Fhzyw5s',
+        url: 'https://youtu.be/nVX6Fhzyw5s',
+        title: 'MILA — Your Day, Your Escape ☀️🌴',
+        titleAr: 'ميلا — وجهتك المثالية للاسترخاء وقضاء أجمل الأوقات ☀️🌴',
+        client: 'MILA',
+        category: 'BRAND CAMPAIGN',
+        duration: '01:25',
+        image: 'https://img.youtube.com/vi/nVX6Fhzyw5s/maxresdefault.jpg',
+        isVertical: false,
+        description: 'Complete brand narrative celebrating hospitality, luxury seating, and exquisite guest experiences.',
       },
     ],
   },
   {
-    id: 'culinary-sensory',
-    coverId: 'cover-4',
-    title: 'FOOD & BEVERAGE SENSORY FILMS',
-    titleAr: 'أفلام الأطعمة والمشروبات الحسية',
-    category: 'SENSORY MACRO • 1000 FPS',
-    categoryAr: 'تصوير بطيء وفود سينما',
-    tag: 'GALLERY 4 • 4 FILMS',
-    coverImage: '/assets/production/the-peak.png',
-    description: 'High-speed culinary cinematography, liquid collision simulations, sizzling grill textures, and sensory sound design.',
-    descriptionAr: 'تصوير احترافي للأطعمة والمشروبات بحركة بطيئة 1000 إطار بالثانية ومؤثرات صوتية حسية تفتح الشهية.',
+    id: 'edits-videos',
+    coverId: 'cover-3',
+    title: 'EDITS VIDEOS',
+    titleAr: 'مونتاج وتحرير الفيديو',
+    category: 'POST-PRODUCTION & VFX',
+    categoryAr: 'مونتاج وما بعد الإنتاج',
+    tag: 'GALLERY 3 • 4 FILMS',
+    coverImage: 'https://img.youtube.com/vi/6tvHbZz_DUw/maxresdefault.jpg',
+    description: 'Advanced video editing, color grading, sound design, VFX motion graphics, and post-production reels.',
+    descriptionAr: 'خدمات المونتاج الاحترافي، تصحيح الألوان السينمائي، تصميم الصوتيات، ومؤثرات الموشن جرافيكس.',
+    isVertical: false,
     videos: [
       {
-        id: 'kinetic-fizz',
-        title: 'KINETIC FIZZ',
-        category: 'BEVERAGE CINEMA',
-        duration: '01:10',
-        client: 'SPARK BEVERAGES',
-        image: '/assets/production/kinetic.png',
-        videoSrc: '/assets/production/video2.mp4',
-        description: 'Macro carbonation bubbles and ice splash captured at 1000 frames per second.',
+        id: 'edit-1',
+        youtubeId: '6tvHbZz_DUw',
+        url: 'https://youtu.be/6tvHbZz_DUw',
+        title: 'Cinematic Sunset Transition & Color Grade',
+        titleAr: 'مونتاج الانتقال السينمائي وتصحيح الألوان',
+        client: 'DEVOTIX POST-LAB',
+        category: 'COLOR GRADING & PACING',
+        duration: '01:15',
+        image: 'https://img.youtube.com/vi/6tvHbZz_DUw/maxresdefault.jpg',
+        isVertical: false,
+        description: 'High-end color grade curve shifting from golden hour daylight to deep midnight blue tones with matching atmospheric acoustics.',
       },
       {
-        id: 'crust-ember',
-        title: 'CRUST & EMBER',
-        category: 'CULINARY ART',
-        duration: '01:45',
-        client: 'MELTIX BURGERS',
-        image: '/assets/production/the-peak.png',
-        videoSrc: '/assets/production/video2.mp4',
-        description: 'Flame-seared wagyu patties with cascading molten cheddar and crisp artisanal brioche.',
+        id: 'edit-2',
+        youtubeId: 'v0fG2V3AV8I',
+        url: 'https://youtu.be/v0fG2V3AV8I',
+        title: 'Culinary Speed-Ramping & Sensory Sound Edit',
+        titleAr: 'مونتاج تسريع وتبطيء حركي مع هندسة صوتية',
+        client: 'DEVOTIX AUDIO LAB',
+        category: 'SPEED RAMPING & SOUND',
+        duration: '01:05',
+        image: 'https://img.youtube.com/vi/v0fG2V3AV8I/maxresdefault.jpg',
+        isVertical: false,
+        description: 'Precision rhythmic audio synchronization, dynamic flame speed ramps, and crisp gourmet foley audio design.',
       },
       {
-        id: 'velvet-roast',
-        title: 'VELVET ROAST',
-        category: 'ESPRESSO FILM',
-        duration: '02:00',
-        client: 'NOIR COFFEE',
-        image: '/assets/production/the-peak.png',
-        videoSrc: '/assets/production/video2.mp4',
-        description: 'Artisanal coffee extraction, golden crema texture swirls, and rich aromatic steam reveals.',
+        id: 'edit-3',
+        youtubeId: 'of_fy33UpmM',
+        url: 'https://youtu.be/of_fy33UpmM',
+        title: 'Industrial Heavy Metal Montage & Sound Design',
+        titleAr: 'مونتاج خطوط الإنتاج الثقيلة وتصميم الصوت الصناعي',
+        client: 'DEVOTIX INDUSTRIAL',
+        category: 'DYNAMIC INDUSTRIAL EDIT',
+        duration: '01:15',
+        image: 'https://img.youtube.com/vi/of_fy33UpmM/maxresdefault.jpg',
+        isVertical: false,
+        description: 'High-impact rhythmic cutting on factory machine beats, precision hydraulic sound layering, and cinematic anamorphic grade.',
       },
       {
-        id: 'artisan-dough',
-        title: 'ARTISAN SOURDOUGH',
-        category: 'BAKERY CINEMA',
-        duration: '01:35',
-        client: 'LE PAIN ARTISAN',
-        image: '/assets/production/apex.png',
-        videoSrc: '/assets/production/video2.mp4',
-        description: 'Sensory flour dusting, slow dough fermentation, and steaming golden sourdough crust reveals.',
+        id: 'edit-4',
+        youtubeId: 'TA-q_k0g6_8',
+        url: 'https://youtube.com/shorts/TA-q_k0g6_8',
+        title: 'Welding Sparks Motion VFX & Speed Ramping',
+        titleAr: 'مؤثرات بصرية وسرعات حركية لشعلات اللحام',
+        client: 'DEVOTIX MOTION LAB',
+        category: 'VFX & SPEED EDIT',
+        duration: '00:45',
+        image: 'https://img.youtube.com/vi/TA-q_k0g6_8/hqdefault.jpg',
+        isVertical: true,
+        description: 'Speed-ramped vertical sequence tracking welding sparks with customized optical flare passes and bass drop impacts.',
+      },
+    ],
+  },
+  {
+    id: 'idas-ads',
+    coverId: 'cover-4',
+    title: 'IDEAS & ADS',
+    titleAr: 'أفكار وإعلانات تجارية',
+    category: 'CREATIVE CONCEPTS & ADS',
+    categoryAr: 'أفكار وحملات إعلانية',
+    tag: 'GALLERY 4 • 4 CAMPAIGNS',
+    coverImage: 'https://img.youtube.com/vi/nVX6Fhzyw5s/maxresdefault.jpg',
+    description: 'Creative advertising campaigns, commercial packages, storytelling concepts, and client deals.',
+    descriptionAr: 'ابتكار أفكار الحملات الإعلانية، مفاهيم السرد القصصي، وباقات الإعلانات التجارية المتكاملة.',
+    isVertical: false,
+    videos: [
+      {
+        id: 'ad-1',
+        youtubeId: 'nVX6Fhzyw5s',
+        url: 'https://youtu.be/nVX6Fhzyw5s',
+        title: 'Luxury Lifestyle Social Media Campaign',
+        titleAr: 'حملة إعلانية لمنصات التواصل – قطاع الضيافة الفاخرة',
+        client: 'MILA LOUNGE',
+        category: 'COMMERCIAL CAMPAIGN',
+        duration: '01:25',
+        image: 'https://img.youtube.com/vi/nVX6Fhzyw5s/maxresdefault.jpg',
+        isVertical: false,
+        description: 'A comprehensive lifestyle visual campaign designed for multi-channel digital release and influencer conversion.',
+      },
+      {
+        id: 'ad-2',
+        youtubeId: '7xkk1GqBHi4',
+        url: 'https://youtu.be/7xkk1GqBHi4',
+        title: 'Factory Brand Campaign & Corporate Authority',
+        titleAr: 'إعلان تعزيز المكانة السوقية للقطاع الصناعي',
+        client: 'TAMEEZ STEEL',
+        category: 'B2B CORPORATE AD',
+        duration: '01:30',
+        image: 'https://img.youtube.com/vi/7xkk1GqBHi4/maxresdefault.jpg',
+        isVertical: false,
+        description: 'High-level commercial pitch positioning industrial manufacturing leaders as Tier-1 nationwide suppliers.',
+      },
+      {
+        id: 'ad-3',
+        youtubeId: 'j8Qj8WpHbYg',
+        url: 'https://youtu.be/j8Qj8WpHbYg',
+        title: 'Gourmet Culinary Seasonal Ad Concept',
+        titleAr: 'فكرة حملة ترويجية موسمية لمطاعم المأكولات البحرية',
+        client: 'AL SHAEERY SEAFOOD',
+        category: 'SEASONAL RESTAURANT AD',
+        duration: '01:00',
+        image: 'https://img.youtube.com/vi/j8Qj8WpHbYg/maxresdefault.jpg',
+        isVertical: false,
+        description: 'Seasonal promotion concept leveraging close-up gastronomic reveals and limited-time offer callouts.',
+      },
+      {
+        id: 'ad-4',
+        youtubeId: 'X7y6WTEykGw',
+        url: 'https://youtube.com/shorts/X7y6WTEykGw',
+        title: 'Aluminum Innovation Teaser Pitch',
+        titleAr: 'إعلان تشويقي للابتكار في صناعات الألمنيوم',
+        client: 'TAMEEZ ALUMINUM',
+        category: 'PRODUCT TEASER AD',
+        duration: '00:50',
+        image: 'https://img.youtube.com/vi/X7y6WTEykGw/hqdefault.jpg',
+        isVertical: true,
+        description: 'Snappy social-first advertising teaser showcasing rapid fabrication delivery and engineering precision.',
       },
     ],
   },
@@ -226,11 +396,13 @@ const PRODUCTION_GALLERIES = [
 export default function Production({ onPlayVideo }) {
   const { isRtl, t } = useThemeLanguage();
   const [selectedGallery, setSelectedGallery] = useState(null);
+  const [activeInlineVideoId, setActiveInlineVideoId] = useState(null);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
         setSelectedGallery(null);
+        setActiveInlineVideoId(null);
       }
     };
     if (selectedGallery) {
@@ -245,19 +417,25 @@ export default function Production({ onPlayVideo }) {
     };
   }, [selectedGallery]);
 
-  const cover1 = PRODUCTION_GALLERIES[0];
-  const cover2 = PRODUCTION_GALLERIES[1];
-  const cover3 = PRODUCTION_GALLERIES[2];
-  const cover4 = PRODUCTION_GALLERIES[3];
+  const cover1 = PRODUCTION_GALLERIES[0]; // REELS
+  const cover2 = PRODUCTION_GALLERIES[1]; // PROMOS
+  const cover3 = PRODUCTION_GALLERIES[2]; // EDITS VIDEOS
+  const cover4 = PRODUCTION_GALLERIES[3]; // IDEAS & ADS
 
   const handleOpenGallery = (gallery) => {
     setSelectedGallery(gallery);
+    setActiveInlineVideoId(null);
   };
 
   const handleVideoClick = (video) => {
     if (onPlayVideo) {
       onPlayVideo(video);
     }
+  };
+
+  const handleInlineIframeToggle = (videoId, e) => {
+    e.stopPropagation();
+    setActiveInlineVideoId((prev) => (prev === videoId ? null : videoId));
   };
 
   return (
@@ -274,13 +452,15 @@ export default function Production({ onPlayVideo }) {
         <div className="text-center max-w-xl mx-auto mb-6 sm:mb-8 pb-3 border-b border-neutral-300/80 dark:border-white/10">
           <TitleAccent type="production" />
           <p className="mt-2 text-[10px] sm:text-[11.5px] text-neutral-600 dark:text-neutral-400 font-semibold uppercase tracking-widest leading-relaxed">
-            {t('production.subtitle', 'Cinematic commercial films, corporate brand documentaries, and high-impact visual productions.')}
+            {isRtl
+              ? 'أفلام سينمائية ترويجية، ريلز وشورتس، مونتاج احترافي، وأفكار إعلانية متكاملة.'
+              : 'Promos, vertical reels, post-production editing, and creative advertising campaigns.'}
           </p>
         </div>
 
         {/* 3-Column Production Covers Layout (2x2 Grid on Mobile | 3-Column on Desktop) */}
         <div className="grid grid-cols-2 md:grid-cols-12 gap-2.5 sm:gap-4 lg:gap-5 items-stretch">
-          {/* Cover 1: Left Tall Vertical Card on Desktop / Top-Left Card on Mobile (Portal to Gallery 1) */}
+          {/* Cover 1: REELS (Left Tall Vertical Card on Desktop / Top-Left Card on Mobile) */}
           <div
             onClick={() => handleOpenGallery(cover1)}
             className="md:col-span-4 group relative rounded-lg sm:rounded-xl overflow-hidden bg-neutral-950 border border-neutral-200/80 dark:border-white/10 cursor-pointer transition-all duration-300 hover:border-brand-red/60 hover:shadow-xl hover:-translate-y-0.5 flex flex-col h-[180px] sm:h-[220px] md:h-[450px]"
@@ -296,8 +476,7 @@ export default function Production({ onPlayVideo }) {
             <div className="absolute top-2 sm:top-3 right-2 sm:right-3 rtl:right-auto rtl:left-2 rtl:sm:left-3 z-10">
               <div className="flex items-center space-x-1 rtl:space-x-reverse px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white text-[7px] sm:text-[8.5px] font-bold uppercase tracking-wider group-hover:bg-brand-red group-hover:border-brand-red transition-all shadow">
                 <Film className="w-2 sm:w-2.5 h-2 sm:h-2.5 text-white" />
-                <span className="hidden xs:inline">{t('production.viewGallery', 'GALLERY')}</span>
-                <span className="xs:hidden">{isRtl ? 'معرض' : 'VIEW'}</span>
+                <span>{isRtl ? 'ريلز 9:16' : 'REELS 9:16'}</span>
                 <ArrowUpRight className="w-2 sm:w-2.5 h-2 sm:h-2.5 text-white rtl:rotate-[-90deg]" />
               </div>
             </div>
@@ -318,15 +497,15 @@ export default function Production({ onPlayVideo }) {
                 {isRtl ? cover1.titleAr : cover1.title}
               </h4>
               <p className="text-[7.5px] sm:text-[8.5px] md:text-[9px] text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
-                <span>{cover1.videos.length} {t('production.videoCount', 'VIDEOS')}</span>
+                <span>{cover1.videos.length} {isRtl ? 'فيديوهات ريلز' : 'REELS'}</span>
                 <span className="hidden xs:inline">• {isRtl ? 'انقر للمشاهدة' : 'Click to View'}</span>
               </p>
             </div>
           </div>
 
-          {/* Center Column: 2 Stacked Horizontal Cards on Desktop / Right Top & Left Bottom Cards on Mobile */}
+          {/* Center Column: PROMOS (Top) & EDITS VIDEOS (Bottom) */}
           <div className="contents md:flex md:col-span-4 md:flex-col md:gap-3 sm:md:gap-4 lg:md:gap-5 md:justify-between md:h-[450px]">
-            {/* Cover 2: Top-Right Card on Mobile / Top Center Card on Desktop (Portal to Gallery 2) */}
+            {/* Cover 2: PROMOS */}
             <div
               onClick={() => handleOpenGallery(cover2)}
               className="group relative rounded-lg sm:rounded-xl overflow-hidden bg-neutral-950 border border-neutral-800/80 cursor-pointer transition-all duration-300 hover:border-brand-red/60 hover:shadow-lg flex flex-col h-[180px] sm:h-[220px] md:h-auto md:flex-1 min-h-0"
@@ -342,8 +521,7 @@ export default function Production({ onPlayVideo }) {
               <div className="absolute top-2 sm:top-2.5 right-2 sm:right-2.5 rtl:right-auto rtl:left-2 rtl:sm:left-2.5 z-10">
                 <div className="flex items-center space-x-1 rtl:space-x-reverse px-2 py-0.5 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white text-[7px] sm:text-[7.5px] font-bold uppercase tracking-wider group-hover:bg-brand-red group-hover:border-brand-red transition-all shadow">
                   <Film className="w-2 sm:w-2.5 h-2 sm:h-2.5" />
-                  <span className="hidden xs:inline">{t('production.viewGallery', 'GALLERY')}</span>
-                  <span className="xs:hidden">{isRtl ? 'معرض' : 'VIEW'}</span>
+                  <span>{isRtl ? 'برومو' : 'PROMOS'}</span>
                   <ArrowUpRight className="w-2 h-2 rtl:rotate-[-90deg]" />
                 </div>
               </div>
@@ -364,13 +542,13 @@ export default function Production({ onPlayVideo }) {
                   {isRtl ? cover2.titleAr : cover2.title}
                 </h4>
                 <p className="text-[7.5px] sm:text-[8.5px] text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
-                  <span>{cover2.videos.length} {t('production.videoCount', 'VIDEOS')}</span>
+                  <span>{cover2.videos.length} {isRtl ? 'أفلام برومو' : 'FILMS'}</span>
                   <span className="hidden xs:inline">• {isRtl ? 'انقر للمشاهدة' : 'Click to View'}</span>
                 </p>
               </div>
             </div>
 
-            {/* Cover 3: Bottom-Left Card on Mobile / Bottom Center Card on Desktop (Portal to Gallery 3) */}
+            {/* Cover 3: EDITS VIDEOS */}
             <div
               onClick={() => handleOpenGallery(cover3)}
               className="group relative rounded-lg sm:rounded-xl overflow-hidden bg-neutral-950 border border-neutral-800/80 cursor-pointer transition-all duration-300 hover:border-brand-red/60 hover:shadow-lg flex flex-col h-[180px] sm:h-[220px] md:h-auto md:flex-1 min-h-0"
@@ -386,8 +564,7 @@ export default function Production({ onPlayVideo }) {
               <div className="absolute top-2 sm:top-2.5 right-2 sm:right-2.5 rtl:right-auto rtl:left-2 rtl:sm:left-2.5 z-10">
                 <div className="flex items-center space-x-1 rtl:space-x-reverse px-2 py-0.5 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white text-[7px] sm:text-[7.5px] font-bold uppercase tracking-wider group-hover:bg-brand-red group-hover:border-brand-red transition-all shadow">
                   <Film className="w-2 sm:w-2.5 h-2 sm:h-2.5" />
-                  <span className="hidden xs:inline">{t('production.viewGallery', 'GALLERY')}</span>
-                  <span className="xs:hidden">{isRtl ? 'معرض' : 'VIEW'}</span>
+                  <span>{isRtl ? 'مونتاج' : 'EDITS'}</span>
                   <ArrowUpRight className="w-2 h-2 rtl:rotate-[-90deg]" />
                 </div>
               </div>
@@ -408,14 +585,14 @@ export default function Production({ onPlayVideo }) {
                   {isRtl ? cover3.titleAr : cover3.title}
                 </h4>
                 <p className="text-[7.5px] sm:text-[8.5px] text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
-                  <span>{cover3.videos.length} {t('production.videoCount', 'VIDEOS')}</span>
+                  <span>{cover3.videos.length} {isRtl ? 'أعمال مونتاج' : 'EDITS'}</span>
                   <span className="hidden xs:inline">• {isRtl ? 'انقر للمشاهدة' : 'Click to View'}</span>
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Cover 4: Right Tall Vertical Card on Desktop / Bottom-Right Card on Mobile (Portal to Gallery 4) */}
+          {/* Cover 4: IDEAS & ADS (Right Tall Vertical Card on Desktop / Bottom-Right Card on Mobile) */}
           <div
             onClick={() => handleOpenGallery(cover4)}
             className="md:col-span-4 group relative rounded-lg sm:rounded-xl overflow-hidden bg-neutral-950 border border-neutral-800/80 cursor-pointer transition-all duration-300 hover:border-brand-red/60 hover:shadow-xl flex flex-col h-[180px] sm:h-[220px] md:h-[450px]"
@@ -431,8 +608,7 @@ export default function Production({ onPlayVideo }) {
             <div className="absolute top-2 sm:top-3 right-2 sm:right-3 rtl:right-auto rtl:left-2 rtl:sm:left-3 z-10">
               <div className="flex items-center space-x-1 rtl:space-x-reverse px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white text-[7px] sm:text-[8.5px] font-bold uppercase tracking-wider group-hover:bg-brand-red group-hover:border-brand-red transition-all shadow">
                 <Film className="w-2 sm:w-2.5 h-2 sm:h-2.5 text-white" />
-                <span className="hidden xs:inline">{t('production.viewGallery', 'GALLERY')}</span>
-                <span className="xs:hidden">{isRtl ? 'معرض' : 'VIEW'}</span>
+                <span>{isRtl ? 'أفكار وإعلانات' : 'IDEAS & ADS'}</span>
                 <ArrowUpRight className="w-2.5 h-2.5 text-white rtl:rotate-[-90deg]" />
               </div>
             </div>
@@ -453,7 +629,7 @@ export default function Production({ onPlayVideo }) {
                 {isRtl ? cover4.titleAr : cover4.title}
               </h4>
               <p className="text-[7.5px] sm:text-[8.5px] md:text-[9px] text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
-                <span>{cover4.videos.length} {t('production.videoCount', 'VIDEOS')}</span>
+                <span>{cover4.videos.length} {isRtl ? 'حملات إعلانية' : 'ADS'}</span>
                 <span className="hidden xs:inline">• {isRtl ? 'انقر للمشاهدة' : 'Click to View'}</span>
               </p>
             </div>
@@ -467,7 +643,10 @@ export default function Production({ onPlayVideo }) {
           {/* Backdrop click to close */}
           <div
             className="absolute inset-0 cursor-pointer"
-            onClick={() => setSelectedGallery(null)}
+            onClick={() => {
+              setSelectedGallery(null);
+              setActiveInlineVideoId(null);
+            }}
           />
 
           {/* Modal Content Window */}
@@ -482,7 +661,7 @@ export default function Production({ onPlayVideo }) {
                   </span>
                   <span className="text-neutral-500">•</span>
                   <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-neutral-400">
-                    {selectedGallery.videos.length} {isRtl ? 'أفلام سينمائية' : 'PRODUCTION FILMS'}
+                    {selectedGallery.videos.length} {isRtl ? 'أعمال معروضة' : 'PRODUCTIONS'}
                   </span>
                 </div>
 
@@ -496,26 +675,32 @@ export default function Production({ onPlayVideo }) {
 
               {/* Gallery Switcher Tabs & Close Button */}
               <div className="flex items-center space-x-2 sm:space-x-3 rtl:space-x-reverse flex-shrink-0">
-                {/* Quick Gallery Pills */}
-                <div className="hidden lg:flex items-center space-x-1.5 rtl:space-x-reverse p-1 bg-black/60 rounded-xl border border-neutral-800">
-                  {PRODUCTION_GALLERIES.map((gal, idx) => (
+                {/* Quick Gallery Switcher Pills */}
+                <div className="flex items-center space-x-1.5 rtl:space-x-reverse p-1 bg-black/60 rounded-xl border border-neutral-800 overflow-x-auto max-w-full">
+                  {PRODUCTION_GALLERIES.map((gal) => (
                     <button
                       key={gal.id}
-                      onClick={() => setSelectedGallery(gal)}
-                      className={`px-2.5 py-1 rounded-lg text-[9px] font-bold uppercase tracking-wider transition-all ${
+                      onClick={() => {
+                        setSelectedGallery(gal);
+                        setActiveInlineVideoId(null);
+                      }}
+                      className={`px-2.5 py-1 rounded-lg text-[9px] font-bold uppercase tracking-wider transition-all whitespace-nowrap cursor-pointer ${
                         selectedGallery.id === gal.id
                           ? 'bg-brand-red text-white shadow-sm'
                           : 'text-neutral-400 hover:text-white hover:bg-neutral-900'
                       }`}
                     >
-                      {isRtl ? `معرض ${idx + 1}` : `Gallery ${idx + 1}`}
+                      {isRtl ? gal.titleAr : gal.title}
                     </button>
                   ))}
                 </div>
 
                 {/* Close Modal Button */}
                 <button
-                  onClick={() => setSelectedGallery(null)}
+                  onClick={() => {
+                    setSelectedGallery(null);
+                    setActiveInlineVideoId(null);
+                  }}
                   className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-neutral-900 hover:bg-brand-red text-neutral-400 hover:text-white border border-neutral-800 flex items-center justify-center transition-all cursor-pointer"
                   aria-label="Close Gallery"
                 >
@@ -526,74 +711,122 @@ export default function Production({ onPlayVideo }) {
 
             {/* Gallery Videos Professional Grid */}
             <div className="p-4 sm:p-6 lg:p-8 overflow-y-auto max-h-[calc(90vh-140px)] bg-neutral-950">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-                {selectedGallery.videos.map((video) => (
-                  <div
-                    key={video.id}
-                    onClick={() => handleVideoClick(video)}
-                    className="group relative rounded-xl overflow-hidden bg-[#0d0d10] border border-neutral-800/90 hover:border-brand-red/60 transition-all duration-300 cursor-pointer flex flex-col shadow-md hover:shadow-red-950/20"
-                  >
-                    {/* Video Thumbnail Screen */}
-                    <div className="relative aspect-video w-full overflow-hidden bg-neutral-900">
-                      <img
-                        src={video.image}
-                        alt={video.title}
-                        className="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105 filter brightness-90 group-hover:brightness-100"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+              {/* Responsive layout: 9:16 vertical grid for Reels, 16:9 for Promos/Edits/Ads */}
+              <div
+                className={`grid gap-4 sm:gap-5 ${
+                  selectedGallery.isVertical
+                    ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
+                    : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
+                }`}
+              >
+                {selectedGallery.videos.map((video) => {
+                  const isInlineActive = activeInlineVideoId === video.id;
+                  return (
+                    <div
+                      key={video.id}
+                      className="group relative rounded-xl overflow-hidden bg-[#0d0d10] border border-neutral-800/90 hover:border-brand-red/60 transition-all duration-300 flex flex-col shadow-md hover:shadow-red-950/20"
+                    >
+                      {/* Video Player Display Container (iFrame or Thumbnail) */}
+                      <div
+                        className={`relative w-full overflow-hidden bg-black ${
+                          video.isVertical ? 'aspect-[9/16]' : 'aspect-video'
+                        }`}
+                      >
+                        {isInlineActive ? (
+                          <iframe
+                            src={`https://www.youtube.com/embed/${video.youtubeId}?autoplay=1&rel=0&modestbranding=1`}
+                            title={isRtl && video.titleAr ? video.titleAr : video.title}
+                            className="w-full h-full border-0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowFullScreen
+                          />
+                        ) : (
+                          <div
+                            onClick={() => handleVideoClick(video)}
+                            className="relative w-full h-full cursor-pointer group/thumb"
+                          >
+                            <img
+                              src={video.image}
+                              alt={video.title}
+                              className="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover/thumb:scale-105 filter brightness-90 group-hover/thumb:brightness-100"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
 
-                      {/* Center Play Button Icon Overlay */}
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-11 h-11 rounded-full bg-brand-red text-white flex items-center justify-center shadow-xl shadow-red-600/40 transition-transform duration-300 transform group-hover:scale-110">
-                          <Play className="w-4 h-4 fill-white translate-x-0.5 rtl:-translate-x-0.5" />
+                            {/* Center Play Button Overlay */}
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className="w-11 h-11 rounded-full bg-brand-red text-white flex items-center justify-center shadow-xl shadow-red-600/40 transition-transform duration-300 transform group-hover/thumb:scale-110">
+                                <Play className="w-4 h-4 fill-white translate-x-0.5 rtl:-translate-x-0.5" />
+                              </div>
+                            </div>
+
+                            {/* Top Badges */}
+                            <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none">
+                              <span className="px-2 py-0.5 bg-black/80 backdrop-blur-md rounded text-[8px] font-extrabold uppercase tracking-widest text-white border border-white/10">
+                                {video.isVertical ? 'REEL 9:16' : '4K CINEMA'}
+                              </span>
+                              <span className="px-2 py-0.5 bg-black/80 backdrop-blur-md rounded text-[8px] font-mono font-bold uppercase tracking-wider text-neutral-300 border border-white/10">
+                                {video.duration}
+                              </span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Video Card Content */}
+                      <div className="p-3 sm:p-3.5 flex flex-col justify-between flex-1 bg-[#0e0e12]">
+                        <div>
+                          <div className="flex items-center justify-between gap-1 mb-1">
+                            <span className="text-[8px] font-bold uppercase tracking-widest text-brand-red truncate">
+                              {video.client}
+                            </span>
+                          </div>
+                          <h4 className="text-xs font-black uppercase tracking-tight text-white group-hover:text-brand-red transition-colors font-display line-clamp-1">
+                            {isRtl && video.titleAr ? video.titleAr : video.title}
+                          </h4>
+                          {video.description && (
+                            <p className="text-[9.5px] text-neutral-400 font-medium mt-1 line-clamp-2 leading-relaxed">
+                              {video.description}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Card Interactive Actions (Play iFrame or Fullscreen Cinema) */}
+                        <div className="mt-3 pt-2.5 border-t border-neutral-800/80 flex items-center justify-between text-[8.5px] font-bold uppercase tracking-wider">
+                          <button
+                            type="button"
+                            onClick={() => handleVideoClick(video)}
+                            className="flex items-center space-x-1 rtl:space-x-reverse text-neutral-400 hover:text-white transition-colors cursor-pointer"
+                          >
+                            <Maximize2 className="w-2.5 h-2.5 text-brand-red" />
+                            <span>{isRtl ? 'سينما' : 'POPUP'}</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={(e) => handleInlineIframeToggle(video.id, e)}
+                            className="flex items-center space-x-1 rtl:space-x-reverse text-brand-red hover:underline font-extrabold cursor-pointer"
+                          >
+                            <span>{isInlineActive ? (isRtl ? 'إغلاق الفيديو' : 'CLOSE IFRAME') : (isRtl ? 'تشغيل iFrame' : 'PLAY IFRAME')}</span>
+                            <ArrowUpRight className="w-3 h-3 rtl:rotate-[-90deg]" />
+                          </button>
                         </div>
                       </div>
-
-                      {/* Top Badges */}
-                      <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none">
-                        <span className="px-2 py-0.5 bg-black/80 backdrop-blur-md rounded text-[8px] font-extrabold uppercase tracking-widest text-white border border-white/10">
-                          4K CINEMA
-                        </span>
-                        <span className="px-2 py-0.5 bg-black/80 backdrop-blur-md rounded text-[8px] font-mono font-bold uppercase tracking-wider text-neutral-300 border border-white/10">
-                          {video.duration}
-                        </span>
-                      </div>
                     </div>
-
-                    {/* Video Card Content */}
-                    <div className="p-3.5 sm:p-4 flex flex-col justify-between flex-1 bg-[#0e0e12]">
-                      <div>
-                        <div className="flex items-center justify-between gap-1 mb-1">
-                          <span className="text-[8px] font-bold uppercase tracking-widest text-brand-red truncate">
-                            {video.client}
-                          </span>
-                        </div>
-                        <h4 className="text-xs sm:text-sm font-black uppercase tracking-tight text-white group-hover:text-brand-red transition-colors font-display line-clamp-1">
-                          {video.title}
-                        </h4>
-                        <p className="text-[10px] text-neutral-400 font-medium mt-1 line-clamp-2 leading-relaxed">
-                          {video.description}
-                        </p>
-                      </div>
-
-                      {/* Watch Video Action Link */}
-                      <div className="mt-3 pt-2.5 border-t border-neutral-800/80 flex items-center justify-between text-[9px] font-bold uppercase tracking-wider text-neutral-400 group-hover:text-brand-red transition-colors">
-                        <span>{t('production.watchFilm', 'WATCH FILM')}</span>
-                        <ArrowUpRight className="w-3 h-3 text-brand-red rtl:rotate-[-90deg]" />
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
             {/* Gallery Modal Footer */}
             <div className="px-6 py-3 bg-[#0a0a0c] border-t border-neutral-800/80 flex items-center justify-between text-xs text-neutral-400">
               <span className="text-[10px] uppercase tracking-wider font-semibold">
-                {isRtl ? 'إنتاج وحدة السينما الداخلية في وكالة ديفوتيكس ميديا' : 'Produced by Devotix Media In-House Cinema Unit'}
+                {isRtl ? 'إنتاج وحدة السينما والإعلانات في وكالة ديفوتيكس ميديا' : 'Produced by Devotix Media Commercial Video & Film Unit'}
               </span>
               <button
-                onClick={() => setSelectedGallery(null)}
+                onClick={() => {
+                  setSelectedGallery(null);
+                  setActiveInlineVideoId(null);
+                }}
                 className="px-4 py-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-white text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer"
               >
                 {t('modals.close', 'Close Gallery')}

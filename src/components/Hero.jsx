@@ -10,13 +10,17 @@ export default function Hero({ onOpenPortfolio, onOpenContact, onScrollToWork, o
       onPlayVideo({
         id: 'devotix-hero-showreel',
         title: t('hero.reelModalTitle', 'DEVOTIX SHOWREEL 2026'),
-        category: 'COMMERCIAL PRODUCTION • 3D CGI',
-        duration: '02:45',
+        category: 'COMMERCIAL PRODUCTION • REEL',
+        duration: '00:30',
         image: '/assets/production/featured-car.png',
+        videoSrc: '/assets/hero/who_.mp4',
+        videoUrl: '/assets/hero/who_.mp4',
+        isVertical: true,
         description: t('hero.tagline', 'Experience our 2026 director showreel featuring cinematic commercial productions and 3D VFX simulations.')
       });
     }
   };
+
 
   return (
     <section
@@ -93,14 +97,25 @@ export default function Hero({ onOpenPortfolio, onOpenContact, onScrollToWork, o
         {/* Small Video after EXPLORE OUR PORTFOLIO button */}
         <div
           onClick={handlePlayShowreel}
-          className="mt-5 relative w-full max-w-[240px] sm:max-w-[280px] aspect-[16/9] rounded-xl overflow-hidden border border-neutral-800 hover:border-brand-red/80 shadow-[0_10px_30px_rgba(0,0,0,0.8)] cursor-pointer group transition-all duration-300 transform hover:scale-105"
+          className="mt-5 relative w-full max-w-[135px] sm:max-w-[155px] aspect-[9/16] rounded-2xl overflow-hidden border border-neutral-800 hover:border-brand-red/80 shadow-[0_10px_30px_rgba(0,0,0,0.8)] cursor-pointer group transition-all duration-300 transform hover:scale-105"
         >
-          <img
-            src="/assets/production/featured-car.png"
-            alt="Devotix Showreel Preview"
-            className="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-110"
+          <video
+            src="/assets/hero/who_.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            ref={(el) => {
+              if (el) {
+                el.defaultMuted = true;
+                el.muted = true;
+                el.play().catch(() => { });
+              }
+            }}
+            className="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
 
           {/* Central Pulsing Play Button */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -110,17 +125,17 @@ export default function Hero({ onOpenPortfolio, onOpenContact, onScrollToWork, o
           </div>
 
           {/* Top/Bottom Badges */}
-          <div className="absolute top-2 left-2 rtl:left-auto rtl:right-2 pointer-events-none">
+          <div className="absolute top-2.5 left-2.5 rtl:left-auto rtl:right-2.5 pointer-events-none">
             <span className="px-2 py-0.5 bg-black/70 backdrop-blur-md rounded-full text-[8px] font-extrabold uppercase tracking-widest text-white border border-white/10">
-              4K REEL
+              REEL
             </span>
           </div>
-          <div className="absolute bottom-2 left-2.5 right-2.5 flex items-center justify-between pointer-events-none">
+          <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none">
             <span className="text-[9px] font-extrabold uppercase tracking-wider text-white">
-              {t('hero.watchReel', 'WATCH SHOWREEL')}
+              {t('hero.watchReel', 'WATCH REEL')}
             </span>
             <span className="text-[8.5px] font-mono text-neutral-300">
-              02:45
+              1:00
             </span>
           </div>
         </div>

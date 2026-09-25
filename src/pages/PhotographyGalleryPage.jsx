@@ -3,6 +3,8 @@ import { ArrowLeft, Maximize2 } from 'lucide-react';
 import Footer from '../components/Footer';
 import { PHOTOGRAPHY_GALLERIES, getGalleryById } from '../data/photographyData';
 import { useThemeLanguage } from '../context/ThemeLanguageContext';
+import CloudImg from '../components/CloudImg';
+import { cldGrid } from '../utils/cloudinaryUrl';
 
 export default function PhotographyGalleryPage({
   gallery,
@@ -95,12 +97,13 @@ export default function PhotographyGalleryPage({
               onClick={() => handlePhotoClick(index)}
               className="group relative h-[320px] sm:h-[360px] md:h-[400px] lg:h-[430px] rounded-2xl overflow-hidden bg-neutral-900 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800/90 hover:border-brand-red/70 transition-all duration-500 cursor-pointer shadow-md hover:shadow-2xl flex flex-col justify-end"
             >
-              {/* High-Resolution Clean Photo */}
-              <img
-                src={photo.image}
+              {/* High-Resolution Clean Photo with blur-up */}
+              <CloudImg
+                src={cldGrid(photo.image)}
                 alt={photo.title || 'Devotix Photography'}
+                className="absolute inset-0 w-full h-full"
+                imgClass="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105 filter brightness-95 group-hover:brightness-100"
                 loading="lazy"
-                className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105 filter brightness-95 group-hover:brightness-100"
               />
 
               {/* Subtle hover overlay with floating expand button */}

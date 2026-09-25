@@ -16,6 +16,22 @@ export const SOFTWARE_PROJECTS = [
     link: 'https://carhub.devotix.io'
   },
   {
+    id: 'aselectric',
+    title: 'ASELECTRIC',
+    category: 'AUTOMOTIVE PLATFORM & DIGITAL DEALERSHIP',
+    description: 'High-performance luxury automotive web application & interactive car dealership platform featuring 360-degree vehicle showcases and real-time inventory management.',
+    image: '/assets/projects/aselectric/cover.png',
+    logo: '/assets/projects/aselectric/logo.png',
+    shot: '/assets/projects/aselectric/shot.jpg',
+    tags: ['React', 'Automotive', 'Web App'],
+    status: 'COMPLETED',
+    subtitle: 'Interactive automotive dealership portal with live inventory streaming and luxury vehicle showcase.',
+    problem: 'Traditional automotive dealership platforms lacked interactive visual engagement and mobile responsiveness, slowing down customer inquiry conversion rates.',
+    solution: 'Engineered a high-performance web platform featuring 360-degree interactive vehicle showcases, direct test-drive booking engine, and instant lead management.',
+    details: 'A custom software solution built for automotive sales and inventory management. Designed to provide instant load speeds, responsive mobile browsing, and intuitive UI for vehicle inquiries.',
+    link: 'https://aselectriceg.org/ar'
+  },
+  {
     id: 'egy-color',
     title: 'EGY COLOR',
     category: 'COLOR & COATINGS E-COMMERCE PLATFORM',

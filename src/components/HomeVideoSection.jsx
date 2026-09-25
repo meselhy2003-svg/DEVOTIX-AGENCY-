@@ -8,10 +8,12 @@ export default function HomeVideoSection({ onPlayVideo }) {
     id: 'devotix-showreel-2026',
     title: "DEVOTIX MEDIA 2026 DIRECTOR'S SHOWREEL",
     category: 'CINEMA PRODUCTION • 3D VFX • BRAND COMMERCIALS',
-    duration: '02:45',
+    duration: '01:30',
     resolution: '4K CINEMA',
-    image: '/assets/production/featured-car.png',
-    description: 'An executive director cut highlighting our latest cinematic commercial campaigns, 3D CGI hypercars, brand identities, and high-energy visual productions.'
+    youtubeId: '7xkk1GqBHi4',
+    url: 'https://youtu.be/7xkk1GqBHi4',
+    image: 'https://img.youtube.com/vi/7xkk1GqBHi4/maxresdefault.jpg',
+    description: 'An executive director cut highlighting our latest cinematic commercial campaigns, brand identities, and high-energy visual productions.'
   };
 
   const handlePlay = () => {
