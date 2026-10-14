@@ -28,7 +28,7 @@ export default function Graphic({ onNavigateGallery, onSelectGraphic }) {
         {/* Section Header */}
         <div className="text-center max-w-xl mx-auto mb-6 sm:mb-8 pb-3 border-b border-neutral-200/80 dark:border-white/10">
           <TitleAccent type="graphic" />
-          <p className="mt-2 text-[10px] sm:text-[11.5px] text-neutral-600 dark:text-neutral-400 font-semibold uppercase tracking-widest leading-relaxed">
+          <p className="mt-2 text-xs sm:text-sm md:text-[14.5px] text-neutral-600 dark:text-neutral-400 font-medium uppercase tracking-wider leading-relaxed">
             {t('graphic.subtitle', 'Brand identity, digital art direction, packaging, and UI/UX design.')}
           </p>
         </div>
@@ -48,23 +48,23 @@ export default function Graphic({ onNavigateGallery, onSelectGraphic }) {
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-90 group-hover:opacity-95 transition-opacity" />
 
             {/* Gallery Badge Top Right */}
-            <div className="absolute top-2.5 sm:top-3 right-2.5 sm:right-3 rtl:right-auto rtl:left-2.5 rtl:sm:left-3 z-10">
-              <div className="flex items-center space-x-1 rtl:space-x-reverse px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white text-[7px] sm:text-[8.5px] font-bold uppercase tracking-wider group-hover:bg-brand-red group-hover:border-brand-red transition-all shadow">
-                <Layers className="w-2 sm:w-2.5 h-2 sm:h-2.5 text-white" />
+            <div className="absolute top-2.5 sm:top-3.5 right-2.5 sm:right-3.5 rtl:right-auto rtl:left-2.5 rtl:sm:left-3.5 z-10">
+              <div className="flex items-center space-x-1.5 rtl:space-x-reverse px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white text-[9.5px] sm:text-[11px] font-bold uppercase tracking-wider group-hover:bg-brand-red group-hover:border-brand-red transition-all shadow">
+                <Layers className="w-2.5 sm:w-3 h-2.5 sm:h-3 text-white" />
                 <span>{t('graphic.viewGallery', 'VIEW GALLERY')}</span>
-                <ArrowUpRight className="w-2 sm:w-2.5 h-2 sm:h-2.5 text-white rtl:rotate-[-90deg]" />
+                <ArrowUpRight className="w-2.5 sm:w-3 h-2.5 sm:h-3 text-white rtl:rotate-[-90deg]" />
               </div>
             </div>
 
             {/* Photo Metadata Bottom */}
-            <div className="absolute bottom-2.5 sm:bottom-3 left-3 sm:left-3.5 right-3 sm:right-3.5 z-10">
-              <span className="text-[7px] sm:text-[8px] font-bold uppercase tracking-widest text-brand-red block mb-0.5">
+            <div className="absolute bottom-2.5 sm:bottom-3.5 left-3 sm:left-4 right-3 sm:right-4 z-10">
+              <span className="text-[9.5px] sm:text-[10.5px] font-bold uppercase tracking-widest text-brand-red block mb-0.5">
                 {cover1.category}
               </span>
-              <h4 className="text-[11px] sm:text-[13px] font-black uppercase tracking-tight text-white font-display line-clamp-1">
+              <h4 className="text-xs sm:text-sm md:text-base font-black uppercase tracking-tight text-white font-display line-clamp-1">
                 {cover1.title}
               </h4>
-              <p className="text-[8px] sm:text-[9px] text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
+              <p className="text-[11px] sm:text-xs text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
                 <span>{cover1.client}</span>
                 <span className="hidden xs:inline">• {t('graphic.clickToOpenGallery', 'Click to Open Graphics Gallery')}</span>
               </p>
@@ -87,23 +87,23 @@ export default function Graphic({ onNavigateGallery, onSelectGraphic }) {
 
               {/* Gallery Badge Top Right */}
               <div className="absolute top-2 sm:top-2.5 right-2 sm:right-2.5 rtl:right-auto rtl:left-2 rtl:sm:left-2.5 z-10">
-                <div className="flex items-center space-x-1 rtl:space-x-reverse px-2 py-0.5 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white text-[7px] sm:text-[7.5px] font-bold uppercase tracking-wider group-hover:bg-brand-red group-hover:border-brand-red transition-all shadow">
-                  <Layers className="w-2 sm:w-2.5 h-2 sm:h-2.5" />
+                <div className="flex items-center space-x-1 rtl:space-x-reverse px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white text-[9px] sm:text-[10px] font-bold uppercase tracking-wider group-hover:bg-brand-red group-hover:border-brand-red transition-all shadow">
+                  <Layers className="w-2.5 sm:w-3 h-2.5 sm:h-3" />
                   <span className="hidden xs:inline">{t('graphic.viewGallery', 'VIEW GALLERY')}</span>
                   <span className="xs:hidden">{isRtl ? 'معرض' : 'VIEW'}</span>
-                  <ArrowUpRight className="w-2 h-2 rtl:rotate-[-90deg]" />
+                  <ArrowUpRight className="w-2.5 h-2.5 rtl:rotate-[-90deg]" />
                 </div>
               </div>
 
               {/* Metadata Bottom */}
-              <div className="absolute bottom-2 sm:bottom-2.5 left-2.5 sm:left-3 right-2.5 sm:right-3 z-10">
-                <span className="text-[6.5px] sm:text-[7.5px] md:text-[8px] font-bold uppercase tracking-widest text-brand-red block mb-0.5">
+              <div className="absolute bottom-2.5 sm:bottom-3 left-2.5 sm:left-3 right-2.5 sm:right-3 z-10">
+                <span className="text-[9.5px] sm:text-[10.5px] font-bold uppercase tracking-widest text-brand-red block mb-0.5">
                   {cover2.category}
                 </span>
-                <h4 className="text-[10px] sm:text-[10.5px] md:text-[12px] font-black uppercase tracking-tight text-white font-display line-clamp-1">
+                <h4 className="text-xs sm:text-sm font-black uppercase tracking-tight text-white font-display line-clamp-1">
                   {cover2.title}
                 </h4>
-                <p className="text-[7.5px] sm:text-[8.5px] text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
+                <p className="text-[11px] sm:text-xs text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
                   <span>{cover2.client}</span>
                 </p>
               </div>
@@ -123,23 +123,23 @@ export default function Graphic({ onNavigateGallery, onSelectGraphic }) {
 
               {/* Gallery Badge Top Right */}
               <div className="absolute top-2 sm:top-2.5 right-2 sm:right-2.5 rtl:right-auto rtl:left-2 rtl:sm:left-2.5 z-10">
-                <div className="flex items-center space-x-1 rtl:space-x-reverse px-2 py-0.5 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white text-[7px] sm:text-[7.5px] font-bold uppercase tracking-wider group-hover:bg-brand-red group-hover:border-brand-red transition-all shadow">
-                  <Layers className="w-2 sm:w-2.5 h-2 sm:h-2.5" />
+                <div className="flex items-center space-x-1 rtl:space-x-reverse px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white text-[9px] sm:text-[10px] font-bold uppercase tracking-wider group-hover:bg-brand-red group-hover:border-brand-red transition-all shadow">
+                  <Layers className="w-2.5 sm:w-3 h-2.5 sm:h-3" />
                   <span className="hidden xs:inline">{t('graphic.viewGallery', 'VIEW GALLERY')}</span>
                   <span className="xs:hidden">{isRtl ? 'معرض' : 'VIEW'}</span>
-                  <ArrowUpRight className="w-2 h-2 rtl:rotate-[-90deg]" />
+                  <ArrowUpRight className="w-2.5 h-2.5 rtl:rotate-[-90deg]" />
                 </div>
               </div>
 
               {/* Metadata Bottom */}
-              <div className="absolute bottom-2 sm:bottom-2.5 left-2.5 sm:left-3 right-2.5 sm:right-3 z-10">
-                <span className="text-[6.5px] sm:text-[7.5px] md:text-[8px] font-bold uppercase tracking-widest text-brand-red block mb-0.5">
+              <div className="absolute bottom-2.5 sm:bottom-3 left-2.5 sm:left-3 right-2.5 sm:right-3 z-10">
+                <span className="text-[9.5px] sm:text-[10.5px] font-bold uppercase tracking-widest text-brand-red block mb-0.5">
                   {cover3.category}
                 </span>
-                <h4 className="text-[10px] sm:text-[10.5px] md:text-[12px] font-black uppercase tracking-tight text-white font-display line-clamp-1">
+                <h4 className="text-xs sm:text-sm font-black uppercase tracking-tight text-white font-display line-clamp-1">
                   {cover3.title}
                 </h4>
-                <p className="text-[7.5px] sm:text-[8.5px] text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
+                <p className="text-[11px] sm:text-xs text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
                   <span>{cover3.client}</span>
                 </p>
               </div>

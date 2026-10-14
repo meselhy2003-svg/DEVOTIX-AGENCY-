@@ -27,12 +27,14 @@
     letter-spacing: -0.01em;
   }
 
-  /* When document is RTL (Arabic mode), prioritize Cairo/Tajawal with ergonomic line-height */
+  /* When document is RTL (Arabic mode), prioritize Noto Kufi Arabic with ergonomic line-height */
   [dir="rtl"],
   [dir="rtl"] body {
-    font-family: 'Cairo', 'Tajawal', 'Montserrat', -apple-system, sans-serif;
-    line-height: 1.65;
+    font-family: 'Noto Kufi Arabic', 'Cairo', 'Montserrat', -apple-system, sans-serif;
+    font-size: 17px;
+    line-height: 1.75;
     letter-spacing: normal;
+    word-spacing: 0.05em;
   }
 
   /* Dark theme body */

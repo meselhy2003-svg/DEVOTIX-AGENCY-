@@ -23,9 +23,9 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Montserrat', 'Cairo', 'Tajawal', 'Poppins', 'sans-serif'],
-        display: ['Montserrat', 'Cairo', 'Syne', 'sans-serif'],
-        arabic: ['Cairo', 'Tajawal', 'sans-serif'],
+        sans: ['Montserrat', 'Noto Kufi Arabic', 'Cairo', 'Tajawal', 'Poppins', 'sans-serif'],
+        display: ['Montserrat', 'Noto Kufi Arabic', 'Cairo', 'Syne', 'sans-serif'],
+        arabic: ['Noto Kufi Arabic', 'Cairo', 'Tajawal', 'sans-serif'],
       },
       animation: {
         'marquee': 'marquee 28s linear infinite',

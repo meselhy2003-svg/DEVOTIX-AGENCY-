@@ -451,7 +451,7 @@ export default function Production({ onPlayVideo }) {
         {/* Section Header */}
         <div className="text-center max-w-xl mx-auto mb-6 sm:mb-8 pb-3 border-b border-neutral-300/80 dark:border-white/10">
           <TitleAccent type="production" />
-          <p className="mt-2 text-[10px] sm:text-[11.5px] text-neutral-600 dark:text-neutral-400 font-semibold uppercase tracking-widest leading-relaxed">
+          <p className="mt-2 text-xs sm:text-sm md:text-[14.5px] text-neutral-600 dark:text-neutral-400 font-medium uppercase tracking-wider leading-relaxed">
             {isRtl
               ? 'أفلام سينمائية ترويجية، ريلز وشورتس، مونتاج احترافي، وأفكار إعلانية متكاملة.'
               : 'Promos, vertical reels, post-production editing, and creative advertising campaigns.'}
@@ -474,10 +474,10 @@ export default function Production({ onPlayVideo }) {
 
             {/* Gallery Badge Top Right */}
             <div className="absolute top-2 sm:top-3 right-2 sm:right-3 rtl:right-auto rtl:left-2 rtl:sm:left-3 z-10">
-              <div className="flex items-center space-x-1 rtl:space-x-reverse px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white text-[7px] sm:text-[8.5px] font-bold uppercase tracking-wider group-hover:bg-brand-red group-hover:border-brand-red transition-all shadow">
-                <Film className="w-2 sm:w-2.5 h-2 sm:h-2.5 text-white" />
+              <div className="flex items-center space-x-1 rtl:space-x-reverse px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white text-[9.5px] sm:text-[11px] font-bold uppercase tracking-wider group-hover:bg-brand-red group-hover:border-brand-red transition-all shadow">
+                <Film className="w-2.5 sm:w-3 h-2.5 sm:h-3 text-white" />
                 <span>{isRtl ? 'ريلز 9:16' : 'REELS 9:16'}</span>
-                <ArrowUpRight className="w-2 sm:w-2.5 h-2 sm:h-2.5 text-white rtl:rotate-[-90deg]" />
+                <ArrowUpRight className="w-2.5 sm:w-3 h-2.5 sm:h-3 text-white rtl:rotate-[-90deg]" />
               </div>
             </div>
 
@@ -489,14 +489,14 @@ export default function Production({ onPlayVideo }) {
             </div>
 
             {/* Cover Metadata Bottom */}
-            <div className="absolute bottom-2 sm:bottom-3 left-2.5 sm:left-3.5 right-2.5 sm:right-3.5 z-10">
-              <span className="text-[6.5px] sm:text-[7.5px] md:text-[8px] font-bold uppercase tracking-widest text-brand-red block mb-0.5">
+            <div className="absolute bottom-2.5 sm:bottom-3.5 left-2.5 sm:left-3.5 right-2.5 sm:right-3.5 z-10">
+              <span className="text-[9.5px] sm:text-[10.5px] font-bold uppercase tracking-widest text-brand-red block mb-0.5">
                 {isRtl ? cover1.categoryAr : cover1.category}
               </span>
-              <h4 className="text-[10px] sm:text-[11px] md:text-[13px] font-black uppercase tracking-tight text-white font-display line-clamp-1">
+              <h4 className="text-xs sm:text-sm md:text-base font-black uppercase tracking-tight text-white font-display line-clamp-1">
                 {isRtl ? cover1.titleAr : cover1.title}
               </h4>
-              <p className="text-[7.5px] sm:text-[8.5px] md:text-[9px] text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
+              <p className="text-[11px] sm:text-xs text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
                 <span>{cover1.videos.length} {isRtl ? 'فيديوهات ريلز' : 'REELS'}</span>
                 <span className="hidden xs:inline">• {isRtl ? 'انقر للمشاهدة' : 'Click to View'}</span>
               </p>
@@ -519,10 +519,10 @@ export default function Production({ onPlayVideo }) {
 
               {/* Gallery Badge Top Right */}
               <div className="absolute top-2 sm:top-2.5 right-2 sm:right-2.5 rtl:right-auto rtl:left-2 rtl:sm:left-2.5 z-10">
-                <div className="flex items-center space-x-1 rtl:space-x-reverse px-2 py-0.5 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white text-[7px] sm:text-[7.5px] font-bold uppercase tracking-wider group-hover:bg-brand-red group-hover:border-brand-red transition-all shadow">
-                  <Film className="w-2 sm:w-2.5 h-2 sm:h-2.5" />
+                <div className="flex items-center space-x-1 rtl:space-x-reverse px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white text-[9.5px] sm:text-[10.5px] font-bold uppercase tracking-wider group-hover:bg-brand-red group-hover:border-brand-red transition-all shadow">
+                  <Film className="w-2.5 sm:w-3 h-2.5 sm:h-3" />
                   <span>{isRtl ? 'برومو' : 'PROMOS'}</span>
-                  <ArrowUpRight className="w-2 h-2 rtl:rotate-[-90deg]" />
+                  <ArrowUpRight className="w-2.5 h-2.5 rtl:rotate-[-90deg]" />
                 </div>
               </div>
 
@@ -534,14 +534,14 @@ export default function Production({ onPlayVideo }) {
               </div>
 
               {/* Cover Metadata Bottom */}
-              <div className="absolute bottom-2 sm:bottom-2.5 left-2.5 sm:left-3 right-2.5 sm:right-3 z-10">
-                <span className="text-[6.5px] sm:text-[7.5px] md:text-[8px] font-bold uppercase tracking-widest text-brand-red block mb-0.5">
+              <div className="absolute bottom-2.5 sm:bottom-3 left-2.5 sm:left-3 right-2.5 sm:right-3 z-10">
+                <span className="text-[9.5px] sm:text-[10.5px] font-bold uppercase tracking-widest text-brand-red block mb-0.5">
                   {isRtl ? cover2.categoryAr : cover2.category}
                 </span>
-                <h4 className="text-[10px] sm:text-[10.5px] md:text-[12px] font-black uppercase tracking-tight text-white font-display line-clamp-1">
+                <h4 className="text-xs sm:text-sm font-black uppercase tracking-tight text-white font-display line-clamp-1">
                   {isRtl ? cover2.titleAr : cover2.title}
                 </h4>
-                <p className="text-[7.5px] sm:text-[8.5px] text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
+                <p className="text-[11px] sm:text-xs text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
                   <span>{cover2.videos.length} {isRtl ? 'أفلام برومو' : 'FILMS'}</span>
                   <span className="hidden xs:inline">• {isRtl ? 'انقر للمشاهدة' : 'Click to View'}</span>
                 </p>
@@ -562,10 +562,10 @@ export default function Production({ onPlayVideo }) {
 
               {/* Gallery Badge Top Right */}
               <div className="absolute top-2 sm:top-2.5 right-2 sm:right-2.5 rtl:right-auto rtl:left-2 rtl:sm:left-2.5 z-10">
-                <div className="flex items-center space-x-1 rtl:space-x-reverse px-2 py-0.5 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white text-[7px] sm:text-[7.5px] font-bold uppercase tracking-wider group-hover:bg-brand-red group-hover:border-brand-red transition-all shadow">
-                  <Film className="w-2 sm:w-2.5 h-2 sm:h-2.5" />
+                <div className="flex items-center space-x-1 rtl:space-x-reverse px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white text-[9.5px] sm:text-[10.5px] font-bold uppercase tracking-wider group-hover:bg-brand-red group-hover:border-brand-red transition-all shadow">
+                  <Film className="w-2.5 sm:w-3 h-2.5 sm:h-3" />
                   <span>{isRtl ? 'مونتاج' : 'EDITS'}</span>
-                  <ArrowUpRight className="w-2 h-2 rtl:rotate-[-90deg]" />
+                  <ArrowUpRight className="w-2.5 h-2.5 rtl:rotate-[-90deg]" />
                 </div>
               </div>
 
@@ -577,14 +577,14 @@ export default function Production({ onPlayVideo }) {
               </div>
 
               {/* Cover Metadata Bottom */}
-              <div className="absolute bottom-2 sm:bottom-2.5 left-2.5 sm:left-3 right-2.5 sm:right-3 z-10">
-                <span className="text-[6.5px] sm:text-[7.5px] md:text-[8px] font-bold uppercase tracking-widest text-brand-red block mb-0.5">
+              <div className="absolute bottom-2.5 sm:bottom-3 left-2.5 sm:left-3 right-2.5 sm:right-3 z-10">
+                <span className="text-[9.5px] sm:text-[10.5px] font-bold uppercase tracking-widest text-brand-red block mb-0.5">
                   {isRtl ? cover3.categoryAr : cover3.category}
                 </span>
-                <h4 className="text-[10px] sm:text-[10.5px] md:text-[12px] font-black uppercase tracking-tight text-white font-display line-clamp-1">
+                <h4 className="text-xs sm:text-sm font-black uppercase tracking-tight text-white font-display line-clamp-1">
                   {isRtl ? cover3.titleAr : cover3.title}
                 </h4>
-                <p className="text-[7.5px] sm:text-[8.5px] text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
+                <p className="text-[11px] sm:text-xs text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
                   <span>{cover3.videos.length} {isRtl ? 'أعمال مونتاج' : 'EDITS'}</span>
                   <span className="hidden xs:inline">• {isRtl ? 'انقر للمشاهدة' : 'Click to View'}</span>
                 </p>
@@ -606,10 +606,10 @@ export default function Production({ onPlayVideo }) {
 
             {/* Gallery Badge Top Right */}
             <div className="absolute top-2 sm:top-3 right-2 sm:right-3 rtl:right-auto rtl:left-2 rtl:sm:left-3 z-10">
-              <div className="flex items-center space-x-1 rtl:space-x-reverse px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white text-[7px] sm:text-[8.5px] font-bold uppercase tracking-wider group-hover:bg-brand-red group-hover:border-brand-red transition-all shadow">
-                <Film className="w-2 sm:w-2.5 h-2 sm:h-2.5 text-white" />
+              <div className="flex items-center space-x-1 rtl:space-x-reverse px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white text-[9.5px] sm:text-[11px] font-bold uppercase tracking-wider group-hover:bg-brand-red group-hover:border-brand-red transition-all shadow">
+                <Film className="w-2.5 sm:w-3 h-2.5 sm:h-3 text-white" />
                 <span>{isRtl ? 'أفكار وإعلانات' : 'IDEAS & ADS'}</span>
-                <ArrowUpRight className="w-2.5 h-2.5 text-white rtl:rotate-[-90deg]" />
+                <ArrowUpRight className="w-2.5 sm:w-3 h-2.5 sm:h-3 text-white rtl:rotate-[-90deg]" />
               </div>
             </div>
 
@@ -621,14 +621,14 @@ export default function Production({ onPlayVideo }) {
             </div>
 
             {/* Cover Metadata Bottom */}
-            <div className="absolute bottom-2 sm:bottom-3 left-2.5 sm:left-3.5 right-2.5 sm:right-3.5 z-10">
-              <span className="text-[6.5px] sm:text-[7.5px] md:text-[8px] font-bold uppercase tracking-widest text-brand-red block mb-0.5">
+            <div className="absolute bottom-2.5 sm:bottom-3.5 left-2.5 sm:left-3.5 right-2.5 sm:right-3.5 z-10">
+              <span className="text-[9.5px] sm:text-[10.5px] font-bold uppercase tracking-widest text-brand-red block mb-0.5">
                 {isRtl ? cover4.categoryAr : cover4.category}
               </span>
-              <h4 className="text-[10px] sm:text-[11px] md:text-[13px] font-black uppercase tracking-tight text-white font-display line-clamp-1">
+              <h4 className="text-xs sm:text-sm md:text-base font-black uppercase tracking-tight text-white font-display line-clamp-1">
                 {isRtl ? cover4.titleAr : cover4.title}
               </h4>
-              <p className="text-[7.5px] sm:text-[8.5px] md:text-[9px] text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
+              <p className="text-[11px] sm:text-xs text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
                 <span>{cover4.videos.length} {isRtl ? 'حملات إعلانية' : 'ADS'}</span>
                 <span className="hidden xs:inline">• {isRtl ? 'انقر للمشاهدة' : 'Click to View'}</span>
               </p>

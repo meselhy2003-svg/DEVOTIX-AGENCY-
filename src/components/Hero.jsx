@@ -27,42 +27,41 @@ export default function Hero({ onOpenPortfolio, onOpenContact, onScrollToWork, o
       id="home"
       className="snap-section min-h-screen relative flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 section-alt-a overflow-hidden pt-14 pb-8 select-none"
     >
-      {/* Studio background image & transparent gradient overlays */}
+      {/* Studio background image & subtle transparent gradient overlays */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <img
           src="/assets/landing/hero-bg.png"
           alt="Creative Studio Background"
-          className="w-full h-full object-cover object-center opacity-60 filter contrast-110"
+          className="w-full h-full object-cover object-center opacity-45 sm:opacity-50 dark:opacity-60 filter contrast-110"
         />
         {/* Transparent gradient texture overlay from assets */}
         <img
           src="/assets/landing/gradient.png"
           alt=""
-          className="absolute inset-0 w-full h-full object-cover opacity-25 mix-blend-screen pointer-events-none"
+          className="absolute inset-0 w-full h-full object-cover opacity-15 dark:opacity-25 mix-blend-screen pointer-events-none"
         />
-        {/* Soft, transparent gradient for text contrast and seamless bottom fade */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black pointer-events-none" />
-        <div className="absolute inset-0 bg-black/15 pointer-events-none" />
+        {/* Balanced, non-intrusive gradient for text contrast and seamless bottom fade */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white/40 via-transparent to-white/80 dark:from-black/50 dark:via-black/30 dark:to-black pointer-events-none" />
       </div>
 
       {/* Hero Content */}
-      <div className="relative z-10 max-w-3xl mx-auto text-center flex flex-col items-center my-auto">
-        {/* Scaled-down Sleek Headline */}
+      <div className="relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center my-auto">
+        {/* Prominent Sleek Headline */}
         {isRtl ? (
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.1] text-white font-display">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-[1.12] text-black dark:text-white font-display">
             خلّي براندك
             <br />
-            <span className="bg-[linear-gradient(90deg,#FFFFFF_5%,#E4E4E7_30%,#71717A_65%,#3F3F46_100%)] bg-clip-text text-transparent inline-block drop-shadow-sm">
+            <span className="bg-[linear-gradient(90deg,#000000_5%,#1F2937_30%,#4B5563_65%,#6B7280_100%)] dark:bg-[linear-gradient(90deg,#FFFFFF_5%,#E4E4E7_30%,#71717A_65%,#3F3F46_100%)] bg-clip-text text-transparent inline-block drop-shadow-sm">
               مستحيل
               <br />
               يتجاهلوه.
             </span>
           </h1>
         ) : (
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight uppercase leading-[1.05] text-white font-display">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight uppercase leading-[1.06] text-black dark:text-white font-display">
             MAKE YOUR BRAND
             <br />
-            <span className="bg-[linear-gradient(90deg,#FFFFFF_5%,#E4E4E7_30%,#71717A_65%,#3F3F46_100%)] bg-clip-text text-transparent inline-block drop-shadow-sm">
+            <span className="bg-[linear-gradient(90deg,#000000_5%,#1F2937_30%,#4B5563_65%,#6B7280_100%)] dark:bg-[linear-gradient(90deg,#FFFFFF_5%,#E4E4E7_30%,#71717A_65%,#3F3F46_100%)] bg-clip-text text-transparent inline-block drop-shadow-sm">
               IMPOSSIBLE TO
               <br />
               IGNORE.
@@ -71,33 +70,33 @@ export default function Hero({ onOpenPortfolio, onOpenContact, onScrollToWork, o
         )}
 
         {/* Subtitle */}
-        <p className="mt-3 max-w-lg text-[11px] sm:text-xs text-neutral-400 font-medium tracking-wide uppercase leading-relaxed text-center px-4">
+        <p className="mt-4 sm:mt-5 max-w-xl text-xs sm:text-sm md:text-base text-neutral-700 dark:text-neutral-300 font-medium tracking-wide uppercase leading-relaxed text-center px-4">
           {t('hero.tagline', 'WE ARE A FULL-SERVICE CREATIVE MEDIA AGENCY DRIVEN BY DATA, CRAFTED WITH PASSION, AND COMMITTED TO MAKING BRANDS UNFORGETTABLE.')}
         </p>
 
         {/* Two Call-to-Action Buttons */}
-        <div className="mt-5 sm:mt-6 flex flex-row items-center gap-3 w-auto justify-center">
+        <div className="mt-6 sm:mt-7 flex flex-row items-center gap-3.5 w-auto justify-center">
           <button
             onClick={onScrollToWork}
-            className="px-5 py-2 bg-brand-red hover:bg-brand-redHover text-white text-[11px] font-bold uppercase tracking-wider rounded-md transition-all duration-300 transform hover:scale-105 shadow-md shadow-red-600/30 flex items-center justify-center space-x-1.5 rtl:space-x-reverse cursor-pointer"
+            className="px-6 py-2.5 sm:px-7 sm:py-3 bg-brand-red hover:bg-brand-redHover text-white text-xs sm:text-sm font-bold uppercase tracking-wider rounded-md transition-all duration-300 transform hover:scale-105 shadow-md shadow-red-600/30 flex items-center justify-center space-x-2 rtl:space-x-reverse cursor-pointer"
           >
             <span>{t('hero.exploreWork', 'EXPLORE OUR PROJECTS')}</span>
-            <ArrowRight className="w-3 h-3 rtl:rotate-180" />
+            <ArrowRight className="w-3.5 h-3.5 rtl:rotate-180" />
           </button>
 
           <button
             onClick={onOpenContact}
-            className="px-5 py-2 bg-transparent hover:bg-white/10 text-white border border-white/40 hover:border-white text-[11px] font-bold uppercase tracking-wider rounded-md transition-all duration-300 backdrop-blur-sm flex items-center justify-center space-x-1.5 rtl:space-x-reverse group cursor-pointer"
+            className="px-6 py-2.5 sm:px-7 sm:py-3 bg-white/60 dark:bg-transparent hover:bg-white dark:hover:bg-white/10 text-neutral-900 dark:text-white border border-neutral-300 dark:border-white/40 hover:border-neutral-900 dark:hover:border-white text-xs sm:text-sm font-bold uppercase tracking-wider rounded-md transition-all duration-300 backdrop-blur-sm flex items-center justify-center space-x-2 rtl:space-x-reverse group cursor-pointer shadow-sm dark:shadow-none"
           >
             <span>{t('nav.letsTalk', "LET'S TALK")}</span>
-            <ArrowUpRight className="w-3 h-3 text-white group-hover:scale-110 transition-transform rtl:rotate-[-90deg]" />
+            <ArrowUpRight className="w-3.5 h-3.5 text-neutral-900 dark:text-white group-hover:scale-110 transition-transform rtl:rotate-[-90deg]" />
           </button>
         </div>
 
         {/* Small Video after EXPLORE OUR PORTFOLIO button */}
         <div
           onClick={handlePlayShowreel}
-          className="mt-5 relative w-full max-w-[135px] sm:max-w-[155px] aspect-[9/16] rounded-2xl overflow-hidden border border-neutral-800 hover:border-brand-red/80 shadow-[0_10px_30px_rgba(0,0,0,0.8)] cursor-pointer group transition-all duration-300 transform hover:scale-105"
+          className="mt-6 relative w-full max-w-[140px] sm:max-w-[160px] aspect-[9/16] rounded-2xl overflow-hidden border border-neutral-300 dark:border-neutral-800 hover:border-brand-red/80 shadow-[0_10px_25px_rgba(0,0,0,0.15)] dark:shadow-[0_10px_30px_rgba(0,0,0,0.8)] cursor-pointer group transition-all duration-300 transform hover:scale-105"
         >
           <video
             src="/assets/hero/who_.mp4"
@@ -126,15 +125,15 @@ export default function Hero({ onOpenPortfolio, onOpenContact, onScrollToWork, o
 
           {/* Top/Bottom Badges */}
           <div className="absolute top-2.5 left-2.5 rtl:left-auto rtl:right-2.5 pointer-events-none">
-            <span className="px-2 py-0.5 bg-black/70 backdrop-blur-md rounded-full text-[8px] font-extrabold uppercase tracking-widest text-white border border-white/10">
+            <span className="px-2.5 py-0.5 bg-black/70 backdrop-blur-md rounded-full text-[9px] sm:text-[10px] font-extrabold uppercase tracking-widest text-white border border-white/10">
               REEL
             </span>
           </div>
           <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none">
-            <span className="text-[9px] font-extrabold uppercase tracking-wider text-white">
+            <span className="text-[10px] sm:text-xs font-extrabold uppercase tracking-wider text-white">
               {t('hero.watchReel', 'WATCH REEL')}
             </span>
-            <span className="text-[8.5px] font-mono text-neutral-300">
+            <span className="text-[9.5px] font-mono text-neutral-300">
               1:00
             </span>
           </div>
@@ -147,7 +146,7 @@ export default function Hero({ onOpenPortfolio, onOpenContact, onScrollToWork, o
         className="relative z-20 flex flex-col items-center group cursor-pointer opacity-70 hover:opacity-100 transition-opacity mt-auto mb-2"
         aria-label="Scroll to work"
       >
-        <span className="text-[8px] uppercase tracking-widest text-neutral-400 font-bold mb-0.5 group-hover:text-brand-red transition-colors">
+        <span className="text-[10px] sm:text-xs uppercase tracking-widest text-neutral-600 dark:text-neutral-400 font-bold mb-0.5 group-hover:text-brand-red transition-colors">
           {isRtl ? 'تمرير' : 'SCROLL'}
         </span>
         <ChevronDown className="w-3.5 h-3.5 text-brand-red animate-bounce" />

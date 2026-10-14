@@ -59,10 +59,10 @@ export default function Footer({ onOpenPolicy }) {
               </div>
             </a>
             <div className="sm:border-l rtl:sm:border-l-0 rtl:sm:border-r sm:border-neutral-300 dark:sm:border-white/10 sm:pl-4 rtl:sm:pl-0 rtl:sm:pr-4 flex flex-col justify-center">
-              <span className="text-xs font-bold uppercase tracking-wider text-neutral-900 dark:text-white">
+              <span className="text-sm font-bold uppercase tracking-wider text-neutral-900 dark:text-white">
                 DEVOTIX MEDIA
               </span>
-              <span className="text-[11px] text-neutral-500 dark:text-neutral-400 font-medium mt-0.5">
+              <span className="text-xs sm:text-[13px] text-neutral-500 dark:text-neutral-400 font-medium mt-0.5">
                 © {new Date().getFullYear()} {t('footer.copyright', 'ALL RIGHTS RESERVED. DEVOTIX MEDIA AGENCY.')}
               </span>
             </div>
@@ -72,13 +72,13 @@ export default function Footer({ onOpenPolicy }) {
           <div className="flex items-center space-x-6 sm:space-x-8 rtl:space-x-reverse">
             <button
               onClick={() => onOpenPolicy && onOpenPolicy('privacy')}
-              className="text-xs font-semibold tracking-wide text-neutral-600 dark:text-neutral-400 hover:text-brand-red transition-colors focus:outline-none cursor-pointer"
+              className="text-xs sm:text-sm font-semibold tracking-wide text-neutral-600 dark:text-neutral-400 hover:text-brand-red transition-colors focus:outline-none cursor-pointer"
             >
               {t('footer.privacyPolicy', 'Privacy Policy')}
             </button>
             <button
               onClick={() => onOpenPolicy && onOpenPolicy('terms')}
-              className="text-xs font-semibold tracking-wide text-neutral-600 dark:text-neutral-400 hover:text-brand-red transition-colors focus:outline-none cursor-pointer"
+              className="text-xs sm:text-sm font-semibold tracking-wide text-neutral-600 dark:text-neutral-400 hover:text-brand-red transition-colors focus:outline-none cursor-pointer"
             >
               {t('footer.termsOfService', 'Terms of Service')}
             </button>

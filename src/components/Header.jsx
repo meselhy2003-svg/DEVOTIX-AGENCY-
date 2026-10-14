@@ -158,13 +158,13 @@ export default function Header({
                 e.target.src = '/favicon.png';
               }}
             />
-            <span className="font-extrabold tracking-wider text-xs sm:text-sm text-neutral-900 dark:text-white font-display uppercase whitespace-nowrap">
+            <span className="font-extrabold tracking-wider text-sm sm:text-base text-neutral-900 dark:text-white font-display uppercase whitespace-nowrap">
               DEVOTIX MEDIA
             </span>
           </a>
 
           {/* Center: Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center space-x-4 xl:space-x-6 2xl:space-x-7 rtl:space-x-reverse flex-nowrap overflow-hidden">
+          <nav className="hidden lg:flex items-center space-x-3.5 xl:space-x-5 2xl:space-x-6 rtl:space-x-reverse flex-nowrap overflow-hidden">
             {navLinks.map((link) => {
               const targetSection = link.href.replace('#', '');
               const isActive = currentPage === 'about'
@@ -180,7 +180,7 @@ export default function Header({
                   key={link.key}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link)}
-                  className={`text-[9.5px] xl:text-[10.5px] 2xl:text-[11px] font-bold tracking-wider transition-colors duration-150 uppercase relative py-1 whitespace-nowrap cursor-pointer ${
+                  className={`text-[12px] xl:text-[13px] 2xl:text-[13.5px] font-bold tracking-wider transition-colors duration-150 uppercase relative py-1.5 whitespace-nowrap cursor-pointer ${
                     isActive
                       ? 'text-brand-red'
                       : 'text-neutral-700 dark:text-neutral-300 hover:text-brand-red dark:hover:text-brand-red'
@@ -196,16 +196,16 @@ export default function Header({
           </nav>
 
           {/* Right: Controls (Language + Theme) & "LET'S TALK" CTA Button */}
-          <div className="hidden sm:flex items-center space-x-2 xl:space-x-3 rtl:space-x-reverse flex-shrink-0">
+          <div className="hidden sm:flex items-center space-x-2.5 xl:space-x-3.5 rtl:space-x-reverse flex-shrink-0">
             {/* Language Switcher Pill */}
             <button
               onClick={toggleLanguage}
               title={language === 'en' ? 'التبديل إلى العربية' : 'Switch to English'}
-              className="px-2.5 py-1.5 rounded-full border border-neutral-300 dark:border-neutral-700 hover:border-brand-red bg-neutral-100 dark:bg-neutral-900 hover:bg-neutral-200 dark:hover:bg-neutral-800 text-neutral-800 dark:text-neutral-200 text-[10px] font-black uppercase tracking-wider flex items-center space-x-1.5 rtl:space-x-reverse transition-all cursor-pointer"
+              className="px-3 py-1.5 rounded-full border border-neutral-300 dark:border-neutral-700 hover:border-brand-red bg-neutral-100 dark:bg-neutral-900 hover:bg-neutral-200 dark:hover:bg-neutral-800 text-neutral-800 dark:text-neutral-200 text-xs font-black uppercase tracking-wider flex items-center space-x-1.5 rtl:space-x-reverse transition-all cursor-pointer"
             >
               <Globe className="w-3.5 h-3.5 text-brand-red" />
               <span className={language === 'en' ? 'text-brand-red font-black' : 'text-neutral-600 dark:text-neutral-400'}>EN</span>
-              <span className="text-neutral-400 dark:text-neutral-600 text-[9px]">/</span>
+              <span className="text-neutral-400 dark:text-neutral-600 text-[10px]">/</span>
               <span className={language === 'ar' ? 'text-brand-red font-black font-arabic' : 'text-neutral-600 dark:text-neutral-400'}>عربي</span>
             </button>
 
@@ -213,7 +213,7 @@ export default function Header({
             <button
               onClick={toggleTheme}
               title={isDark ? t('nav.themeLight', 'Switch to Light Mode') : t('nav.themeDark', 'Switch to Dark Mode')}
-              className="p-1.5 rounded-full border border-neutral-300 dark:border-neutral-700 hover:border-brand-red bg-neutral-100 dark:bg-neutral-900 hover:bg-neutral-200 dark:hover:bg-neutral-800 text-neutral-800 dark:text-neutral-200 transition-all cursor-pointer flex items-center justify-center"
+              className="p-2 rounded-full border border-neutral-300 dark:border-neutral-700 hover:border-brand-red bg-neutral-100 dark:bg-neutral-900 hover:bg-neutral-200 dark:hover:bg-neutral-800 text-neutral-800 dark:text-neutral-200 transition-all cursor-pointer flex items-center justify-center"
               aria-label="Toggle Theme"
             >
               {isDark ? (
@@ -226,10 +226,10 @@ export default function Header({
             {/* CTA Button */}
             <button
               onClick={handleCtaClick}
-              className="bg-brand-red hover:bg-brand-redHover text-white text-[9.5px] xl:text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 lg:px-3.5 lg:py-1.5 rounded-full transition-all duration-300 transform hover:scale-105 active:scale-95 shadow hover:shadow-red-500/30 flex items-center space-x-1 rtl:space-x-reverse cursor-pointer"
+              className="bg-brand-red hover:bg-brand-redHover text-white text-xs sm:text-[13px] font-bold uppercase tracking-wider px-3.5 py-1.5 lg:px-4 lg:py-2 rounded-full transition-all duration-300 transform hover:scale-105 active:scale-95 shadow hover:shadow-red-500/30 flex items-center space-x-1.5 rtl:space-x-reverse cursor-pointer"
             >
               <span>{t('nav.letsTalk', "LET'S TALK")}</span>
-              <ArrowUpRight className="w-2.5 h-2.5 rtl:rotate-[-90deg]" />
+              <ArrowUpRight className="w-3 h-3 rtl:rotate-[-90deg]" />
             </button>
           </div>
 
@@ -238,7 +238,7 @@ export default function Header({
             {/* Mobile Language Toggle */}
             <button
               onClick={toggleLanguage}
-              className="px-2 py-1 rounded-full border border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 text-[9.5px] font-bold uppercase cursor-pointer"
+              className="px-2.5 py-1.5 rounded-full border border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 text-xs font-bold uppercase cursor-pointer"
             >
               {language === 'en' ? 'عربي' : 'EN'}
             </button>
@@ -246,16 +246,16 @@ export default function Header({
             {/* Mobile Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-1 rounded-full border border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 cursor-pointer"
+              className="p-1.5 rounded-full border border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 cursor-pointer"
               aria-label="Toggle Theme"
             >
-              {isDark ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-neutral-700" />}
+              {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-neutral-700" />}
             </button>
 
             {/* Menu Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-neutral-900 dark:text-white p-1.5 focus:outline-none"
+              className="text-neutral-900 dark:text-white p-2 focus:outline-none"
               aria-label="Toggle Navigation Menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -265,7 +265,7 @@ export default function Header({
 
         {/* Mobile / Compact Tablet Drawer Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden bg-white dark:bg-neutral-950 border-t border-neutral-200 dark:border-neutral-800 px-5 pt-3 pb-5 space-y-1.5 animate-fadeIn max-h-[80vh] overflow-y-auto shadow-xl">
+          <div className="lg:hidden bg-white dark:bg-neutral-950 border-t border-neutral-200 dark:border-neutral-800 px-6 pt-4 pb-6 space-y-2 animate-fadeIn max-h-[80vh] overflow-y-auto shadow-xl">
             {navLinks.map((link) => {
               const targetSection = link.href.replace('#', '');
               const isActive = currentPage === 'about'
@@ -281,7 +281,7 @@ export default function Header({
                   key={link.key}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link)}
-                  className={`block text-xs font-bold uppercase py-1.5 transition-colors ${
+                  className={`block text-sm sm:text-base font-bold uppercase py-2 transition-colors ${
                     isActive ? 'text-brand-red' : 'text-neutral-800 dark:text-neutral-200 hover:text-brand-red'
                   }`}
                 >
@@ -289,16 +289,16 @@ export default function Header({
                 </a>
               );
             })}
-            <div className="pt-3 border-t border-neutral-100 dark:border-neutral-800 flex flex-col gap-2">
+            <div className="pt-4 border-t border-neutral-100 dark:border-neutral-800 flex flex-col gap-2">
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
                   handleCtaClick();
                 }}
-                className="w-full bg-brand-red hover:bg-brand-redHover text-white font-bold text-xs uppercase py-2.5 rounded-full tracking-wider transition-colors shadow text-center flex items-center justify-center space-x-2 rtl:space-x-reverse"
+                className="w-full bg-brand-red hover:bg-brand-redHover text-white font-bold text-sm uppercase py-3 rounded-full tracking-wider transition-colors shadow text-center flex items-center justify-center space-x-2 rtl:space-x-reverse"
               >
                 <span>{t('nav.letsTalk', "LET'S TALK")}</span>
-                <ArrowUpRight className="w-3.5 h-3.5 rtl:rotate-[-90deg]" />
+                <ArrowUpRight className="w-4 h-4 rtl:rotate-[-90deg]" />
               </button>
             </div>
           </div>
