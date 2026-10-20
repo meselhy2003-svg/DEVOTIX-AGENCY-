@@ -120,6 +120,17 @@ export default function AdminDashboardPage({ onNavigateHome }) {
   const [selectedProdGalleryId, setSelectedProdGalleryId] = useState('reals');
   const [selectedPhotoGalleryId, setSelectedPhotoGalleryId] = useState('fashion');
   const [draggedPhotoIndex, setDraggedPhotoIndex] = useState(null);
+  const [draggedGraphicIndex, setDraggedGraphicIndex] = useState(null);
+  const graphicFileInputRef = useRef(null);
+
+  const [newGraphicData, setNewGraphicData] = useState({
+    title: '',
+    category: 'BRANDING & IDENTITY',
+    categoryFilter: 'branding',
+    client: '',
+    image: '',
+    tag: 'NEW RELEASE',
+  });
 
   // Supabase Cloud Database Configuration State
   const [supabaseConfig, setSupabaseConfigState] = useState(getSupabaseConfig);
@@ -441,6 +452,88 @@ export default function AdminDashboardPage({ onNavigateHome }) {
       savePhotographyGalleries(updatedGalleries);
       showToast(isRtl ? 'تم حذف الصورة من المعرض' : 'Photo removed from gallery');
     }
+  };
+
+  // ─────────────────────────────────────────────
+  // 4.1 Graphics Artworks Handlers
+  // ─────────────────────────────────────────────
+  const handleGraphicFileUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setIsUploading(true);
+      setUploadProgress(10);
+      const res = await uploadToCloudinary(file, { folder: 'devotix_cms' }, (pct) => {
+        setUploadProgress(pct);
+      });
+
+      setNewGraphicData((prev) => ({
+        ...prev,
+        image: res.secure_url,
+      }));
+
+      showToast(isRtl ? 'تم رفع التصميم بنجاح إلى Cloudinary!' : 'Uploaded artwork to Cloudinary!');
+    } catch (err) {
+      console.error(err);
+      showToast(isRtl ? 'فشل الرفع' : (err.message || 'Upload failed'), 'error');
+    } finally {
+      setIsUploading(false);
+      setUploadProgress(0);
+      if (graphicFileInputRef.current) graphicFileInputRef.current.value = '';
+    }
+  };
+
+  const handleAddGraphicArtwork = (e) => {
+    e.preventDefault();
+    if (!newGraphicData.image) {
+      showToast(isRtl ? 'يرجى رفع تصميم أولاً أو إدخال رابط الصورة' : 'Please upload or provide an image URL', 'error');
+      return;
+    }
+    const newArt = {
+      id: 'graphic-' + Date.now(),
+      title: newGraphicData.title || 'NEW GRAPHIC ARTWORK',
+      category: newGraphicData.category || 'BRANDING & IDENTITY',
+      client: newGraphicData.client || 'DEVOTIX CLIENT',
+      image: newGraphicData.image,
+      thumb: newGraphicData.image,
+      tag: newGraphicData.tag || 'NEW RELEASE',
+      categoryFilter: newGraphicData.categoryFilter || 'branding',
+      description: 'New design release uploaded from Devotix CMS.',
+      year: '2026',
+      format: 'Digital Artwork',
+      details: 'Visual artwork created by Devotix Media.',
+    };
+    const updated = [newArt, ...graphics];
+    setGraphics(updated);
+    saveGraphicsData(updated);
+    setNewGraphicData({
+      title: '',
+      category: 'BRANDING & IDENTITY',
+      categoryFilter: 'branding',
+      client: '',
+      image: '',
+      tag: 'NEW RELEASE',
+    });
+    showToast(isRtl ? 'تم نشر التصميم في معرض الجرافيك بنجاح!' : 'Artwork published to graphics gallery!');
+  };
+
+  const handleMoveGraphic = (fromIndex, toIndex) => {
+    if (toIndex < 0 || toIndex >= graphics.length) return;
+    const updated = [...graphics];
+    const [moved] = updated.splice(fromIndex, 1);
+    updated.splice(toIndex, 0, moved);
+    setGraphics(updated);
+    saveGraphicsData(updated);
+    showToast(isRtl ? `تم نقل التصميم للمركز #${toIndex + 1}` : `Moved artwork to #${toIndex + 1}`);
+  };
+
+  const handleDeleteGraphic = (graphicId) => {
+    if (!window.confirm(isRtl ? 'هل تريد حذف هذا التصميم من المعرض؟' : 'Delete this artwork?')) return;
+    const updated = graphics.filter((item) => item.id !== graphicId);
+    setGraphics(updated);
+    saveGraphicsData(updated);
+    showToast(isRtl ? 'تم حذف التصميم' : 'Artwork deleted');
   };
 
   // ─────────────────────────────────────────────
@@ -782,10 +875,11 @@ export default function AdminDashboardPage({ onNavigateHome }) {
         <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-8 no-scrollbar border-b border-neutral-200 dark:border-white/10">
           {[
             { id: 'social', label: isRtl ? 'السوشيال ميديا وإيميلات النماذج' : 'Social & Form Emails', icon: Share2 },
-            { id: 'sheets', label: isRtl ? 'ربط شيت جوجل (Google Sheets)' : 'Google Sheets Sync', icon: Database },
+            { id: 'sheets', label: isRtl ? 'ربط ومزامنة شيت جوجل' : 'Google Sheets Sync', icon: Database },
             { id: 'views', label: isRtl ? 'فيوهات المحتوى (ريلز)' : 'Content Views (Reels)', icon: Flame },
             { id: 'production', label: isRtl ? 'معارض الإنتاج والفيديو' : 'Production Galleries', icon: Video },
-            { id: 'media', label: isRtl ? 'رفع الصور والتصاميم' : 'Photos & Graphics Upload', icon: ImageIcon },
+            { id: 'photography', label: isRtl ? 'معارض التصوير الفوتوغرافي' : 'Photography Galleries', icon: ImageIcon },
+            { id: 'graphics', label: isRtl ? 'معرض التصاميم والجرافيك' : 'Graphic Artworks', icon: Layers },
             { id: 'campaigns', label: isRtl ? 'متابعة الكامبينز' : 'Campaigns Tracker', icon: BarChart3 },
             { id: 'inbox', label: isRtl ? `صندوق الاستفسارات (${leads.length})` : `Leads Inbox (${leads.length})`, icon: Mail },
             { id: 'settings', label: isRtl ? 'الإعدادات والنسخ' : 'Settings & Backup', icon: Settings },
@@ -949,88 +1043,34 @@ export default function AdminDashboardPage({ onNavigateHome }) {
                     </div>
                   </div>
 
-                  {/* Form 3: Google Sheets Realtime Webhook & Direct Link Sync */}
-                  <div className="md:col-span-2 p-4 sm:p-5 rounded-xl bg-gradient-to-r from-emerald-500/5 via-emerald-500/10 to-transparent border border-emerald-500/30 space-y-4">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                      <div className="flex items-center gap-2">
-                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                        <label className="text-xs sm:text-[13px] font-black uppercase tracking-wide text-neutral-900 dark:text-white font-display">
-                          {isRtl ? '3. ربط النماذج بشيت جوجل (Google Sheets Integration)' : '3. Google Sheets Integration & Webhook'}
-                        </label>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setActiveTab('sheets')}
-                          className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer"
-                        >
-                          <ExternalLink className="w-3.5 h-3.5" />
-                          <span>{isRtl ? 'فتح مدير شيت جوجل الكامل' : 'Open Sheets Manager'}</span>
-                        </button>
-                        <span className="text-neutral-400">•</span>
-                        <button
-                          type="button"
-                          onClick={() => setShowAppsScriptModal(true)}
-                          className="text-[11px] font-bold text-neutral-600 dark:text-neutral-300 hover:underline flex items-center gap-1 cursor-pointer"
-                        >
-                          <Copy className="w-3.5 h-3.5" />
-                          <span>{isRtl ? 'نسخ كود Apps Script' : 'Copy Apps Script'}</span>
-                        </button>
-                      </div>
-                    </div>
-
-                    <p className="text-[11px] text-neutral-600 dark:text-neutral-400 leading-relaxed font-medium">
-                      {isRtl
-                        ? 'ألصق رابط تطبيق الويب (Google Web App URL) ورابط الشيت المباشر. عند تقديم أي استفسار خدمة أو طلب توظيف، سيتم إدراج صف جديد ببياناته تلقائياً في شيت جوجل.'
-                        : 'Paste your deployed Google Apps Script Web App URL and direct sheet link to stream inquiries and CVs to your spreadsheet.'}
-                    </p>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-[10.5px] font-extrabold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 mb-1">
-                          {isRtl ? 'رابط Webhook التلقائي (/exec)' : 'Google Web App Webhook (/exec)'}
-                        </label>
-                        <input
-                          type="url"
-                          value={socials.googleSheetWebhookUrl || ''}
-                          onChange={(e) => setSocials({ ...socials, googleSheetWebhookUrl: e.target.value })}
-                          placeholder="https://script.google.com/macros/s/AKfycb.../exec"
-                          className="w-full px-3.5 py-2.5 rounded-lg bg-white dark:bg-black/60 border border-neutral-300 dark:border-white/15 text-xs font-semibold focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all font-mono"
-                        />
+                  {/* Google Sheets Sync Pointer Banner (Centralized in Sheets tab) */}
+                  <div className="md:col-span-2 p-5 rounded-2xl bg-gradient-to-r from-emerald-500/10 via-emerald-500/5 to-transparent border border-emerald-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-11 h-11 rounded-xl bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-md shadow-emerald-500/20">
+                        <Database className="w-5 h-5" />
                       </div>
                       <div>
-                        <div className="flex items-center justify-between mb-1">
-                          <label className="text-[10.5px] font-extrabold uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
-                            {isRtl ? 'رابط ملف شيت جوجل المباشر للمعاينة' : 'Direct Google Sheet Link'}
-                          </label>
-                          {socials.googleSheetViewUrl && (
-                            <a
-                              href={socials.googleSheetViewUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-[10.5px] font-bold text-emerald-500 hover:underline flex items-center gap-0.5"
-                            >
-                              <span>{isRtl ? 'فتح الشيت' : 'Open'}</span>
-                              <ExternalLink className="w-2.5 h-2.5" />
-                            </a>
-                          )}
+                        <div className="flex items-center gap-2">
+                          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                          <h4 className="text-sm font-black uppercase tracking-wide text-neutral-900 dark:text-white font-display">
+                            {isRtl ? 'إدارة ومزامنة شيت جوجل (Google Sheets Sync)' : 'Centralized Google Sheets Sync'}
+                          </h4>
                         </div>
-                        <input
-                          type="url"
-                          value={socials.googleSheetViewUrl || ''}
-                          onChange={(e) => setSocials({ ...socials, googleSheetViewUrl: e.target.value })}
-                          placeholder="https://docs.google.com/spreadsheets/d/1BxiMVs.../edit"
-                          className="w-full px-3.5 py-2.5 rounded-lg bg-white dark:bg-black/60 border border-neutral-300 dark:border-white/15 text-xs font-semibold focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all font-mono"
-                        />
+                        <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-0.5 leading-relaxed">
+                          {isRtl
+                            ? 'تم توحيد جميع إعدادات Webhook وروابط الشيت وتجربة الإرسال الحي في تبويب شيت جوجل المخصص.'
+                            : 'All Google Sheet Webhooks, live spreadsheet URLs, test rows, and Apps Script codes are managed in the dedicated tab.'}
+                        </p>
                       </div>
                     </div>
-
-                    <div className="text-[10px] text-neutral-500 dark:text-neutral-400 font-mono flex items-center justify-between pt-1 border-t border-neutral-200 dark:border-white/5">
-                      <span>{isRtl ? 'الوجهة:' : 'Destination:'} Google Spreadsheet (طلبات الخدمات & طلبات التوظيف)</span>
-                      <span className={socials.googleSheetWebhookUrl ? "text-emerald-500 font-bold uppercase" : "text-neutral-400 uppercase"}>
-                        {socials.googleSheetWebhookUrl ? (isRtl ? 'مربوط وجاهز ✅' : 'Connected ✅') : (isRtl ? 'غير مربوط (اختياري)' : 'Not Connected')}
-                      </span>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab('sheets')}
+                      className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 cursor-pointer shadow-md shadow-emerald-600/20 whitespace-nowrap shrink-0 transition-all"
+                    >
+                      <span>{isRtl ? 'فتح مدير شيت جوجل' : 'Open Sheets Manager'}</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </button>
                   </div>
                 </div>
               </div>
@@ -1554,16 +1594,16 @@ export default function AdminDashboardPage({ onNavigateHome }) {
         {/* ─────────────────────────────────────────────────────────────
             TAB 4: PHOTOS & GRAPHICS UPLOAD (Cloudinary)
         ───────────────────────────────────────────────────────────── */}
-        {activeTab === 'media' && (
+        {(activeTab === 'photography' || activeTab === 'media') && (
           <div className="max-w-4xl mx-auto space-y-8">
             <div className="pb-4 border-b border-neutral-200 dark:border-white/10">
               <h2 className="text-xl sm:text-2xl font-black uppercase tracking-wider">
-                {isRtl ? 'رفع الصور وإدارة المعارض الفوتوغرافية' : 'Direct Cloudinary Upload & Photography CMS'}
+                {isRtl ? 'معارض التصوير الفوتوغرافي' : 'Photography Galleries CMS'}
               </h2>
               <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-1">
                 {isRtl
-                  ? 'رفع الصور مباشرة إلى سحابة Cloudinary (qs6oltzi) وإضافتها لمعارض الفاشون، المنتجات، الطعام، أو الجرافيك.'
-                  : 'Upload high-resolution photography directly to Cloudinary cloud (qs6oltzi) and publish to Fashion, Products, Food, or Graphic Artworks.'}
+                  ? 'رفع الصور مباشرة إلى سحابة Cloudinary وإدارتها في معارض الفاشون، المنتجات، والطعام مع ترتيب ظهورها وغلاف كل معرض.'
+                  : 'Upload high-resolution photography directly to Cloudinary and manage Fashion, Products, and Food galleries.'}
               </p>
             </div>
 
@@ -1627,7 +1667,6 @@ export default function AdminDashboardPage({ onNavigateHome }) {
                     <option value="fashion">Fashion & Editorial (فاشون)</option>
                     <option value="product">Products & Commercial (منتجات)</option>
                     <option value="food">Food & Culinary (طعام ومأكولات)</option>
-                    <option value="graphic">Graphic Design & Artworks (جرافيك)</option>
                   </select>
                 </div>
 
@@ -1731,9 +1770,7 @@ export default function AdminDashboardPage({ onNavigateHome }) {
 
                 {/* Quick Info Badge */}
                 <div className="px-3.5 py-1.5 rounded-xl bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-xs font-bold text-neutral-600 dark:text-neutral-300 w-fit">
-                  {selectedPhotoGalleryId === 'graphic'
-                    ? `${graphics.length} ${isRtl ? 'تصميم متاح' : 'Artworks'}`
-                    : `${photoGalleries.find((g) => g.id === selectedPhotoGalleryId)?.photos?.length || 0} ${isRtl ? 'صورة في المعرض' : 'Photos in Gallery'}`}
+                  {photoGalleries.find((g) => g.id === selectedPhotoGalleryId)?.photos?.length || 0} {isRtl ? 'صورة في المعرض' : 'Photos in Gallery'}
                 </div>
               </div>
 
@@ -1743,7 +1780,6 @@ export default function AdminDashboardPage({ onNavigateHome }) {
                   { id: 'fashion', label: isRtl ? 'معرض الفاشون (Fashion)' : 'Fashion Gallery' },
                   { id: 'product', label: isRtl ? 'معرض المنتجات (Products)' : 'Products Gallery' },
                   { id: 'food', label: isRtl ? 'معرض المأكولات (Food)' : 'Food Gallery' },
-                  { id: 'graphic', label: isRtl ? 'معرض الجرافيك (Graphics)' : 'Graphics Artworks' },
                 ].map((tab) => (
                   <button
                     key={tab.id}
@@ -1762,10 +1798,7 @@ export default function AdminDashboardPage({ onNavigateHome }) {
 
               {/* Reordering Grid */}
               {(() => {
-                const isGraphic = selectedPhotoGalleryId === 'graphic';
-                const itemsList = isGraphic
-                  ? graphics
-                  : photoGalleries.find((g) => g.id === selectedPhotoGalleryId)?.photos || [];
+                const itemsList = photoGalleries.find((g) => g.id === selectedPhotoGalleryId)?.photos || [];
 
                 if (itemsList.length === 0) {
                   return (
@@ -1889,6 +1922,310 @@ export default function AdminDashboardPage({ onNavigateHome }) {
                   </div>
                 );
               })()}
+            </div>
+          </div>
+        )}
+
+        {/* ─────────────────────────────────────────────────────────────
+            TAB: GRAPHIC DESIGN & ARTWORKS (معرض التصاميم والجرافيك)
+        ───────────────────────────────────────────────────────────── */}
+        {activeTab === 'graphics' && (
+          <div className="max-w-5xl mx-auto space-y-8 animate-fadeIn">
+            {/* Header */}
+            <div className="pb-4 border-b border-neutral-200 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h2 className="text-xl sm:text-2xl font-black uppercase tracking-wider flex items-center gap-2">
+                  <Layers className="w-6 h-6 text-brand-red" />
+                  <span>{isRtl ? 'إدارة معرض التصاميم والجرافيك' : 'Graphic Artworks & Designs CMS'}</span>
+                </h2>
+                <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+                  {isRtl
+                    ? 'رفع أعمال وتصاميم الهوية البصرية، الباكيدجينج، وسوشيال ميديا ديزاين وترتيب تسلسل ظهورها في الموقع.'
+                    : 'Upload and arrange brand identity, packaging, typography, and social media designs.'}
+                </p>
+              </div>
+
+              <div className="px-3.5 py-1.5 rounded-xl bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-xs font-bold text-neutral-600 dark:text-neutral-300 w-fit shrink-0">
+                {graphics.length} {isRtl ? 'تصميم منشور' : 'Published Artworks'}
+              </div>
+            </div>
+
+            {/* Direct Upload Box for Graphics */}
+            <div className="p-6 sm:p-8 rounded-2xl bg-neutral-50 dark:bg-white/[0.03] border-2 border-dashed border-neutral-300 dark:border-white/20 text-center relative hover:border-brand-red/60 transition-colors">
+              <input
+                ref={graphicFileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleGraphicFileUpload}
+                disabled={isUploading}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+              />
+              <div className="flex flex-col items-center justify-center space-y-3 pointer-events-none">
+                <div className="w-16 h-16 rounded-2xl bg-brand-red/10 border border-brand-red/30 flex items-center justify-center">
+                  {isUploading ? (
+                    <RefreshCw className="w-8 h-8 text-brand-red animate-spin" />
+                  ) : (
+                    <Upload className="w-8 h-8 text-brand-red" />
+                  )}
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-neutral-900 dark:text-white">
+                    {isUploading
+                      ? (isRtl ? `جاري رفع التصميم إلى Cloudinary... ${uploadProgress}%` : `Uploading Graphic to Cloudinary... ${uploadProgress}%`)
+                      : (isRtl ? 'انقر أو اسحب ملف التصميم هنا للرفع المباشر' : 'Click or Drag artwork file here to upload')}
+                  </h3>
+                  <p className="text-xs text-neutral-500 mt-1">
+                    Direct Cloudinary (qs6oltzi) • Auto-optimised WebP/AVIF
+                  </p>
+                </div>
+              </div>
+
+              {isUploading && (
+                <div className="mt-4 w-full bg-neutral-200 dark:bg-neutral-800 rounded-full h-2 overflow-hidden">
+                  <div
+                    className="bg-brand-red h-full transition-all duration-300"
+                    style={{ width: `${uploadProgress}%` }}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Graphic Metadata Form */}
+            <form onSubmit={handleAddGraphicArtwork} className="p-6 rounded-2xl bg-neutral-50 dark:bg-white/[0.03] border border-neutral-200 dark:border-white/10 space-y-4">
+              <h3 className="text-sm font-black uppercase tracking-wider flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-brand-red" />
+                <span>{isRtl ? 'بيانات العمل وتصنيف الجرافيك' : 'Graphic Details & Category'}</span>
+              </h3>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 mb-1.5">
+                    {isRtl ? 'تصنيف الفلترة' : 'Category Filter'}
+                  </label>
+                  <select
+                    value={newGraphicData.categoryFilter}
+                    onChange={(e) => {
+                      const filterVal = e.target.value;
+                      let label = 'BRANDING & IDENTITY';
+                      if (filterVal === 'social') label = 'SOCIAL MEDIA & ADS';
+                      else if (filterVal === 'packaging') label = 'PACKAGING & PRINT';
+                      else if (filterVal === 'typography') label = 'TYPOGRAPHY & ART';
+                      setNewGraphicData({
+                        ...newGraphicData,
+                        categoryFilter: filterVal,
+                        category: label,
+                      });
+                    }}
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-white dark:bg-black/50 border border-neutral-300 dark:border-white/15 text-sm focus:outline-none focus:border-brand-red"
+                  >
+                    <option value="branding">Branding & Identity (هوية بصرية)</option>
+                    <option value="social">Social Media & Ads (سوشيال ميديا)</option>
+                    <option value="packaging">Packaging & Print (تغليف وطباعة)</option>
+                    <option value="typography">Typography & Art (تايبوجرافي وفنون)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 mb-1.5">
+                    {isRtl ? 'عنوان العمل' : 'Artwork Title'}
+                  </label>
+                  <input
+                    type="text"
+                    value={newGraphicData.title}
+                    onChange={(e) => setNewGraphicData({ ...newGraphicData, title: e.target.value })}
+                    placeholder="e.g. LUXURY COFFEE REBRAND"
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-white dark:bg-black/50 border border-neutral-300 dark:border-white/15 text-sm focus:outline-none focus:border-brand-red"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 mb-1.5">
+                    {isRtl ? 'اسم العميل / العلامة' : 'Client / Brand'}
+                  </label>
+                  <input
+                    type="text"
+                    value={newGraphicData.client}
+                    onChange={(e) => setNewGraphicData({ ...newGraphicData, client: e.target.value })}
+                    placeholder="e.g. AROMA ROASTERS"
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-white dark:bg-black/50 border border-neutral-300 dark:border-white/15 text-sm focus:outline-none focus:border-brand-red"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 mb-1.5">
+                    {isRtl ? 'شارة العمل (Tag / Badge)' : 'Artwork Tag'}
+                  </label>
+                  <input
+                    type="text"
+                    value={newGraphicData.tag}
+                    onChange={(e) => setNewGraphicData({ ...newGraphicData, tag: e.target.value })}
+                    placeholder="e.g. BRAND IDENTITY"
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-white dark:bg-black/50 border border-neutral-300 dark:border-white/15 text-sm focus:outline-none focus:border-brand-red"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 mb-1.5">
+                  {isRtl ? 'رابط التصميم (Image URL)' : 'Artwork Image URL'}
+                </label>
+                <input
+                  type="text"
+                  value={newGraphicData.image}
+                  onChange={(e) => setNewGraphicData({ ...newGraphicData, image: e.target.value })}
+                  placeholder="https://res.cloudinary.com/qs6oltzi/image/upload/..."
+                  className="w-full px-3.5 py-2.5 rounded-lg bg-white dark:bg-black/50 border border-neutral-300 dark:border-white/15 text-sm font-mono focus:outline-none focus:border-brand-red"
+                />
+              </div>
+
+              {/* Preview if image URL exists */}
+              {newGraphicData.image && (
+                <div className="flex items-center gap-4 p-3 rounded-xl bg-white dark:bg-black/40 border border-neutral-200 dark:border-white/10">
+                  <img
+                    src={newGraphicData.image}
+                    alt="Artwork preview"
+                    className="w-20 h-20 object-cover rounded-lg border border-neutral-300 dark:border-white/15"
+                  />
+                  <div className="text-xs space-y-1">
+                    <p className="font-bold text-emerald-500">{isRtl ? 'جاهز للإضافة لمعرض الجرافيك' : 'Ready to add'}</p>
+                    <p className="text-neutral-500 font-mono line-clamp-1">{newGraphicData.image}</p>
+                  </div>
+                </div>
+              )}
+
+              <div className="flex justify-end pt-2">
+                <button
+                  type="submit"
+                  className="px-8 py-3 rounded-xl bg-brand-red hover:bg-brand-red/90 text-white font-bold text-sm uppercase tracking-wider flex items-center gap-2 cursor-pointer shadow-lg shadow-brand-red/25"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>{isRtl ? 'نشر التصميم في المعرض' : 'Publish to Graphics Gallery'}</span>
+                </button>
+              </div>
+            </form>
+
+            {/* Reorder & Arrange Graphics Artworks */}
+            <div className="pt-6 border-t border-neutral-200 dark:border-white/10 space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-lg sm:text-xl font-black uppercase tracking-wider flex items-center gap-2 text-neutral-900 dark:text-white">
+                    <Layers className="w-5 h-5 text-brand-red" />
+                    <span>{isRtl ? 'ترتيب وتنسيق ظهور التصاميم' : 'Reorder & Sequence Graphics'}</span>
+                  </h3>
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                    {isRtl
+                      ? 'يمكنك ترتيب ظهور التصاميم بالأسهم ⬆️ ⬇️ أو بالسحب والإفلات. التصميم رقم #1 يتصدر واجهة المعرض.'
+                      : 'Reorder artworks using ⬆️ ⬇️ or drag & drop. Design #1 appears first in the gallery.'}
+                  </p>
+                </div>
+              </div>
+
+              {graphics.length === 0 ? (
+                <div className="p-8 text-center rounded-xl bg-neutral-50 dark:bg-white/[0.02] border border-neutral-200 dark:border-white/10 text-xs text-neutral-500">
+                  {isRtl ? 'لا توجد تصاميم في المعرض حالياً.' : 'No graphic artworks in the gallery yet.'}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5">
+                  {graphics.map((art, index) => {
+                    const isCover = index === 0;
+                    return (
+                      <div
+                        key={art.id || index}
+                        draggable
+                        onDragStart={() => setDraggedGraphicIndex(index)}
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          if (draggedGraphicIndex !== null && draggedGraphicIndex !== index) {
+                            handleMoveGraphic(draggedGraphicIndex, index);
+                            setDraggedGraphicIndex(null);
+                          }
+                        }}
+                        className={`relative rounded-xl overflow-hidden border transition-all flex flex-col justify-between bg-white dark:bg-neutral-900 group ${
+                          isCover
+                            ? 'border-brand-red shadow-md shadow-brand-red/10 ring-1 ring-brand-red/50'
+                            : 'border-neutral-200 dark:border-white/10 hover:border-neutral-400 dark:hover:border-white/30'
+                        }`}
+                      >
+                        {/* Artwork Preview & Rank Badge */}
+                        <div className="relative aspect-square bg-black overflow-hidden">
+                          <img
+                            src={art.image || art.thumb}
+                            alt={art.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            loading="lazy"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none" />
+
+                          {/* Rank Badge */}
+                          <div className="absolute top-2 left-2 rtl:left-auto rtl:right-2 flex items-center gap-1">
+                            <span
+                              className={`px-2 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase shadow ${
+                                isCover
+                                  ? 'bg-brand-red text-white ring-2 ring-white/40'
+                                  : 'bg-black/75 text-white backdrop-blur-md border border-white/20'
+                              }`}
+                            >
+                              #{index + 1} {isCover ? (isRtl ? '⭐ الأول' : '⭐ #1') : ''}
+                            </span>
+                          </div>
+
+                          {/* Category Tag Badge */}
+                          <div className="absolute top-2 right-2 rtl:right-auto rtl:left-2 flex items-center gap-1">
+                            <span className="px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase bg-white/20 text-white backdrop-blur-md">
+                              {art.categoryFilter || 'artwork'}
+                            </span>
+                          </div>
+
+                          {/* Bottom Info on Image */}
+                          <div className="absolute bottom-2 left-2 right-2 text-white">
+                            <p className="text-xs font-bold truncate">{art.title || 'Untitled'}</p>
+                            <p className="text-[10px] text-neutral-300 font-medium truncate">
+                              {art.client || art.tag || ''}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Reordering Action Buttons */}
+                        <div className="p-2.5 bg-neutral-50 dark:bg-white/[0.02] border-t border-neutral-200 dark:border-white/10 flex items-center justify-between gap-1.5 text-xs">
+                          {/* Move Up / Down Buttons */}
+                          <div className="flex items-center gap-1">
+                            <button
+                              type="button"
+                              disabled={index === 0}
+                              onClick={() => handleMoveGraphic(index, index - 1)}
+                              className="p-1.5 rounded-lg border border-neutral-300 dark:border-white/15 bg-white dark:bg-neutral-800 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-neutral-100 dark:hover:bg-white/10 text-neutral-700 dark:text-neutral-200 transition-colors cursor-pointer"
+                              title={isRtl ? 'تقديم خطوة للأمام' : 'Move Up'}
+                            >
+                              <ArrowUp className="w-3.5 h-3.5" />
+                            </button>
+
+                            <button
+                              type="button"
+                              disabled={index === graphics.length - 1}
+                              onClick={() => handleMoveGraphic(index, index + 1)}
+                              className="p-1.5 rounded-lg border border-neutral-300 dark:border-white/15 bg-white dark:bg-neutral-800 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-neutral-100 dark:hover:bg-white/10 text-neutral-700 dark:text-neutral-200 transition-colors cursor-pointer"
+                              title={isRtl ? 'تأخير خطوة للخلف' : 'Move Down'}
+                            >
+                              <ArrowDown className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+
+                          {/* Delete Button */}
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteGraphic(art.id)}
+                            className="p-1.5 rounded-lg border border-red-500/30 text-red-500 hover:bg-red-500/10 transition-colors cursor-pointer"
+                            title={isRtl ? 'حذف التصميم' : 'Delete Artwork'}
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
         )}
