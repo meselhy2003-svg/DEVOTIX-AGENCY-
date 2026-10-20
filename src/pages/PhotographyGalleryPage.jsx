@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ArrowLeft, Maximize2 } from 'lucide-react';
 import Footer from '../components/Footer';
-import { PHOTOGRAPHY_GALLERIES, getGalleryById } from '../data/photographyData';
+import { getPhotographyGalleries } from '../data/photographyData';
 import { useThemeLanguage } from '../context/ThemeLanguageContext';
 import CloudImg from '../components/CloudImg';
 import { cldGrid } from '../utils/cloudinaryUrl';
@@ -13,15 +13,30 @@ export default function PhotographyGalleryPage({
   onOpenPolicy
 }) {
   const { isRtl, isDark, t } = useThemeLanguage();
-  const [currentGallery, setCurrentGallery] = useState(gallery || PHOTOGRAPHY_GALLERIES[0]);
+  const [galleriesList, setGalleriesList] = useState(getPhotographyGalleries);
+  const [currentGallery, setCurrentGallery] = useState(() => {
+    const list = getPhotographyGalleries();
+    return (gallery && list.find(g => g.id === gallery.id)) || list[0];
+  });
+
+  useEffect(() => {
+    const handleUpdate = (e) => {
+      const updated = e.detail || getPhotographyGalleries();
+      setGalleriesList(updated);
+      setCurrentGallery(prev => (prev ? updated.find(g => g.id === prev.id) || updated[0] : updated[0]));
+    };
+    window.addEventListener('devotix_photography_updated', handleUpdate);
+    return () => window.removeEventListener('devotix_photography_updated', handleUpdate);
+  }, []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
-  }, [currentGallery]);
+  }, [currentGallery?.id]);
 
   useEffect(() => {
     if (gallery) {
-      setCurrentGallery(gallery);
+      const list = getPhotographyGalleries();
+      setCurrentGallery(list.find(g => g.id === gallery.id) || gallery);
     }
   }, [gallery]);
 
@@ -51,7 +66,7 @@ export default function PhotographyGalleryPage({
             <span className="text-[9px] font-bold uppercase tracking-widest text-neutral-500 dark:text-neutral-400 mr-1 rtl:mr-0 rtl:ml-1 hidden md:inline-block">
               {isRtl ? 'تبديل المعرض:' : 'Switch Gallery:'}
             </span>
-            {PHOTOGRAPHY_GALLERIES.map((gal) => (
+            {galleriesList.map((gal) => (
               <button
                 key={gal.id}
                 onClick={() => setCurrentGallery(gal)}

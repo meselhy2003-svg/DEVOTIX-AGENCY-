@@ -28,6 +28,62 @@ export const GRAPHICS_DATA = [
     details: 'Brand collateral and industrial presentation design highlighting chemical paint durability, color accuracy matching, and digital distribution catalog.',
   },
   {
+    id: 'meltix-social-campaign',
+    title: 'MELTIX TRUFFLE MELT SOCIAL AD',
+    category: 'SOCIAL MEDIA ADVERTISING',
+    client: 'MELTIX BURGER CO.',
+    image: '/assets/graphic/social/social-burger-ad.jpg',
+    thumb: '/assets/graphic/social/social-burger-ad.jpg',
+    tag: 'SOCIAL MEDIA ADS',
+    categoryFilter: 'social',
+    description: 'High-converting Instagram & TikTok social creative for Meltix Truffle Melt launch with neon typography and appetizing food art direction.',
+    year: '2026',
+    format: 'Social Media Ad Campaign',
+    details: 'Digital advertising visual identity, promotional poster design, and high-CTR social media creative engineered for high-engagement food conversion.',
+  },
+  {
+    id: 'carhub-social-campaign',
+    title: 'CAR HUB EXCLUSIVE SOCIAL POSTER',
+    category: 'AUTOMOTIVE SOCIAL CREATIVE',
+    client: 'CAR HUB LUXURY',
+    image: '/assets/graphic/social/social-car-ad.jpg',
+    thumb: '/assets/graphic/social/social-car-ad.jpg',
+    tag: 'AUTOMOTIVE SOCIAL',
+    categoryFilter: 'social',
+    description: 'Precision-engineered dark-mode automotive promotional social ad campaign highlighting speed, performance, and luxury.',
+    year: '2026',
+    format: 'Paid Ad Creative & Campaign Poster',
+    details: 'High-impact motion-feel poster designed for social feeds and story ads with futuristic UI HUD accents and high-end automotive styling.',
+  },
+  {
+    id: 'petunia-social-campaign',
+    title: 'PETUNIA HAUTE COUTURE LOOKBOOK',
+    category: 'FASHION SOCIAL CREATIVE',
+    client: 'PETUNIA COUTURE',
+    image: '/assets/graphic/social/social-fashion-ad.jpg',
+    thumb: '/assets/graphic/social/social-fashion-ad.jpg',
+    tag: 'FASHION SOCIAL',
+    categoryFilter: 'social',
+    description: 'Editorial luxury aesthetic campaign creative for autumn/winter digital collection with warm beige brutalist architecture.',
+    year: '2026',
+    format: 'Instagram Editorial Lookbook Post',
+    details: 'Minimalist editorial composition designed for high-fashion digital storytelling, social moodboards, and luxury apparel campaigns.',
+  },
+  {
+    id: 'noir-perfume-social',
+    title: 'NOIR ESSENCE EAU DE PARFUM AD',
+    category: 'LUXURY PRODUCT SOCIAL',
+    client: 'NOIR ESSENCE LUXURY',
+    image: '/assets/graphic/social/social-perfume-ad.jpg',
+    thumb: '/assets/graphic/social/social-perfume-ad.jpg',
+    tag: 'LUXURY SOCIAL',
+    categoryFilter: 'social',
+    description: 'Cinematic splash water simulation and gold particle lighting for luxury perfume social campaign launch.',
+    year: '2026',
+    format: 'Product Launch Creative Post',
+    details: 'Dramatic product rendering and creative art direction tailored for high-ticket e-commerce conversion and social ad feeds.',
+  },
+  {
     id: 'meltix-burger-cover',
     title: 'MELTIX BURGER BRAND IDENTITY',
     category: 'RESTAURANT BRAND IDENTITY',
@@ -113,6 +169,63 @@ export const GRAPHICS_DATA = [
   },
 ];
 
+const STORAGE_KEY = 'devotix_graphics_data';
+
+export function getGraphicsData() {
+  if (typeof window === 'undefined') return GRAPHICS_DATA;
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        // Seamlessly merge new default items (e.g. social media designs) if missing
+        const existingIds = new Set(parsed.map((item) => item.id));
+        const missing = GRAPHICS_DATA.filter((item) => !existingIds.has(item.id));
+        if (missing.length > 0) {
+          const merged = [...parsed, ...missing];
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+          return merged;
+        }
+        return parsed;
+      }
+    }
+  } catch (e) {
+    console.error('Failed to parse graphics data from localStorage:', e);
+  }
+  return GRAPHICS_DATA;
+}
+
+export function saveGraphicsData(items, syncCloud = true) {
+  if (typeof window === 'undefined') return;
+  try {
+    const existingIds = new Set((items || []).map((item) => item.id));
+    const missing = GRAPHICS_DATA.filter((item) => !existingIds.has(item.id));
+    const finalItems = missing.length > 0 ? [...(items || []), ...missing] : items;
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(finalItems));
+    window.dispatchEvent(new CustomEvent('devotix_graphics_updated', { detail: finalItems }));
+    if (syncCloud) {
+      import('../services/cmsSync').then(({ pushKeyToCloud, CMS_KEYS }) => {
+        pushKeyToCloud(CMS_KEYS.GRAPHICS, finalItems);
+      }).catch(() => {});
+    }
+  } catch (e) {
+    console.error('Failed to save graphics data to localStorage:', e);
+  }
+}
+
+export function resetGraphicsData() {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+    window.dispatchEvent(new CustomEvent('devotix_graphics_updated', { detail: GRAPHICS_DATA }));
+  } catch (e) {
+    console.error('Failed to reset graphics data in localStorage:', e);
+  }
+}
+
 export const getGraphicById = (id) => {
-  return GRAPHICS_DATA.find((g) => g.id === id) || GRAPHICS_DATA[0];
+  const all = getGraphicsData();
+  return all.find((g) => g.id === id) || all[0];
 };
+

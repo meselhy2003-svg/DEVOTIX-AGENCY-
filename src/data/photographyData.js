@@ -13,17 +13,9 @@ export const PHOTOGRAPHY_GALLERIES = [
     title: 'FASHION',
     category: 'FASHION & EDITORIAL',
     tag: 'FASHION',
-    coverImage: 'https://res.cloudinary.com/qs6oltzi/image/upload/v1789044141/5Q3A6973.jpg',
+    coverImage: 'https://res.cloudinary.com/qs6oltzi/image/upload/v1789044140/5Q3A6968.jpg',
     description: 'High-fashion editorial photography — runway looks, bold styling, and expressive portraiture shot with precision and artistry.',
     photos: [
-      {
-        id: 1,
-        title: 'EDITORIAL I',
-        category: 'FASHION & EDITORIAL',
-        image: 'https://res.cloudinary.com/qs6oltzi/image/upload/v1789044141/5Q3A6973.jpg',
-        location: 'MILAN, ITALY',
-        camera: 'Hasselblad H6D-100c • 85mm f/1.8',
-      },
       {
         id: 2,
         title: 'EDITORIAL II',
@@ -39,6 +31,14 @@ export const PHOTOGRAPHY_GALLERIES = [
         image: 'https://res.cloudinary.com/qs6oltzi/image/upload/v1789044139/5Q3A6943.jpg',
         location: 'NEW YORK, USA',
         camera: 'Sony A1 • 50mm f/1.2 GM',
+      },
+      {
+        id: 1,
+        title: 'EDITORIAL I',
+        category: 'FASHION & EDITORIAL',
+        image: 'https://res.cloudinary.com/qs6oltzi/image/upload/v1789044141/5Q3A6973.jpg',
+        location: 'MILAN, ITALY',
+        camera: 'Hasselblad H6D-100c • 85mm f/1.8',
       },
       {
         id: 4,
@@ -634,6 +634,51 @@ export const PHOTOGRAPHY_GALLERIES = [
   },
 ];
 
+const STORAGE_KEY = 'devotix_photography_galleries';
+
+export function getPhotographyGalleries() {
+  if (typeof window === 'undefined') return PHOTOGRAPHY_GALLERIES;
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+  } catch (e) {
+    console.error('Failed to parse photography galleries from localStorage:', e);
+  }
+  return PHOTOGRAPHY_GALLERIES;
+}
+
+export function savePhotographyGalleries(galleries, syncCloud = true) {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(galleries));
+    window.dispatchEvent(new CustomEvent('devotix_photography_updated', { detail: galleries }));
+    if (syncCloud) {
+      import('../services/cmsSync').then(({ pushKeyToCloud, CMS_KEYS }) => {
+        pushKeyToCloud(CMS_KEYS.PHOTOGRAPHY, galleries);
+      }).catch(() => {});
+    }
+  } catch (e) {
+    console.error('Failed to save photography galleries to localStorage:', e);
+  }
+}
+
+export function resetPhotographyGalleries() {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+    window.dispatchEvent(new CustomEvent('devotix_photography_updated', { detail: PHOTOGRAPHY_GALLERIES }));
+  } catch (e) {
+    console.error('Failed to reset photography galleries in localStorage:', e);
+  }
+}
+
 export const getGalleryById = (id) => {
-  return PHOTOGRAPHY_GALLERIES.find((g) => g.id === id) || PHOTOGRAPHY_GALLERIES[0];
+  const all = getPhotographyGalleries();
+  return all.find((g) => g.id === id) || all[0];
 };
+

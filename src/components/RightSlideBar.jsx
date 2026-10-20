@@ -12,6 +12,7 @@ export default function RightSlideBar({ currentPage = 'home' }) {
       { id: 'services', label: t('slideBar.services', 'Services') },
       { id: 'work', label: t('slideBar.work', 'Our Work') },
       { id: 'production', label: t('slideBar.production', 'Production') },
+      { id: 'content-views', label: t('slideBar.contentViews', 'Views') },
       { id: 'photography', label: t('slideBar.photography', 'Photography') },
       { id: 'graphic', label: t('slideBar.graphic', 'Graphic') },
       { id: 'clients', label: t('slideBar.clients', 'Clients') },

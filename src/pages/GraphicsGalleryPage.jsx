@@ -1,32 +1,49 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, ArrowUpRight, Maximize2, Layers, Sparkles } from 'lucide-react';
 import Footer from '../components/Footer';
-import { GRAPHICS_DATA } from '../data/graphicsData';
+import { getGraphicsData } from '../data/graphicsData';
 import { useThemeLanguage } from '../context/ThemeLanguageContext';
 
 export default function GraphicsGalleryPage({
   onBackToHome,
   onSelectGraphic,
   onOpenPolicy,
+  initialCategory = 'all',
 }) {
   const { isRtl, isDark, t } = useThemeLanguage();
-  const [activeCategory, setActiveCategory] = useState('all');
+  const [graphicsList, setGraphicsList] = useState(getGraphicsData);
+  const [activeCategory, setActiveCategory] = useState(initialCategory || 'all');
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, []);
 
+  useEffect(() => {
+    if (initialCategory) {
+      setActiveCategory(initialCategory);
+    }
+  }, [initialCategory]);
+
+  useEffect(() => {
+    const handleUpdate = (e) => {
+      setGraphicsList(e.detail || getGraphicsData());
+    };
+    window.addEventListener('devotix_graphics_updated', handleUpdate);
+    return () => window.removeEventListener('devotix_graphics_updated', handleUpdate);
+  }, []);
+
   const categories = [
-    { id: 'all', label: t('pages.graphicsGallery.allArtworks', 'ALL ARTWORKS') },
-    { id: 'branding', label: t('pages.graphicsGallery.branding', 'BRANDING & UI/UX') },
-    { id: 'packaging', label: t('pages.graphicsGallery.packaging', 'PACKAGING & COATINGS') },
-    { id: 'logo', label: t('pages.graphicsGallery.logo', 'LOGO DESIGN') },
-    { id: 'interface', label: t('pages.graphicsGallery.interface', 'DIGITAL INTERFACES') },
+    { id: 'all', label: isRtl ? 'كافة التصاميم' : 'ALL ARTWORKS' },
+    { id: 'social', label: isRtl ? 'تصاميم السوشيال ميديا' : 'SOCIAL MEDIA DESIGNS' },
+    { id: 'branding', label: isRtl ? 'الهوية البصرية' : 'BRANDING & IDENTITY' },
+    { id: 'packaging', label: isRtl ? 'التغليف والمنتجات' : 'PACKAGING & COATINGS' },
+    { id: 'logo', label: isRtl ? 'تصميم الشعارات' : 'LOGO DESIGN' },
+    { id: 'interface', label: isRtl ? 'واجهات رقمية UI/UX' : 'DIGITAL INTERFACES' },
   ];
 
   const filteredGraphics = activeCategory === 'all'
-    ? GRAPHICS_DATA
-    : GRAPHICS_DATA.filter((item) => item.categoryFilter === activeCategory);
+    ? graphicsList
+    : graphicsList.filter((item) => item.categoryFilter === activeCategory);
 
   const handleCardClick = (graphic) => {
     if (onSelectGraphic) {
@@ -54,8 +71,8 @@ export default function GraphicsGalleryPage({
             {categories.map((cat) => {
               const isActive = activeCategory === cat.id;
               const count = cat.id === 'all'
-                ? GRAPHICS_DATA.length
-                : GRAPHICS_DATA.filter((item) => item.categoryFilter === cat.id).length;
+                ? graphicsList.length
+                : graphicsList.filter((item) => item.categoryFilter === cat.id).length;
 
               return (
                 <button

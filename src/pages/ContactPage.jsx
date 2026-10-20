@@ -1,66 +1,115 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ArrowLeft,
-  UploadCloud,
   CheckCircle2,
   ChevronDown,
-  FileText,
   Phone,
-  Clock
+  Clock,
+  Sparkles,
+  RefreshCw,
+  Send
 } from 'lucide-react';
 import Footer from '../components/Footer';
 import { useThemeLanguage } from '../context/ThemeLanguageContext';
+import { getSocialLinks } from '../data/socialLinks';
+import { sendFormToOfficialEmail } from '../utils/sendEmail';
+import {
+  SERVICES_HEARD_FROM_OPTIONS,
+  SERVICES_COUNTRY_OPTIONS,
+  SERVICES_NEEDED_OPTIONS,
+  SERVICES_SOCIAL_PAGES_OPTIONS
+} from '../services/googleSheetService';
 
-export default function ContactPage({ onBackToHome, onOpenPolicy }) {
+export default function ContactPage({ onBackToHome, onOpenPolicy, initialService }) {
   const { isRtl, isDark, t } = useThemeLanguage();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, []);
 
-  // Form State
+  // Form State - Matches Services Google Form exactly
   const [fullName, setFullName] = useState('');
+  const [profession, setProfession] = useState('');
+  const [heardFrom, setHeardFrom] = useState('الانستجرام');
+  const [otherHeardFrom, setOtherHeardFrom] = useState('');
+  const [businessType, setBusinessType] = useState('');
+  const [country, setCountry] = useState('EGYPT');
+  const [otherCountry, setOtherCountry] = useState('');
   const [phone, setPhone] = useState('');
-  const [whatsapp, setWhatsapp] = useState('');
   const [email, setEmail] = useState('');
-  const [country, setCountry] = useState('');
-  const [businessDescription, setBusinessDescription] = useState('');
-  const [projectDescription, setProjectDescription] = useState('');
-  const [uploadedFile, setUploadedFile] = useState(null);
+  const [serviceNeeded, setServiceNeeded] = useState(initialService || 'احتاج الى ادارة سوشيال ميديا');
+  const [otherService, setOtherService] = useState('');
+  const [hasSocialPages, setHasSocialPages] = useState('نعم');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const fileInputRef = useRef(null);
 
-  const handleFileChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setUploadedFile(e.target.files[0]);
+  useEffect(() => {
+    if (initialService) {
+      setServiceNeeded(initialService);
     }
-  };
+  }, [initialService]);
 
-  const handleDrop = (e) => {
+  const [links, setLinks] = useState(getSocialLinks());
+
+  useEffect(() => {
+    const handleUpdate = () => setLinks(getSocialLinks());
+    window.addEventListener('devotix_social_links_updated', handleUpdate);
+    return () => window.removeEventListener('devotix_social_links_updated', handleUpdate);
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      setUploadedFile(e.dataTransfer.files[0]);
+    setIsSubmitting(true);
+
+    const finalHeardFrom = heardFrom === 'أخرى'
+      ? (otherHeardFrom ? `أخرى: ${otherHeardFrom}` : 'أخرى')
+      : heardFrom;
+
+    const finalCountry = country === 'أخرى'
+      ? (otherCountry ? `أخرى: ${otherCountry}` : 'أخرى')
+      : country;
+
+    const finalService = serviceNeeded === 'أخرى'
+      ? (otherService ? `أخرى: ${otherService}` : 'أخرى')
+      : serviceNeeded;
+
+    try {
+      await sendFormToOfficialEmail({
+        category: 'services',
+        formType: 'نموذج طلب الخدمات – Devotix Media',
+        fullName,
+        name: fullName,
+        profession,
+        heardFrom: finalHeardFrom,
+        businessType,
+        country: finalCountry,
+        phone,
+        email,
+        serviceNeeded: finalService,
+        service: finalService,
+        hasSocialPages,
+      });
+    } catch (err) {
+      console.error('Services submission error:', err);
+    } finally {
+      setIsSubmitting(false);
+      setIsSubmitted(true);
     }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsSubmitted(true);
   };
 
   const socialLinks = [
-    { name: 'WhatsApp', handle: '@DEVOTIX', icon: '/assets/contact/WhatsApp.png', href: 'https://wa.me/201010185181' },
-    { name: 'Telegram', handle: '@DEVOTIX', icon: '/assets/contact/Telegram.png', href: 'https://t.me/devotix' },
-    { name: 'Instagram', handle: '@DEVOTIX', icon: '/assets/contact/Instagram.png', href: 'https://instagram.com' },
-    { name: 'Facebook', handle: '@DEVOTIX', icon: '/assets/contact/Facebook.png', href: 'https://facebook.com' },
-    { name: 'TikTok', handle: '@DEVOTIX', icon: '/assets/contact/TikTok.png', href: 'https://tiktok.com' },
-    { name: 'Snapchat', handle: '@DEVOTIX', icon: '/assets/contact/Snapchat.png', href: 'https://snapchat.com' },
-    { name: 'LinkedIn', handle: '@DEVOTIX', icon: '/assets/contact/LinkedIn.png', href: 'https://linkedin.com' },
-    { name: 'X', handle: '@DEVOTIX', icon: null, href: 'https://x.com' },
+    { name: 'WhatsApp', handle: '+20 101 018 5181', icon: '/assets/contact/WhatsApp.png', href: links.whatsapp },
+    { name: 'Telegram', handle: '@devotix', icon: '/assets/contact/Telegram.png', href: links.telegram },
+    { name: 'Instagram', handle: '@devotixmedia', icon: '/assets/contact/Instagram.png', href: links.instagram },
+    { name: 'Facebook', handle: '@devotixmedia', icon: '/assets/contact/Facebook.png', href: links.facebook },
+    { name: 'TikTok', handle: '@devotixmedia', icon: '/assets/contact/TikTok.png', href: links.tiktok },
+    { name: 'Snapchat', handle: '@devotixmedia', icon: '/assets/contact/Snapchat.png', href: links.snapchat },
+    { name: 'LinkedIn', handle: '@devotixmedia', icon: '/assets/contact/LinkedIn.png', href: links.linkedin },
+    { name: 'X', handle: '@devotixmedia', icon: null, href: links.twitter },
   ];
 
   return (
-    <div className="min-h-screen bg-[#f8f8f9] dark:bg-black text-neutral-900 dark:text-white font-sans selection:bg-brand-red selection:text-white pt-14 lg:pt-16 flex flex-col justify-between select-none transition-colors duration-200">
+    <div className="min-h-screen bg-white dark:bg-black text-neutral-900 dark:text-white font-sans selection:bg-brand-red selection:text-white pt-14 lg:pt-16 flex flex-col justify-between select-none transition-colors duration-200">
       <main className="max-w-3xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-10 sm:space-y-12 flex-1">
         {/* ========================================================================= */}
         {/* 1. HERO TITLE & PROJECT FORM SECTION (Compact Scale, Exact Format) */}
@@ -141,26 +190,124 @@ export default function ContactPage({ onBackToHome, onOpenPolicy }) {
                 </div>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-3.5 sm:space-y-4">
-                {/* Row 1 (3 Columns): FULL NAME, PHONE NUMBER, WHATSAPP NAME */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-3.5">
-                  <div className="space-y-1 text-left rtl:text-right">
-                    <label className="block text-[8.5px] font-extrabold uppercase tracking-wider text-[#1e293b] dark:text-neutral-200 font-display">
-                      {isRtl ? 'الاسم بالكامل' : 'FULL NAME'}
+              <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6 pt-1">
+                {/* 1. الاسم & 2. بتشتغل في إيه وايه تخصصك؟ */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5 text-left rtl:text-right">
+                    <label className="block text-[11px] font-extrabold uppercase tracking-wider text-neutral-800 dark:text-neutral-200">
+                      {isRtl ? 'الاسم' : 'Name'} <span className="text-brand-red">*</span>
                     </label>
                     <input
                       type="text"
                       required
-                      placeholder={isRtl ? 'مصطفى المصلحي' : 'John Doe'}
+                      placeholder={isRtl ? 'أحمد محمد' : 'Your name'}
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
-                      className="w-full px-3 py-1.5 sm:py-2 bg-[#edf0f3] dark:bg-neutral-800 rounded text-[11.5px] text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 border-0 focus:outline-none focus:ring-1 focus:ring-brand-red transition-all"
+                      className="w-full px-3.5 py-2.5 rounded-lg bg-[#edf0f3] dark:bg-neutral-800 text-xs text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 border-0 focus:outline-none focus:ring-1 focus:ring-brand-red transition-all"
                     />
                   </div>
 
-                  <div className="space-y-1 text-left rtl:text-right">
-                    <label className="block text-[8.5px] font-extrabold uppercase tracking-wider text-[#1e293b] dark:text-neutral-200 font-display">
-                      {isRtl ? 'رقم الهاتف' : 'PHONE NUMBER'}
+                  <div className="space-y-1.5 text-left rtl:text-right">
+                    <label className="block text-[11px] font-extrabold uppercase tracking-wider text-neutral-800 dark:text-neutral-200">
+                      {isRtl ? 'بتشتغل في إيه وايه تخصصك؟' : 'What is your job & speciality?'} <span className="text-brand-red">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder={isRtl ? 'مثال: رائد أعمال / مدير تسويق / صاحب متجر' : 'e.g. Founder, Marketing Director, Brand Owner'}
+                      value={profession}
+                      onChange={(e) => setProfession(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-lg bg-[#edf0f3] dark:bg-neutral-800 text-xs text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 border-0 focus:outline-none focus:ring-1 focus:ring-brand-red transition-all"
+                    />
+                  </div>
+                </div>
+
+                {/* 3. عرفتنا منين ؟ */}
+                <div className="space-y-2 text-left rtl:text-right">
+                  <label className="block text-[11px] font-extrabold uppercase tracking-wider text-neutral-800 dark:text-neutral-200">
+                    {isRtl ? 'عرفتنا منين ؟' : 'How did you hear about us?'} <span className="text-brand-red">*</span>
+                  </label>
+                  <div className="flex flex-wrap gap-2 pt-0.5">
+                    {SERVICES_HEARD_FROM_OPTIONS.map((opt) => (
+                      <button
+                        type="button"
+                        key={opt}
+                        onClick={() => setHeardFrom(opt)}
+                        className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                          heardFrom === opt
+                            ? 'bg-brand-red text-white shadow-md shadow-brand-red/20'
+                            : 'bg-[#edf0f3] dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700'
+                        }`}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                  {heardFrom === 'أخرى' && (
+                    <input
+                      type="text"
+                      required
+                      placeholder={isRtl ? 'اذكر المصدر هنا...' : 'Specify how you found us...'}
+                      value={otherHeardFrom}
+                      onChange={(e) => setOtherHeardFrom(e.target.value)}
+                      className="w-full mt-2 px-3.5 py-2 rounded-lg bg-white dark:bg-black/60 border border-brand-red text-xs text-neutral-900 dark:text-white focus:outline-none"
+                    />
+                  )}
+                </div>
+
+                {/* 4. نوع البيزنس؟ & 5. الدوله */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5 text-left rtl:text-right">
+                    <label className="block text-[11px] font-extrabold uppercase tracking-wider text-neutral-800 dark:text-neutral-200">
+                      {isRtl ? 'نوع البيزنس؟' : 'Business Type?'}
+                    </label>
+                    <input
+                      type="text"
+                      placeholder={isRtl ? 'مثال: ملابس، مطاعم، عيادات، عقارات...' : 'e.g. Fashion, F&B, Real Estate, E-commerce'}
+                      value={businessType}
+                      onChange={(e) => setBusinessType(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-lg bg-[#edf0f3] dark:bg-neutral-800 text-xs text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 border-0 focus:outline-none focus:ring-1 focus:ring-brand-red transition-all"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5 text-left rtl:text-right">
+                    <label className="block text-[11px] font-extrabold uppercase tracking-wider text-neutral-800 dark:text-neutral-200">
+                      {isRtl ? 'الدوله' : 'Country'} <span className="text-brand-red">*</span>
+                    </label>
+                    <div className="flex gap-2">
+                      {SERVICES_COUNTRY_OPTIONS.map((opt) => (
+                        <button
+                          type="button"
+                          key={opt}
+                          onClick={() => setCountry(opt)}
+                          className={`flex-1 py-2 px-3 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                            country === opt
+                              ? 'bg-brand-red text-white shadow-md shadow-brand-red/20'
+                              : 'bg-[#edf0f3] dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700'
+                          }`}
+                        >
+                          {opt}
+                        </button>
+                      ))}
+                    </div>
+                    {country === 'أخرى' && (
+                      <input
+                        type="text"
+                        required
+                        placeholder={isRtl ? 'اكتب اسم الدولة هنا...' : 'Enter country name...'}
+                        value={otherCountry}
+                        onChange={(e) => setOtherCountry(e.target.value)}
+                        className="w-full mt-2 px-3.5 py-2 rounded-lg bg-white dark:bg-black/60 border border-brand-red text-xs text-neutral-900 dark:text-white focus:outline-none"
+                      />
+                    )}
+                  </div>
+                </div>
+
+                {/* 6. رقم تليفونك & 7. البريد الاكترني */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5 text-left rtl:text-right">
+                    <label className="block text-[11px] font-extrabold uppercase tracking-wider text-neutral-800 dark:text-neutral-200">
+                      {isRtl ? 'رقم تليفونك' : 'Phone Number'} <span className="text-brand-red">*</span>
                     </label>
                     <input
                       type="tel"
@@ -168,29 +315,13 @@ export default function ContactPage({ onBackToHome, onOpenPolicy }) {
                       placeholder="+20 100 000 0000"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      className="w-full px-3 py-1.5 sm:py-2 bg-[#edf0f3] dark:bg-neutral-800 rounded text-[11.5px] text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 border-0 focus:outline-none focus:ring-1 focus:ring-brand-red transition-all"
+                      className="w-full px-3.5 py-2.5 rounded-lg bg-[#edf0f3] dark:bg-neutral-800 text-xs text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 border-0 focus:outline-none focus:ring-1 focus:ring-brand-red transition-all"
                     />
                   </div>
 
-                  <div className="space-y-1 text-left rtl:text-right">
-                    <label className="block text-[8.5px] font-extrabold uppercase tracking-wider text-[#1e293b] dark:text-neutral-200 font-display">
-                      {isRtl ? 'واتساب' : 'WHATSAPP NUMBER'}
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="+201012158181"
-                      value={whatsapp}
-                      onChange={(e) => setWhatsapp(e.target.value)}
-                      className="w-full px-3 py-1.5 sm:py-2 bg-[#edf0f3] dark:bg-neutral-800 rounded text-[11.5px] text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 border-0 focus:outline-none focus:ring-1 focus:ring-brand-red transition-all"
-                    />
-                  </div>
-                </div>
-
-                {/* Row 2 (2 Columns): EMAIL ADDRESS, COUNTRY */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-3.5">
-                  <div className="space-y-1 text-left rtl:text-right">
-                    <label className="block text-[8.5px] font-extrabold uppercase tracking-wider text-[#1e293b] dark:text-neutral-200 font-display">
-                      {isRtl ? 'البريد الإلكتروني' : 'EMAIL ADDRESS'}
+                  <div className="space-y-1.5 text-left rtl:text-right">
+                    <label className="block text-[11px] font-extrabold uppercase tracking-wider text-neutral-800 dark:text-neutral-200">
+                      {isRtl ? 'البريد الإلكتروني' : 'Email Address'} <span className="text-brand-red">*</span>
                     </label>
                     <input
                       type="email"
@@ -198,117 +329,96 @@ export default function ContactPage({ onBackToHome, onOpenPolicy }) {
                       placeholder="name@company.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full px-3 py-1.5 sm:py-2 bg-[#edf0f3] dark:bg-neutral-800 rounded text-[11.5px] text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 border-0 focus:outline-none focus:ring-1 focus:ring-brand-red transition-all"
+                      className="w-full px-3.5 py-2.5 rounded-lg bg-[#edf0f3] dark:bg-neutral-800 text-xs text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 border-0 focus:outline-none focus:ring-1 focus:ring-brand-red transition-all"
                     />
                   </div>
+                </div>
 
-                  <div className="space-y-1 text-left rtl:text-right">
-                    <label className="block text-[8.5px] font-extrabold uppercase tracking-wider text-[#1e293b] dark:text-neutral-200 font-display">
-                      {isRtl ? 'الدولة' : 'COUNTRY'}
-                    </label>
-                    <div className="relative">
-                      <select
-                        value={country}
-                        onChange={(e) => setCountry(e.target.value)}
-                        className="w-full appearance-none px-3 py-1.5 sm:py-2 bg-[#edf0f3] dark:bg-neutral-800 rounded text-[11.5px] text-neutral-900 dark:text-white border-0 focus:outline-none focus:ring-1 focus:ring-brand-red cursor-pointer pr-7 rtl:pr-3 rtl:pl-7 transition-all"
+                {/* 8. ما الخدمه الذي تحتاجه */}
+                <div className="space-y-2 text-left rtl:text-right">
+                  <label className="block text-[11px] font-extrabold uppercase tracking-wider text-neutral-800 dark:text-neutral-200">
+                    {isRtl ? 'ما الخدمه الذي تحتاجه' : 'What service do you need?'} <span className="text-brand-red">*</span>
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-0.5">
+                    {SERVICES_NEEDED_OPTIONS.map((opt) => (
+                      <button
+                        type="button"
+                        key={opt}
+                        onClick={() => setServiceNeeded(opt)}
+                        className={`p-3 rounded-lg text-xs font-semibold text-start flex items-center gap-2.5 transition-all cursor-pointer ${
+                          serviceNeeded === opt
+                            ? 'bg-brand-red text-white shadow-md shadow-brand-red/20'
+                            : 'bg-[#edf0f3] dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-200 dark:hover:bg-neutral-700'
+                        }`}
                       >
-                        <option value="" className="dark:bg-neutral-900">{isRtl ? 'اختر الدولة' : 'choose country'}</option>
-                        <option value="Egypt" className="dark:bg-neutral-900">{isRtl ? 'مصر (+20)' : 'Egypt (+20)'}</option>
-                        <option value="Saudi Arabia" className="dark:bg-neutral-900">{isRtl ? 'المملكة العربية السعودية (+966)' : 'Saudi Arabia (+966)'}</option>
-                        <option value="UAE" className="dark:bg-neutral-900">{isRtl ? 'الإمارات العربية المتحدة (+971)' : 'United Arab Emirates (+971)'}</option>
-                        <option value="UK" className="dark:bg-neutral-900">United Kingdom (+44)</option>
-                        <option value="USA" className="dark:bg-neutral-900">United States (+1)</option>
-                        <option value="Other" className="dark:bg-neutral-900">{isRtl ? 'أخرى' : 'Other'}</option>
-                      </select>
-                      <ChevronDown className="w-3.5 h-3.5 absolute right-2.5 rtl:right-auto rtl:left-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500" />
-                    </div>
+                        <div
+                          className={`w-3.5 h-3.5 rounded-full border flex-shrink-0 flex items-center justify-center ${
+                            serviceNeeded === opt ? 'border-white' : 'border-neutral-400'
+                          }`}
+                        >
+                          {serviceNeeded === opt && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                        </div>
+                        <span className="leading-snug">{opt}</span>
+                      </button>
+                    ))}
                   </div>
-
-                  {/* Empty 3rd column */}
-                  <div className="hidden sm:block" />
+                  {serviceNeeded === 'أخرى' && (
+                    <input
+                      type="text"
+                      required
+                      placeholder={isRtl ? 'اكتب تفاصيل الخدمة المطلوبة هنا...' : 'Specify the service you need...'}
+                      value={otherService}
+                      onChange={(e) => setOtherService(e.target.value)}
+                      className="w-full mt-2 px-3.5 py-2 rounded-lg bg-white dark:bg-black/60 border border-brand-red text-xs text-neutral-900 dark:text-white focus:outline-none"
+                    />
+                  )}
                 </div>
 
-                {/* Row 3: YOUR BUSINESS DESCRIPTION */}
-                <div className="space-y-1 text-left rtl:text-right">
-                  <label className="block text-[8.5px] font-extrabold uppercase tracking-wider text-[#1e293b] dark:text-neutral-200 font-display">
-                    {isRtl ? 'وصف نشاطك التجاري' : 'YOUR BUSINESS DESCRIPTION'}
+                {/* 9. هل لديك صفحات حالياً للبزنس على السوشيال ميديا؟ */}
+                <div className="space-y-2 text-left rtl:text-right pt-1">
+                  <label className="block text-[11px] font-extrabold uppercase tracking-wider text-neutral-800 dark:text-neutral-200">
+                    {isRtl ? 'هل لديك صفحات حالياً للبزنس على السوشيال ميديا؟' : 'Do you currently have social media pages for your business?'} <span className="text-brand-red">*</span>
                   </label>
-                  <textarea
-                    rows={2}
-                    placeholder={isRtl ? 'صف باختصار نشاط علامتك التجارية وأهدافك...' : 'Briefly describe your vision, goals, and technical requirements...'}
-                    value={businessDescription}
-                    onChange={(e) => setBusinessDescription(e.target.value)}
-                    className="w-full px-3 py-1.5 sm:py-2 bg-[#edf0f3] dark:bg-neutral-800 rounded text-[11.5px] text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 border-0 focus:outline-none focus:ring-1 focus:ring-brand-red transition-all resize-none"
-                  />
-                </div>
-
-                {/* Row 4: DESCRIPTION WHAT DO YOU WANT ? */}
-                <div className="space-y-1 text-left rtl:text-right">
-                  <label className="block text-[8.5px] font-extrabold uppercase tracking-wider text-[#1e293b] dark:text-neutral-200 font-display">
-                    {isRtl ? 'ما هي متطلبات مشروعك بالتحديد؟' : 'DESCRIPTION WHAT DO YOU WANT ?'}
-                  </label>
-                  <textarea
-                    rows={2}
-                    placeholder={isRtl ? 'أخبرنا عن المخرجات المطلوبة والجدول الزمني...' : 'Tell us what deliverables you are looking for...'}
-                    value={projectDescription}
-                    onChange={(e) => setProjectDescription(e.target.value)}
-                    className="w-full px-3 py-1.5 sm:py-2 bg-[#edf0f3] dark:bg-neutral-800 rounded text-[11.5px] text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 border-0 focus:outline-none focus:ring-1 focus:ring-brand-red transition-all resize-none"
-                  />
-                </div>
-
-                {/* Row 5: ATTACHMENTS */}
-                <div className="space-y-1 text-left rtl:text-right">
-                  <label className="block text-[8.5px] font-extrabold uppercase tracking-wider text-[#1e293b] dark:text-neutral-200 font-display">
-                    {isRtl ? 'الملفات المرفقة' : 'ATTACHMENTS'}
-                  </label>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept=".pdf,.docx,.doc,.png,.jpg,.jpeg"
-                    onChange={handleFileChange}
-                    className="hidden"
-                  />
-                  <div
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={handleDrop}
-                    onClick={() => fileInputRef.current && fileInputRef.current.click()}
-                    className="border border-dashed border-neutral-300 dark:border-neutral-700 hover:border-brand-red rounded-lg p-3 text-center cursor-pointer transition-all bg-[#f8f9fa] dark:bg-neutral-800/50 flex flex-col items-center justify-center space-y-1 min-h-[64px]"
-                  >
-                    {uploadedFile ? (
-                      <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                        <FileText className="w-4 h-4 text-brand-red" />
-                        <span className="text-[11px] font-bold text-neutral-900 dark:text-white truncate max-w-[240px]">
-                          {uploadedFile.name}
+                  <div className="flex gap-4 pt-0.5">
+                    {SERVICES_SOCIAL_PAGES_OPTIONS.map((opt) => (
+                      <label
+                        key={opt}
+                        onClick={() => setHasSocialPages(opt)}
+                        className="inline-flex items-center gap-2 cursor-pointer select-none"
+                      >
+                        <div
+                          className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${
+                            hasSocialPages === opt ? 'border-brand-red' : 'border-neutral-400 dark:border-neutral-600'
+                          }`}
+                        >
+                          {hasSocialPages === opt && <div className="w-2 h-2 rounded-full bg-brand-red" />}
+                        </div>
+                        <span className="text-xs font-bold text-neutral-800 dark:text-neutral-200">
+                          {opt}
                         </span>
-                        <span className="text-[9px] text-neutral-500 dark:text-neutral-400">
-                          ({(uploadedFile.size / (1024 * 1024)).toFixed(2)} MB)
-                        </span>
-                      </div>
-                    ) : (
-                      <>
-                        <UploadCloud className="w-4 h-4 text-brand-red" />
-                        <p className="text-[10.5px] font-medium text-neutral-700 dark:text-neutral-300">
-                          {isRtl ? (
-                            <>اسحب الملفات وأفلتها هنا أو <span className="text-brand-red font-bold underline">انقر للرفع</span></>
-                          ) : (
-                            <>Drag & drop your files here or <span className="text-brand-red font-bold underline">click to upload</span></>
-                          )}
-                        </p>
-                        <span className="text-[8.5px] text-neutral-400 dark:text-neutral-500">
-                          {isRtl ? 'يدعم ملفات PDF و DOCX والصور عالية الدقة (حد أقصى 25MB)' : 'Supports PDF, DOCX, and high-res images (Max 25MB)'}
-                        </span>
-                      </>
-                    )}
+                      </label>
+                    ))}
                   </div>
                 </div>
 
-                {/* Row 6: Submit Button */}
-                <div className="pt-1">
+                {/* Submit Button */}
+                <div className="pt-2">
                   <button
                     type="submit"
-                    className="w-full py-2.5 sm:py-3 bg-brand-red hover:bg-brand-redHover text-white text-[11.5px] sm:text-xs font-bold rounded-md transition-all duration-200 shadow-md shadow-red-500/20 cursor-pointer text-center"
+                    disabled={isSubmitting}
+                    className="w-full py-3 bg-brand-red hover:bg-brand-redHover disabled:opacity-75 text-white text-xs font-bold uppercase tracking-wider rounded-lg transition-all duration-200 shadow-lg shadow-brand-red/25 cursor-pointer flex items-center justify-center gap-2"
                   >
-                    {isRtl ? 'إرسال تفاصيل المشروع' : 'Submit Project'}
+                    {isSubmitting ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 animate-spin" />
+                        <span>{isRtl ? 'جاري الإرسال والمزامنة مع جوجل شيت...' : 'Sending & Syncing to Google Sheets...'}</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4" />
+                        <span>{isRtl ? 'إرسال طلب الخدمة' : 'Submit Service Request'}</span>
+                      </>
+                    )}
                   </button>
                 </div>
               </form>

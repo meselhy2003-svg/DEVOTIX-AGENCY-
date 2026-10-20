@@ -1,16 +1,34 @@
+import React, { useState, useEffect } from 'react';
 import TitleAccent from './TitleAccent';
 import { ArrowUpRight, Layers, Clock } from 'lucide-react';
-import { PHOTOGRAPHY_GALLERIES } from '../data/photographyData';
+import { getPhotographyGalleries } from '../data/photographyData';
 import { useThemeLanguage } from '../context/ThemeLanguageContext';
 import CloudImg from './CloudImg';
 import { cldCover } from '../utils/cloudinaryUrl';
 
 export default function Photography({ onSelectGallery }) {
   const { isRtl, isDark, t } = useThemeLanguage();
+  const [galleries, setGalleries] = useState(getPhotographyGalleries);
 
-  const cover1 = PHOTOGRAPHY_GALLERIES[0];
-  const cover2 = PHOTOGRAPHY_GALLERIES[1];
-  const cover3 = PHOTOGRAPHY_GALLERIES[2];
+  useEffect(() => {
+    const handleUpdate = (e) => {
+      if (e.detail) {
+        setGalleries(e.detail);
+      } else {
+        setGalleries(getPhotographyGalleries());
+      }
+    };
+    window.addEventListener('devotix_photography_updated', handleUpdate);
+    return () => window.removeEventListener('devotix_photography_updated', handleUpdate);
+  }, []);
+
+  const cover1 = galleries[0] || {};
+  const cover2 = galleries[1] || {};
+  const cover3 = galleries[2] || {};
+
+  const cover1Image = cover1.photos?.[0]?.image || cover1.coverImage;
+  const cover2Image = cover2.photos?.[0]?.image || cover2.coverImage;
+  const cover3Image = cover3.photos?.[0]?.image || cover3.coverImage;
 
   const handleCoverClick = (gallery) => {
     if (onSelectGallery) {
@@ -38,10 +56,10 @@ export default function Photography({ onSelectGallery }) {
           {/* Cover 1: LARGE LEFT CARD on Desktop / Full-width Top Banner on Mobile */}
           <div
             onClick={() => handleCoverClick(cover1)}
-            className="col-span-2 md:col-span-6 group relative rounded-lg sm:rounded-xl overflow-hidden bg-neutral-900 dark:bg-[#111116] border border-neutral-200/90 dark:border-white/10 cursor-pointer transition-all duration-300 hover:border-brand-red/60 hover:shadow-xl hover:-translate-y-0.5 flex flex-col h-[200px] sm:h-[260px] md:h-[450px]"
+            className="col-span-2 md:col-span-6 group relative rounded-lg sm:rounded-xl overflow-hidden bg-white dark:bg-[#111116] border border-neutral-200/90 dark:border-white/10 cursor-pointer transition-all duration-300 hover:border-brand-red/60 hover:shadow-xl hover:-translate-y-0.5 flex flex-col h-[200px] sm:h-[260px] md:h-[450px]"
           >
             <CloudImg
-              src={cldCover(cover1.coverImage)}
+              src={cldCover(cover1Image)}
               alt={cover1.title}
               className="absolute inset-0 w-full h-full"
               imgClass="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
@@ -78,10 +96,10 @@ export default function Photography({ onSelectGallery }) {
             {/* Cover 2: Right Card 1 (Top Horizontal on Desktop / Left Card on Mobile) */}
             <div
               onClick={() => handleCoverClick(cover2)}
-              className="col-span-1 group relative rounded-lg sm:rounded-xl overflow-hidden bg-neutral-900 dark:bg-[#111116] border border-neutral-200/90 dark:border-white/10 cursor-pointer transition-all duration-300 hover:border-brand-red/60 hover:shadow-lg hover:-translate-y-0.5 flex flex-col h-[160px] sm:h-[180px] md:h-auto md:flex-1 min-h-0"
+              className="col-span-1 group relative rounded-lg sm:rounded-xl overflow-hidden bg-white dark:bg-[#111116] border border-neutral-200/90 dark:border-white/10 cursor-pointer transition-all duration-300 hover:border-brand-red/60 hover:shadow-lg hover:-translate-y-0.5 flex flex-col h-[160px] sm:h-[180px] md:h-auto md:flex-1 min-h-0"
             >
               <CloudImg
-                src={cldCover(cover2.coverImage)}
+                src={cldCover(cover2Image)}
                 alt={cover2.title}
                 className="absolute inset-0 w-full h-full"
                 imgClass="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
@@ -126,10 +144,10 @@ export default function Photography({ onSelectGallery }) {
             {/* Cover 3: Right Card 2 (Bottom Horizontal on Desktop / Right Card on Mobile) */}
             <div
               onClick={() => handleCoverClick(cover3)}
-              className="col-span-1 group relative rounded-lg sm:rounded-xl overflow-hidden bg-neutral-900 dark:bg-[#111116] border border-neutral-200/90 dark:border-white/10 cursor-pointer transition-all duration-300 hover:border-brand-red/60 hover:shadow-lg hover:-translate-y-0.5 flex flex-col h-[160px] sm:h-[180px] md:h-auto md:flex-1 min-h-0"
+              className="col-span-1 group relative rounded-lg sm:rounded-xl overflow-hidden bg-white dark:bg-[#111116] border border-neutral-200/90 dark:border-white/10 cursor-pointer transition-all duration-300 hover:border-brand-red/60 hover:shadow-lg hover:-translate-y-0.5 flex flex-col h-[160px] sm:h-[180px] md:h-auto md:flex-1 min-h-0"
             >
               <CloudImg
-                src={cldCover(cover3.coverImage)}
+                src={cldCover(cover3Image)}
                 alt={cover3.title}
                 className="absolute inset-0 w-full h-full"
                 imgClass="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"

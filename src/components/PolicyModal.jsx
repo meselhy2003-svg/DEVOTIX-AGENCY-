@@ -30,18 +30,18 @@ export default function PolicyModal({ type, onClose }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/90 backdrop-blur-xl animate-fadeIn">
       <div className="absolute inset-0" onClick={onClose} />
 
-      <div className="relative z-10 w-full max-w-2xl bg-neutral-950 border border-neutral-800 rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[85vh]">
+      <div className="relative z-10 w-full max-w-2xl bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[85vh] transition-colors">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-neutral-800 bg-neutral-900/60">
+        <div className="flex items-center justify-between px-6 py-5 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/60">
           <div className="flex items-center space-x-2.5 rtl:space-x-reverse">
             <ShieldCheck className="w-5 h-5 text-brand-red" />
-            <h3 className="text-xl font-black uppercase tracking-tight text-white font-display">
+            <h3 className="text-xl font-black uppercase tracking-tight text-neutral-900 dark:text-white font-display">
               {title}
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="w-9 h-9 rounded-full bg-neutral-900 hover:bg-brand-red hover:text-white text-neutral-400 flex items-center justify-center transition-colors border border-neutral-800 cursor-pointer"
+            className="w-9 h-9 rounded-full bg-neutral-100 dark:bg-neutral-900 hover:bg-brand-red hover:text-white text-neutral-600 dark:text-neutral-400 flex items-center justify-center transition-colors border border-neutral-200 dark:border-neutral-800 cursor-pointer"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />
@@ -49,7 +49,7 @@ export default function PolicyModal({ type, onClose }) {
         </div>
 
         {/* Content */}
-        <div className="overflow-y-auto p-6 sm:p-8 space-y-4 text-xs sm:text-sm text-neutral-300 leading-relaxed">
+        <div className="overflow-y-auto p-6 sm:p-8 space-y-4 text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed">
           {isRtl ? (
             isPrivacy ? (
               <>
@@ -142,7 +142,7 @@ export default function PolicyModal({ type, onClose }) {
         </div>
 
         {/* Footer */}
-        <div className="p-4 sm:p-5 bg-neutral-900/40 border-t border-neutral-800 flex justify-end">
+        <div className="p-4 sm:p-5 bg-neutral-50 dark:bg-neutral-900/40 border-t border-neutral-200 dark:border-neutral-800 flex justify-end">
           <button
             onClick={onClose}
             className="px-6 py-2 bg-brand-red hover:bg-brand-redHover text-white text-xs font-bold uppercase tracking-wider rounded-md transition-colors cursor-pointer"

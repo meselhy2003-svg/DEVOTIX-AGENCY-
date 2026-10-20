@@ -14,17 +14,17 @@
     <script>
       (function() {
         try {
-          var theme = localStorage.getItem('devotix_theme') || 'dark';
+          var theme = localStorage.getItem('devotix_theme') || 'light';
           var lang = localStorage.getItem('devotix_lang') || 'en';
           var root = document.documentElement;
-          if (theme === 'light') {
-            root.classList.add('light');
-            root.classList.remove('dark');
-            root.setAttribute('data-theme', 'light');
-          } else {
+          if (theme === 'dark') {
             root.classList.add('dark');
             root.classList.remove('light');
             root.setAttribute('data-theme', 'dark');
+          } else {
+            root.classList.add('light');
+            root.classList.remove('dark');
+            root.setAttribute('data-theme', 'light');
           }
           root.setAttribute('lang', lang);
           root.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');

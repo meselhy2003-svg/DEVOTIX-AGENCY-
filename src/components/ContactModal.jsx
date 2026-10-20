@@ -1,41 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { X, Send, CheckCircle2 } from 'lucide-react';
+import { X, Send, CheckCircle2, RefreshCw } from 'lucide-react';
 import { useThemeLanguage } from '../context/ThemeLanguageContext';
+import { sendFormToOfficialEmail } from '../utils/sendEmail';
+import {
+  SERVICES_HEARD_FROM_OPTIONS,
+  SERVICES_COUNTRY_OPTIONS,
+  SERVICES_NEEDED_OPTIONS,
+  SERVICES_SOCIAL_PAGES_OPTIONS
+} from '../services/googleSheetService';
 
 export default function ContactModal({ isOpen, onClose }) {
   const { t, isRtl } = useThemeLanguage();
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [formData, setFormData] = useState({
     name: '',
+    profession: '',
+    heardFrom: 'الانستجرام',
+    otherHeardFrom: '',
+    businessType: '',
+    country: 'EGYPT',
+    otherCountry: '',
+    phone: '',
     email: '',
-    company: '',
-    services: [],
-    budget: '$25k - $50k',
-    message: ''
+    serviceNeeded: 'احتاج الى ادارة سوشيال ميديا',
+    otherService: '',
+    hasSocialPages: 'نعم',
   });
-
-  const availableServices = isRtl ? [
-    'الإنتاج المرئي والسينمائي',
-    'صناعة المحتوى الإبداعي',
-    'الهوية البصرية والعلامة التجارية',
-    'هندسة وتطوير البرمجيات',
-    'إدارة الإعلانات والميديا باينج',
-    'التصوير الفوتوغرافي التجاري'
-  ] : [
-    'Video Production',
-    'Content Creation',
-    'Brand Identity',
-    'Software Engineering',
-    'Media Buying',
-    'Photography'
-  ];
-
-  const budgetOptions = [
-    '< $15k',
-    '$15k - $30k',
-    '$30k - $60k',
-    '$60k - $100k+',
-  ];
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -53,192 +45,341 @@ export default function ContactModal({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
-  const toggleService = (svc) => {
-    setFormData((prev) => ({
-      ...prev,
-      services: prev.services.includes(svc)
-        ? prev.services.filter((s) => s !== svc)
-        : [...prev.services, svc]
-    }));
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
+    setIsSubmitting(true);
+
+    const finalHeardFrom = formData.heardFrom === 'أخرى'
+      ? (formData.otherHeardFrom ? `أخرى: ${formData.otherHeardFrom}` : 'أخرى')
+      : formData.heardFrom;
+
+    const finalCountry = formData.country === 'أخرى'
+      ? (formData.otherCountry ? `أخرى: ${formData.otherCountry}` : 'أخرى')
+      : formData.country;
+
+    const finalService = formData.serviceNeeded === 'أخرى'
+      ? (formData.otherService ? `أخرى: ${formData.otherService}` : 'أخرى')
+      : formData.serviceNeeded;
+
+    try {
+      await sendFormToOfficialEmail({
+        category: 'services',
+        formType: 'نموذج طلب الخدمات (Modal) – Devotix Media',
+        fullName: formData.name,
+        name: formData.name,
+        profession: formData.profession,
+        heardFrom: finalHeardFrom,
+        businessType: formData.businessType,
+        country: finalCountry,
+        phone: formData.phone,
+        email: formData.email,
+        serviceNeeded: finalService,
+        service: finalService,
+        hasSocialPages: formData.hasSocialPages,
+      });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsSubmitting(false);
+      setSubmitted(true);
+    }
   };
 
   const handleReset = () => {
     setSubmitted(false);
     setFormData({
       name: '',
+      profession: '',
+      heardFrom: 'الانستجرام',
+      otherHeardFrom: '',
+      businessType: '',
+      country: 'EGYPT',
+      otherCountry: '',
+      phone: '',
       email: '',
-      company: '',
-      services: [],
-      budget: '$25k - $50k',
-      message: ''
+      serviceNeeded: 'احتاج الى ادارة سوشيال ميديا',
+      otherService: '',
+      hasSocialPages: 'نعم',
     });
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/90 backdrop-blur-xl animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-xl animate-fadeIn">
       <div className="absolute inset-0" onClick={onClose} />
 
-      <div className="relative z-10 w-full max-w-2xl bg-neutral-950 border border-neutral-800 rounded-2xl overflow-hidden shadow-2xl">
+      <div className="relative z-10 w-full max-w-2xl bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl overflow-hidden shadow-2xl transition-colors max-h-[92vh] flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 sm:px-8 py-5 border-b border-neutral-800 bg-neutral-900/40">
+        <div className="flex items-center justify-between px-5 sm:px-7 py-4 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40 flex-shrink-0">
           <div>
             <div className="flex items-center space-x-2 rtl:space-x-reverse">
               <span className="w-2 h-2 rounded-full bg-brand-red animate-pulse" />
               <span className="text-[11px] font-bold tracking-widest uppercase text-brand-red">
-                {isRtl ? 'ابدأ مشروعاً جديداً' : 'START A PROJECT'}
+                {isRtl ? 'طلب خدمة جديدة' : 'SERVICES REQUEST'}
               </span>
             </div>
-            <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white font-display mt-0.5">
-              {t('nav.letsTalk')}
+            <h3 className="text-lg sm:text-xl font-black uppercase tracking-tight text-neutral-900 dark:text-white font-display mt-0.5">
+              {isRtl ? 'تعال نبني شغلك باحترافية' : "LET'S TALK BUSINESS"}
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="w-9 h-9 rounded-full bg-neutral-900 hover:bg-brand-red hover:text-white text-neutral-400 flex items-center justify-center transition-colors border border-neutral-800 cursor-pointer"
+            className="w-8 h-8 rounded-full bg-neutral-100 dark:bg-neutral-900 hover:bg-brand-red text-neutral-600 dark:text-neutral-400 hover:text-white flex items-center justify-center transition-colors border border-neutral-200 dark:border-neutral-800 cursor-pointer"
             aria-label="Close modal"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-6 sm:p-8 max-h-[80vh] overflow-y-auto">
+        <div className="p-5 sm:p-7 overflow-y-auto flex-1">
           {submitted ? (
-            <div className="py-12 text-center flex flex-col items-center">
-              <div className="w-16 h-16 rounded-full bg-brand-red/20 text-brand-red flex items-center justify-center mb-4 border border-brand-red/40">
-                <CheckCircle2 className="w-9 h-9" />
+            <div className="py-10 text-center flex flex-col items-center">
+              <div className="w-14 h-14 rounded-full bg-brand-red/20 text-brand-red flex items-center justify-center mb-3 border border-brand-red/40">
+                <CheckCircle2 className="w-8 h-8" />
               </div>
-              <h4 className="text-2xl font-black uppercase tracking-tight text-white font-display">
-                {t('modals.sendSuccess')}
+              <h4 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-neutral-900 dark:text-white font-display">
+                {isRtl ? 'تم استلام طلبك بنجاح' : 'REQUEST RECEIVED'}
               </h4>
-              <p className="mt-2 text-sm text-neutral-400 max-w-md font-medium">
-                {t('modals.sendSuccessDesc')}
+              <p className="mt-2 text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 max-w-md font-medium leading-relaxed">
+                {isRtl
+                  ? 'شكراً لتواصلك مع ديفوتيكس ميديا! تم تسجيل طلبك في شيت المتابعة وسيتواصل معك فريقنا خلال ساعات.'
+                  : 'Your service request has been logged and synced. Our team will contact you shortly.'}
               </p>
               <button
                 onClick={handleReset}
-                className="mt-8 px-8 py-3 bg-brand-red hover:bg-brand-redHover text-white text-xs font-bold uppercase tracking-wider rounded-md transition-colors cursor-pointer"
+                className="mt-6 px-8 py-2.5 bg-brand-red hover:bg-brand-redHover text-white text-xs font-bold uppercase tracking-wider rounded-lg transition-colors cursor-pointer"
               >
-                {t('nav.backToHome')}
+                {isRtl ? 'إغلاق' : 'Close'}
               </button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Service tags multi-select */}
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-300 mb-3">
-                  {t('modals.serviceLabel')}
-                </label>
-                <div className="flex flex-wrap gap-2">
-                  {availableServices.map((service) => {
-                    const selected = formData.services.includes(service);
-                    return (
-                      <button
-                        type="button"
-                        key={service}
-                        onClick={() => toggleService(service)}
-                        className={`text-xs font-semibold uppercase px-3.5 py-2 rounded-lg border transition-all cursor-pointer ${
-                          selected
-                            ? 'bg-brand-red text-white border-brand-red shadow-md shadow-red-600/30'
-                            : 'bg-neutral-900/80 text-neutral-400 border-neutral-800 hover:border-neutral-700 hover:text-white'
-                        }`}
-                      >
-                        {service}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Name & Email Inputs */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+              {/* 1. Name & 2. Profession */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-neutral-300 mb-2">
-                    {t('modals.nameLabel')} *
+                  <label className="block text-[11px] font-extrabold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 mb-1.5">
+                    {isRtl ? 'الاسم' : 'Name'} <span className="text-brand-red">*</span>
                   </label>
                   <input
                     type="text"
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder={t('modals.namePlaceholder')}
-                    className="w-full px-4 py-3 bg-neutral-900 border border-neutral-800 rounded-lg text-white placeholder-neutral-500 text-sm focus:outline-none focus:border-brand-red transition-colors"
+                    placeholder={isRtl ? 'أحمد محمد' : 'Your name'}
+                    className="w-full px-3.5 py-2.5 bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 rounded-lg text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 text-xs focus:outline-none focus:border-brand-red transition-colors"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-neutral-300 mb-2">
-                    {t('modals.emailLabel')} *
+                  <label className="block text-[11px] font-extrabold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 mb-1.5">
+                    {isRtl ? 'بتشتغل في إيه وايه تخصصك؟' : 'Your job & speciality?'} <span className="text-brand-red">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.profession}
+                    onChange={(e) => setFormData({ ...formData, profession: e.target.value })}
+                    placeholder={isRtl ? 'مثال: رائد أعمال / صاحب متجر' : 'e.g. Founder, Store Owner'}
+                    className="w-full px-3.5 py-2.5 bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 rounded-lg text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 text-xs focus:outline-none focus:border-brand-red transition-colors"
+                  />
+                </div>
+              </div>
+
+              {/* 3. عرفتنا منين ؟ */}
+              <div>
+                <label className="block text-[11px] font-extrabold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 mb-1.5">
+                  {isRtl ? 'عرفتنا منين ؟' : 'How did you hear about us?'} <span className="text-brand-red">*</span>
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {SERVICES_HEARD_FROM_OPTIONS.map((opt) => (
+                    <button
+                      type="button"
+                      key={opt}
+                      onClick={() => setFormData({ ...formData, heardFrom: opt })}
+                      className={`px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all cursor-pointer ${
+                        formData.heardFrom === opt
+                          ? 'bg-brand-red text-white shadow-md shadow-brand-red/20'
+                          : 'bg-neutral-100 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-800'
+                      }`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+                {formData.heardFrom === 'أخرى' && (
+                  <input
+                    type="text"
+                    required
+                    placeholder={isRtl ? 'اذكر المصدر هنا...' : 'Specify how you found us...'}
+                    value={formData.otherHeardFrom}
+                    onChange={(e) => setFormData({ ...formData, otherHeardFrom: e.target.value })}
+                    className="w-full mt-2 px-3 py-1.5 rounded-lg bg-white dark:bg-black/60 border border-brand-red text-xs text-neutral-900 dark:text-white focus:outline-none"
+                  />
+                )}
+              </div>
+
+              {/* 4. نوع البيزنس؟ & 5. الدوله */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div>
+                  <label className="block text-[11px] font-extrabold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 mb-1.5">
+                    {isRtl ? 'نوع البيزنس؟' : 'Business Type?'}
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.businessType}
+                    onChange={(e) => setFormData({ ...formData, businessType: e.target.value })}
+                    placeholder={isRtl ? 'مثال: ملابس، مطاعم، عيادات' : 'e.g. Retail, Food, Medical'}
+                    className="w-full px-3.5 py-2.5 bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 rounded-lg text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 text-xs focus:outline-none focus:border-brand-red transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-extrabold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 mb-1.5">
+                    {isRtl ? 'الدوله' : 'Country'} <span className="text-brand-red">*</span>
+                  </label>
+                  <div className="flex gap-2">
+                    {SERVICES_COUNTRY_OPTIONS.map((opt) => (
+                      <button
+                        type="button"
+                        key={opt}
+                        onClick={() => setFormData({ ...formData, country: opt })}
+                        className={`flex-1 py-1.5 px-2 rounded-lg text-[11px] font-semibold transition-all cursor-pointer ${
+                          formData.country === opt
+                            ? 'bg-brand-red text-white shadow-md shadow-brand-red/20'
+                            : 'bg-neutral-100 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-800'
+                        }`}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                  {formData.country === 'أخرى' && (
+                    <input
+                      type="text"
+                      required
+                      placeholder={isRtl ? 'اكتب اسم الدولة...' : 'Enter country name...'}
+                      value={formData.otherCountry}
+                      onChange={(e) => setFormData({ ...formData, otherCountry: e.target.value })}
+                      className="w-full mt-2 px-3 py-1.5 rounded-lg bg-white dark:bg-black/60 border border-brand-red text-xs text-neutral-900 dark:text-white focus:outline-none"
+                    />
+                  )}
+                </div>
+              </div>
+
+              {/* 6. Phone & 7. Email */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div>
+                  <label className="block text-[11px] font-extrabold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 mb-1.5">
+                    {isRtl ? 'رقم تليفونك' : 'Phone Number'} <span className="text-brand-red">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    required
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    placeholder="+20 100 000 0000"
+                    className="w-full px-3.5 py-2.5 bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 rounded-lg text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 text-xs focus:outline-none focus:border-brand-red transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-extrabold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 mb-1.5">
+                    {isRtl ? 'البريد الإلكتروني' : 'Email Address'} <span className="text-brand-red">*</span>
                   </label>
                   <input
                     type="email"
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder={t('modals.emailPlaceholder')}
-                    className="w-full px-4 py-3 bg-neutral-900 border border-neutral-800 rounded-lg text-white placeholder-neutral-500 text-sm focus:outline-none focus:border-brand-red transition-colors"
+                    placeholder="name@company.com"
+                    className="w-full px-3.5 py-2.5 bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 rounded-lg text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 text-xs focus:outline-none focus:border-brand-red transition-colors"
                   />
                 </div>
               </div>
 
-              {/* Company & Budget */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-neutral-300 mb-2">
-                    {isRtl ? 'الشركة / العلامة التجارية' : 'Company / Brand'}
-                  </label>
+              {/* 8. Service Needed */}
+              <div>
+                <label className="block text-[11px] font-extrabold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 mb-1.5">
+                  {isRtl ? 'ما الخدمه الذي تحتاجه' : 'What service do you need?'} <span className="text-brand-red">*</span>
+                </label>
+                <div className="space-y-1.5">
+                  {SERVICES_NEEDED_OPTIONS.map((opt) => (
+                    <button
+                      type="button"
+                      key={opt}
+                      onClick={() => setFormData({ ...formData, serviceNeeded: opt })}
+                      className={`w-full p-2.5 rounded-lg text-xs font-semibold text-start flex items-center gap-2.5 transition-all cursor-pointer ${
+                        formData.serviceNeeded === opt
+                          ? 'bg-brand-red text-white shadow-md shadow-brand-red/20'
+                          : 'bg-neutral-100 dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-200 dark:hover:bg-neutral-800'
+                      }`}
+                    >
+                      <div
+                        className={`w-3.5 h-3.5 rounded-full border flex-shrink-0 flex items-center justify-center ${
+                          formData.serviceNeeded === opt ? 'border-white' : 'border-neutral-400'
+                        }`}
+                      >
+                        {formData.serviceNeeded === opt && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                      </div>
+                      <span className="leading-snug text-[11.5px]">{opt}</span>
+                    </button>
+                  ))}
+                </div>
+                {formData.serviceNeeded === 'أخرى' && (
                   <input
                     type="text"
-                    value={formData.company}
-                    onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                    placeholder="Acme Studio"
-                    className="w-full px-4 py-3 bg-neutral-900 border border-neutral-800 rounded-lg text-white placeholder-neutral-500 text-sm focus:outline-none focus:border-brand-red transition-colors"
+                    required
+                    placeholder={isRtl ? 'اكتب تفاصيل الخدمة...' : 'Specify the service you need...'}
+                    value={formData.otherService}
+                    onChange={(e) => setFormData({ ...formData, otherService: e.target.value })}
+                    className="w-full mt-2 px-3.5 py-2 rounded-lg bg-white dark:bg-black/60 border border-brand-red text-xs text-neutral-900 dark:text-white focus:outline-none"
                   />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-neutral-300 mb-2">
-                    {isRtl ? 'الميزانية التقديرية' : 'Estimated Budget'}
-                  </label>
-                  <select
-                    value={formData.budget}
-                    onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                    className="w-full px-4 py-3 bg-neutral-900 border border-neutral-800 rounded-lg text-white text-sm focus:outline-none focus:border-brand-red transition-colors cursor-pointer"
-                  >
-                    {budgetOptions.map((b) => (
-                      <option key={b} value={b} className="bg-neutral-950 text-white">
-                        {b}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                )}
               </div>
 
-              {/* Message */}
+              {/* 9. Has Social Pages */}
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-300 mb-2">
-                  {t('modals.messageLabel')}
+                <label className="block text-[11px] font-extrabold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 mb-1.5">
+                  {isRtl ? 'هل لديك صفحات حالياً للبزنس على السوشيال ميديا؟' : 'Existing social media pages?'} <span className="text-brand-red">*</span>
                 </label>
-                <textarea
-                  rows="4"
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  placeholder={t('modals.messagePlaceholder')}
-                  className="w-full px-4 py-3 bg-neutral-900 border border-neutral-800 rounded-lg text-white placeholder-neutral-500 text-sm focus:outline-none focus:border-brand-red transition-colors resize-none"
-                />
+                <div className="flex gap-6 pt-0.5">
+                  {SERVICES_SOCIAL_PAGES_OPTIONS.map((opt) => (
+                    <label
+                      key={opt}
+                      onClick={() => setFormData({ ...formData, hasSocialPages: opt })}
+                      className="inline-flex items-center gap-2 cursor-pointer select-none"
+                    >
+                      <div
+                        className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${
+                          formData.hasSocialPages === opt ? 'border-brand-red' : 'border-neutral-400 dark:border-neutral-600'
+                        }`}
+                      >
+                        {formData.hasSocialPages === opt && <div className="w-2 h-2 rounded-full bg-brand-red" />}
+                      </div>
+                      <span className="text-xs font-bold text-neutral-800 dark:text-neutral-200">
+                        {opt}
+                      </span>
+                    </label>
+                  ))}
+                </div>
               </div>
 
-              {/* Submit Button */}
+              {/* Submit */}
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full py-4 bg-brand-red hover:bg-brand-redHover text-white text-xs sm:text-sm font-bold uppercase tracking-wider rounded-lg transition-all transform hover:scale-[1.01] shadow-lg shadow-red-600/30 flex items-center justify-center space-x-2 rtl:space-x-reverse cursor-pointer"
+                  disabled={isSubmitting}
+                  className="w-full py-3 bg-brand-red hover:bg-brand-redHover disabled:opacity-75 text-white text-xs font-bold uppercase tracking-wider rounded-lg transition-all duration-200 shadow-lg shadow-brand-red/25 cursor-pointer flex items-center justify-center gap-2"
                 >
-                  <Send className="w-4 h-4 rtl:rotate-180" />
-                  <span>{t('modals.submitInquiry')}</span>
+                  {isSubmitting ? (
+                    <>
+                      <RefreshCw className="w-4 h-4 animate-spin" />
+                      <span>{isRtl ? 'جاري الإرسال والمزامنة...' : 'Submitting...'}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" />
+                      <span>{isRtl ? 'إرسال طلب الخدمة' : 'Submit Service Request'}</span>
+                    </>
+                  )}
                 </button>
               </div>
             </form>

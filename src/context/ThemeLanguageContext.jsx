@@ -4,13 +4,13 @@ import { translations } from '../locales/translations';
 const ThemeLanguageContext = createContext(null);
 
 export function ThemeLanguageProvider({ children }) {
-  // 1. Theme State (defaults to 'dark')
+  // 1. Theme State (defaults to 'light')
   const [theme, setTheme] = useState(() => {
     try {
       const savedTheme = localStorage.getItem('devotix_theme');
-      return savedTheme === 'light' ? 'light' : 'dark';
+      return savedTheme === 'dark' ? 'dark' : 'light';
     } catch {
-      return 'dark';
+      return 'light';
     }
   });
 

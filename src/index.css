@@ -43,9 +43,9 @@
     color: #f3f4f6;
   }
 
-  /* Light theme body */
+  /* Light theme body - Pure Clean White */
   html.light body {
-    background-color: #f8f9fa;
+    background-color: #ffffff;
     color: #111827;
   }
 }
@@ -310,7 +310,7 @@ html.dark .section-alt-a {
 }
 
 .section-alt-b {
-  background-color: #f4f6fa;
+  background-color: #ffffff;
   color: #111827;
   transition: background-color 0.35s ease, color 0.35s ease;
 }
@@ -321,21 +321,35 @@ html.dark .section-alt-b {
 
 /* Glassmorphism Card Style */
 .card-glass {
-  background: rgba(18, 18, 22, 0.65);
+  background: #ffffff;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid #e5e7eb;
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html.dark .card-glass {
+  background: rgba(18, 18, 22, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .card-glass:hover {
   border-color: rgba(255, 30, 39, 0.5);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 30, 39, 0.15);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.15), 0 0 25px rgba(255, 30, 39, 0.1);
   transform: translateY(-2px);
+}
+
+html.dark .card-glass:hover {
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 30, 39, 0.15);
 }
 
 .more-videos-btn:hover {
   border-color: #FF1E27;
+  color: #111827;
+  background-color: #f3f4f6;
+}
+
+html.dark .more-videos-btn:hover {
   color: #ffffff;
   background-color: #171717;
 }
@@ -372,10 +386,15 @@ html.dark .section-alt-b {
   flex-direction: column;
   border-radius: 0.75rem;
   overflow: hidden;
-  background-color: #0a0a0a;
-  border: 1px solid #262626;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
   transition: all 0.3s ease;
   cursor: pointer;
+}
+
+html.dark .video-card {
+  background-color: #0a0a0a;
+  border: 1px solid #262626;
 }
 
 .video-card:hover {
@@ -519,14 +538,22 @@ html.dark .section-alt-b {
   z-index: 10;
   width: 100%;
   max-width: 64rem;
-  background-color: #0a0a0a;
-  border: 1px solid rgba(38, 38, 38, 0.9);
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
   border-radius: 1rem;
   overflow: hidden;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
   max-height: 90vh;
+  color: #111827;
+}
+
+html.dark .more-videos-dialog {
+  background-color: #0a0a0a;
+  border: 1px solid rgba(38, 38, 38, 0.9);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  color: #ffffff;
 }
 
 /* Category Filter Tabs Bar (Static Layout, No Slider) */
@@ -534,6 +561,11 @@ html.dark .section-alt-b {
   position: relative;
   z-index: 20;
   padding: 0.875rem 1.5rem;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+html.dark .more-videos-tabs-bar {
   background-color: #0a0a0a;
   border-bottom: 1px solid rgba(38, 38, 38, 0.8);
 }
@@ -571,12 +603,23 @@ html.dark .section-alt-b {
 }
 
 .category-tab-btn.inactive {
+  background-color: #f3f4f6;
+  color: #4b5563;
+  border-color: #e5e7eb;
+}
+
+html.dark .category-tab-btn.inactive {
   background-color: #171717;
   color: #a3a3a3;
   border-color: #262626;
 }
 
 .category-tab-btn.inactive:hover {
+  color: #111827;
+  background-color: #e5e7eb;
+}
+
+html.dark .category-tab-btn.inactive:hover {
   color: #ffffff;
   background-color: #262626;
 }

@@ -10,6 +10,7 @@
     "get-photos": "node scripts/testCloudinary.cjs"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
     "cloudinary": "^2.11.0",
     "dotenv": "^18.0.1",
     "lucide-react": "^0.475.0",

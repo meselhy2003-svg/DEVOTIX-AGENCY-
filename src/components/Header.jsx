@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ArrowUpRight, Sun, Moon, Globe } from 'lucide-react';
 import { useThemeLanguage } from '../context/ThemeLanguageContext';
+import SocialIconsGroup from './SocialIconsGroup';
 
 export default function Header({
   onOpenContact,
@@ -41,7 +42,7 @@ export default function Header({
       }
 
       if (currentPage === 'home') {
-        const sections = ['home', 'services', 'work', 'production', 'photography', 'graphic', 'clients'];
+        const sections = ['home', 'services', 'work', 'production', 'content-views', 'photography', 'graphic', 'clients'];
         const scrollPosition = window.scrollY + 160;
 
         for (const sectionId of sections) {
@@ -300,6 +301,10 @@ export default function Header({
                 <span>{t('nav.letsTalk', "LET'S TALK")}</span>
                 <ArrowUpRight className="w-4 h-4 rtl:rotate-[-90deg]" />
               </button>
+
+              <div className="pt-3 flex items-center justify-center">
+                <SocialIconsGroup size="sm" />
+              </div>
             </div>
           </div>
         )}

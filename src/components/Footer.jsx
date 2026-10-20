@@ -1,6 +1,7 @@
 import React from 'react';
-import { ArrowUp, Instagram, Linkedin, Twitter, Youtube } from 'lucide-react';
+import { ArrowUp } from 'lucide-react';
 import { useThemeLanguage } from '../context/ThemeLanguageContext';
+import SocialIconsGroup from './SocialIconsGroup';
 
 export default function Footer({ onOpenPolicy }) {
   const { isRtl, isDark, t } = useThemeLanguage();
@@ -82,46 +83,17 @@ export default function Footer({ onOpenPolicy }) {
             >
               {t('footer.termsOfService', 'Terms of Service')}
             </button>
+            <a
+              href="#admin"
+              className="text-xs sm:text-sm font-semibold tracking-wide text-neutral-400 dark:text-neutral-500 hover:text-brand-red transition-colors focus:outline-none cursor-pointer"
+            >
+              {isRtl ? 'لوحة التحكم' : 'Admin Portal'}
+            </a>
           </div>
 
           {/* Right / Left (in RTL): Social Media Icons & Scroll to Top */}
-          <div className="flex items-center space-x-3 rtl:space-x-reverse">
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-8 h-8 rounded-full bg-neutral-100 dark:bg-[#111116] hover:bg-brand-red hover:text-white text-neutral-700 dark:text-neutral-300 flex items-center justify-center transition-all duration-300 shadow-sm border border-neutral-200/80 dark:border-white/10"
-              aria-label="Instagram"
-            >
-              <Instagram className="w-4 h-4" />
-            </a>
-            <a
-              href="https://linkedin.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-8 h-8 rounded-full bg-neutral-100 dark:bg-[#111116] hover:bg-brand-red hover:text-white text-neutral-700 dark:text-neutral-300 flex items-center justify-center transition-all duration-300 shadow-sm border border-neutral-200/80 dark:border-white/10"
-              aria-label="LinkedIn"
-            >
-              <Linkedin className="w-4 h-4" />
-            </a>
-            <a
-              href="https://twitter.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-8 h-8 rounded-full bg-neutral-100 dark:bg-[#111116] hover:bg-brand-red hover:text-white text-neutral-700 dark:text-neutral-300 flex items-center justify-center transition-all duration-300 shadow-sm border border-neutral-200/80 dark:border-white/10"
-              aria-label="Twitter / X"
-            >
-              <Twitter className="w-4 h-4" />
-            </a>
-            <a
-              href="https://youtube.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-8 h-8 rounded-full bg-neutral-100 dark:bg-[#111116] hover:bg-brand-red hover:text-white text-neutral-700 dark:text-neutral-300 flex items-center justify-center transition-all duration-300 shadow-sm border border-neutral-200/80 dark:border-white/10"
-              aria-label="YouTube"
-            >
-              <Youtube className="w-4 h-4" />
-            </a>
+          <div className="flex items-center space-x-2 rtl:space-x-reverse">
+            <SocialIconsGroup size="md" />
 
             <button
               onClick={scrollToTop}

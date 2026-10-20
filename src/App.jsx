@@ -5,6 +5,7 @@ import Hero from './components/Hero';
 import Services from './components/Services';
 import Work from './components/Work';
 import Production from './components/Production';
+import ContentViewsSection from './components/ContentViewsSection';
 import Photography from './components/Photography';
 import Graphic from './components/Graphic';
 import Clients from './components/Clients';
@@ -24,6 +25,7 @@ import ContactPage from './pages/ContactPage';
 import PhotographyGalleryPage from './pages/PhotographyGalleryPage';
 import GraphicsGalleryPage from './pages/GraphicsGalleryPage';
 import GraphicSingleViewPage from './pages/GraphicSingleViewPage';
+import AdminDashboardPage from './pages/AdminDashboardPage';
 
 // Modals
 import VideoModal from './components/VideoModal';
@@ -33,16 +35,18 @@ import ProjectModal from './components/ProjectModal';
 import PolicyModal from './components/PolicyModal';
 import CareerModal from './components/CareerModal';
 import AboutModal from './components/AboutModal';
+import { initCmsSync } from './services/cmsSync';
 
 function AppContent() {
   const { isDark } = useThemeLanguage();
 
-  // Page routing state ('home' | 'project-view' | 'software-engineering' | 'about' | 'career' | 'job-apply' | 'send-cv' | 'contact' | 'photography-gallery' | 'graphics-gallery' | 'graphic-view')
+  // Page routing state ('home' | 'project-view' | 'software-engineering' | 'about' | 'career' | 'job-apply' | 'send-cv' | 'contact' | 'photography-gallery' | 'graphics-gallery' | 'graphic-view' | 'admin')
   const [currentPage, setCurrentPage] = useState('home');
   const [selectedProjectDetail, setSelectedProjectDetail] = useState(null);
   const [selectedJobRole, setSelectedJobRole] = useState(null);
   const [selectedPhotoGallery, setSelectedPhotoGallery] = useState(null);
   const [selectedGraphic, setSelectedGraphic] = useState(null);
+  const [selectedGraphicsCategory, setSelectedGraphicsCategory] = useState('all');
 
   // Modal states
   const [activeVideo, setActiveVideo] = useState(null);
@@ -51,13 +55,21 @@ function AppContent() {
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [lightboxData, setLightboxData] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedServiceForContact, setSelectedServiceForContact] = useState(null);
   const [policyType, setPolicyType] = useState(null);
+
+  // Initialize Cloud CMS synchronization on application load
+  useEffect(() => {
+    initCmsSync();
+  }, []);
 
   // Listen to hash changes for single-page routing
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash;
-      if (hash === '#software-engineering' || hash === '#case-study') {
+      if (hash === '#admin' || hash === '#dashboard' || hash === '#cms') {
+        setCurrentPage('admin');
+      } else if (hash === '#software-engineering' || hash === '#case-study') {
         setCurrentPage('software-engineering');
       } else if (hash === '#project-view') {
         setCurrentPage('project-view');
@@ -108,7 +120,7 @@ function AppContent() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const navigateToContact = () => {
+  const navigateToContact = (service) => {
     setActiveVideo(null);
     setLightboxData(null);
     setSelectedProject(null);
@@ -116,6 +128,12 @@ function AppContent() {
     setIsCareerOpen(false);
     setIsContactOpen(false);
     setPolicyType(null);
+    if (service) {
+      const val = service.formValue || service.title || (typeof service === 'string' ? service : null);
+      if (val) setSelectedServiceForContact(val);
+    } else {
+      setSelectedServiceForContact(null);
+    }
     window.location.hash = '#contact';
     setCurrentPage('contact');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -148,7 +166,8 @@ function AppContent() {
     window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
-  const navigateToGraphicsGallery = () => {
+  const navigateToGraphicsGallery = (category = 'all') => {
+    setSelectedGraphicsCategory(category);
     window.location.hash = '#graphics-gallery';
     setCurrentPage('graphics-gallery');
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -193,6 +212,10 @@ function AppContent() {
     }
   };
 
+  if (currentPage === 'admin') {
+    return <AdminDashboardPage onNavigateHome={() => navigateToHome('home')} />;
+  }
+
   return (
     <div className="min-h-screen bg-white dark:bg-[#08080a] text-neutral-900 dark:text-white selection:bg-brand-red selection:text-white font-sans overflow-x-hidden transition-colors duration-300">
       {/* 1. FIXED Header (Across ALL pages) */}
@@ -214,6 +237,7 @@ function AppContent() {
       {/* Page Content Rendering (Normal Natural Scrolling) */}
       {currentPage === 'contact' ? (
         <ContactPage
+          initialService={selectedServiceForContact}
           onBackToHome={() => navigateToHome('home')}
           onOpenPolicy={(type) => setPolicyType(type)}
         />
@@ -268,6 +292,7 @@ function AppContent() {
         />
       ) : currentPage === 'graphics-gallery' ? (
         <GraphicsGalleryPage
+          initialCategory={selectedGraphicsCategory}
           onBackToHome={() => navigateToHome('graphic')}
           onSelectGraphic={navigateToGraphicSingleView}
           onOpenPolicy={(type) => setPolicyType(type)}
@@ -304,6 +329,10 @@ function AppContent() {
 
             {/* 4. Production Section (id="production") */}
             <Production onPlayVideo={(video) => setActiveVideo(video)} />
+
+            {/* 4.1 Content Views & Virality Section (id="content-views") */}
+            <ContentViewsSection onPlayVideo={(video) => setActiveVideo(video)} />
+
 
             {/* 5. Photography Section (id="photography") */}
             <Photography onSelectGallery={navigateToPhotoGallery} />

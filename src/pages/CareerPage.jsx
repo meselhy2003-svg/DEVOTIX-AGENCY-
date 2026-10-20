@@ -24,86 +24,286 @@ export default function CareerPage({
   const jobRoles = isRtl
     ? [
         {
-          id: 'sr-graphic-designer',
-          title: 'سينيور جرافيك ديزاينر (Senior Graphic Designer)',
+          id: 'montage-editor',
+          title: 'مونتير (Montage)',
+          department: 'الإنتاج والميديا',
+          location: 'مصر / هجين',
+          type: 'دوام كامل',
+          level: 'متوسط - سينيور',
+          workplace: 'هجين / ريموت',
+          description: 'مونتاج إعلانات تجارية سينمائية وريلز سريعة الانتشار باستخدام Premiere و DaVinci و After Effects.'
+        },
+        {
+          id: 'graphic-designer',
+          title: 'مصمم جرافيك (Graphic Designer)',
           department: 'فريق الديزاين والإبداع',
           location: 'مصر / هجين',
           type: 'دوام كامل',
           level: 'سينيور (خبرة متقدمة)',
           workplace: 'هجين / بالمقر',
-          description: 'بندور على سينيور جرافيك ديزاينر شاطر ينضم لفريقنا ويقود الأفكار البصرية للبراندات والحملات الإعلانية والسوشيال ميديا.'
+          description: 'بناء الهويات البصرية القوية والتصاميم الإعلانية والسوشيال ميديا للبراندات والشركات الكبرى.'
         },
         {
-          id: 'media-buyer',
-          title: 'ميديا باير أول (Senior Media Buyer)',
-          department: 'الميديا باينج والتسويق',
+          id: 'social-media-specialist',
+          title: 'متخصص سوشيال ميديا (Social Media Specialist)',
+          department: 'الميديا والتسويق الرقمي',
+          location: 'مصر / بالمقر',
+          type: 'دوام كامل',
+          level: 'خبرة متوسطة',
+          workplace: 'بالمقر / هجين',
+          description: 'إدارة وتطوير حسابات التواصل الاجتماعي، إعداد خطط النشر، وتحليل التفاعل ونمو الجمهور.'
+        },
+        {
+          id: 'moderator',
+          title: 'موديريتور (Moderator)',
+          department: 'خدمة العملاء والتواصل',
+          location: 'عن بُعد / مصر',
+          type: 'دوام كامل',
+          level: 'مبتدئ - متوسط',
+          workplace: 'عن بُعد (ريموت)',
+          description: 'الرد السريع والاحترافي على استفسارات العملاء والرسائل والتعليقات على مختلف المنصات.'
+        },
+        {
+          id: 'account-manager',
+          title: 'Account Manager',
+          department: 'إدارة الحسابات والعملاء',
+          location: 'مصر / بالمقر',
+          type: 'دوام كامل',
+          level: 'سينيور (خبرة متقدمة)',
+          workplace: 'بالمقر',
+          description: 'إدارة العلاقة مع كبار العملاء وتنسيق متطلبات المشاريع بين العميل وفرق التنفيذ بكفاءة.'
+        },
+        {
+          id: 'content-creator',
+          title: 'Content Creator',
+          department: 'صناعة المحتوى والإبداع',
+          location: 'مصر / هجين',
+          type: 'دوام كامل',
+          level: 'خبرة متوسطة',
+          workplace: 'هجين / بالمقر',
+          description: 'ابتكار أفكار فيديوهات إبداعية وكتابة سكريبتات إعلانية قوية والتصوير وصناعة المحتوى الجذاب.'
+        },
+        {
+          id: 'photographer',
+          title: 'Photographer',
+          department: 'الإنتاج والتصوير',
+          location: 'مصر / بالمقر',
+          type: 'دوام كامل',
+          level: 'محترف',
+          workplace: 'استوديو / ميداني',
+          description: 'تصوير فوتوغرافي احترافي للمنتجات والموديلز وتغطية الفعاليات بأحدث معدات الإضاءة والكاميرات.'
+        },
+        {
+          id: 'sales',
+          title: 'Sales',
+          department: 'المبيعات وتطوير الأعمال',
           location: 'مصر / بالمقر',
           type: 'دوام كامل',
           level: 'متوسط - سينيور',
           workplace: 'بالمقر',
-          description: 'إدارة وتوجيه ميزانيات إعلانية كبيرة على ميتا، تيك توك، وجوجل مع تحقيق أعلى عائد ROAS وأفضل نتائج بيع.'
+          description: 'استقطاب عملاء جدد وعقد الصفقات وتقديم حلول الدعاية والإنتاج للشركات والمؤسسات.'
         },
         {
-          id: 'video-editor',
-          title: 'فيديو إديتور ومونتير محترف',
-          department: 'الإنتاج والميديا',
-          location: 'عن بُعد / مصر',
+          id: 'accountant',
+          title: 'محاسب',
+          department: 'الإدارة والمالية',
+          location: 'مصر / بالمقر',
           type: 'دوام كامل',
           level: 'خبرة متوسطة',
-          workplace: 'عن بُعد (ريموت)',
-          description: 'مونتاج إعلانات تجارية سينمائية وريلز سريعة الانتشار باستخدام Premiere و DaVinci و After Effects.'
+          workplace: 'بالمقر',
+          description: 'إدارة الحسابات المالية والفواتير ومتابعة التدفقات النقدية والتقارير المحاسبية الدورية.'
         },
         {
-          id: 'creative-technologist',
-          title: 'مطور واجهات وتطبيقات تفاعلية (Frontend Dev)',
-          department: 'فريق السوفت وير والويب',
+          id: 'hr',
+          title: 'HR',
+          department: 'الموارد البشرية',
+          location: 'مصر / بالمقر',
+          type: 'دوام كامل',
+          level: 'خبرة متوسطة',
+          workplace: 'بالمقر',
+          description: 'إدارة عمليات التوظيف ومتابعة شؤون الموظفين وتطوير بيئة العمل وثقافة الفريق في ديفوتيكس.'
+        },
+        {
+          id: 'pr',
+          title: 'PR',
+          department: 'العلاقات العامة',
+          location: 'مصر / هجين',
+          type: 'دوام كامل',
+          level: 'خبرة متوسطة',
+          workplace: 'هجين',
+          description: 'بناء وتطوير العلاقات الاستراتيجية مع الشركاء ووسائل الإعلام وتنظيم المؤتمرات والفعاليات.'
+        },
+        {
+          id: 'assistance',
+          title: 'Assistance',
+          department: 'الدعم الإداري والتشغيل',
+          location: 'مصر / بالمقر',
+          type: 'دوام كامل',
+          level: 'مبتدئ - متوسط',
+          workplace: 'بالمقر',
+          description: 'مساعدة إدارة العمليات وتنسيق المواعيد وتنظيم المهام اليومية لفرق العمل بسلاسة.'
+        },
+        {
+          id: 'web-developer',
+          title: 'web Developer',
+          department: 'البرمجة والتطوير',
           location: 'مصر / عن بُعد',
           type: 'دوام كامل',
           level: 'سينيور (خبرة متقدمة)',
-          workplace: 'هجين / ريموت',
-          description: 'بناء مواقع وتطبيقات تفاعلية سريعة وتجارب 3D ثلاثية الأبعاد بـ React و Three.js.'
+          workplace: 'ريموت / هجين',
+          description: 'تطوير وتحديث المواقع الإلكترونية والمنصات التفاعلية وتطبيقات الويب السريعة والحديثة.'
+        },
+        {
+          id: 'digital-marketing-strategis',
+          title: 'Digital Marketing strategis',
+          department: 'التسويق الرقمي والاستراتيجيات',
+          location: 'مصر / هجين',
+          type: 'دوام كامل',
+          level: 'سينيور (خبير استراتيجي)',
+          workplace: 'هجين / بالمقر',
+          description: 'تخطيط وبناء الاستراتيجيات التسويقية الشاملة للحملات الإعلانية ونمو العلامات التجارية.'
         }
       ]
     : [
         {
-          id: 'sr-graphic-designer',
-          title: 'SENIOR GRAPHIC DESIGNER',
+          id: 'montage-editor',
+          title: 'مونتير (Montage)',
+          department: 'PRODUCTION & MEDIA',
+          location: 'EGYPT / HYBRID',
+          type: 'FULL-TIME',
+          level: 'MID-SENIOR LEVEL',
+          workplace: 'Hybrid / Remote',
+          description: 'Cut cinema-grade commercial films, dynamic social reels, and high-energy showreels.'
+        },
+        {
+          id: 'graphic-designer',
+          title: 'مصمم جرافيك (Graphic Designer)',
           department: 'CREATIVE',
           location: 'ISMAILIA, EGYPT',
           type: 'FULL-TIME',
           level: 'SENIOR LEVEL',
-          workplace: 'Hybrid/On-site',
-          description: 'We are looking for a Senior Graphic Designer to join our creative team and develop strong visual concepts across brands, campaigns, digital platforms and social media.'
+          workplace: 'Hybrid / On-site',
+          description: 'Develop strong visual concepts across brands, campaigns, digital platforms and social media.'
         },
         {
-          id: 'media-buyer',
-          title: 'MEDIA BUYER',
-          department: 'MEDIA',
+          id: 'social-media-specialist',
+          title: 'متخصص سوشيال ميديا (Social Media Specialist)',
+          department: 'DIGITAL MARKETING',
           location: 'ISMAILIA, EGYPT',
           type: 'FULL-TIME',
-          level: 'MID-SENIOR LEVEL',
-          workplace: 'On-site',
-          description: 'Manage 7-figure multi-channel ad spend across Meta, TikTok, Google, and programmatic networks with strict ROAS targets.'
+          level: 'MID LEVEL',
+          workplace: 'On-site / Hybrid',
+          description: 'Manage and grow brand accounts across social channels, content planning, and performance metrics.'
         },
         {
-          id: 'video-editor',
-          title: 'VIDEO EDITOR',
-          department: 'PRODUCTION',
+          id: 'moderator',
+          title: 'موديريتور (Moderator)',
+          department: 'CUSTOMER CARE',
           location: 'REMOTE / EGYPT',
           type: 'FULL-TIME',
-          level: 'MID LEVEL',
+          level: 'ENTRY-MID',
           workplace: 'Remote',
-          description: 'Cut cinema-grade commercial films, dynamic social reels, and high-energy showreels using Premiere, DaVinci, and After Effects.'
+          description: 'Engage audience, handle inquiries, and manage inbound messages with professional speed.'
         },
         {
-          id: 'creative-technologist',
-          title: 'CREATIVE TECHNOLOGIST / FRONTEND DEV',
+          id: 'account-manager',
+          title: 'Account Manager',
+          department: 'CLIENT MANAGEMENT',
+          location: 'ISMAILIA, EGYPT',
+          type: 'FULL-TIME',
+          level: 'SENIOR LEVEL',
+          workplace: 'On-site',
+          description: 'Lead client relationships, project scopes, delivery alignment, and account growth.'
+        },
+        {
+          id: 'content-creator',
+          title: 'Content Creator',
+          department: 'CREATIVE & CONTENT',
+          location: 'EGYPT / HYBRID',
+          type: 'FULL-TIME',
+          level: 'MID LEVEL',
+          workplace: 'Hybrid',
+          description: 'Brainstorm creative concepts, script hooks, produce viral videos, and lead storytelling.'
+        },
+        {
+          id: 'photographer',
+          title: 'Photographer',
+          department: 'PRODUCTION',
+          location: 'ISMAILIA, EGYPT',
+          type: 'FULL-TIME',
+          level: 'PROFESSIONAL',
+          workplace: 'Studio / On-location',
+          description: 'Execute commercial photography for luxury products, fashion models, and brand campaigns.'
+        },
+        {
+          id: 'sales',
+          title: 'Sales',
+          department: 'BUSINESS DEVELOPMENT',
+          location: 'ISMAILIA, EGYPT',
+          type: 'FULL-TIME',
+          level: 'MID-SENIOR',
+          workplace: 'On-site',
+          description: 'Generate leads, close partnerships, and present media production services to brands.'
+        },
+        {
+          id: 'accountant',
+          title: 'محاسب',
+          department: 'FINANCE',
+          location: 'ISMAILIA, EGYPT',
+          type: 'FULL-TIME',
+          level: 'MID LEVEL',
+          workplace: 'On-site',
+          description: 'Manage corporate bookkeeping, financial operations, invoicing, and fiscal reporting.'
+        },
+        {
+          id: 'hr',
+          title: 'HR',
+          department: 'HUMAN RESOURCES',
+          location: 'ISMAILIA, EGYPT',
+          type: 'FULL-TIME',
+          level: 'MID LEVEL',
+          workplace: 'On-site',
+          description: 'Manage talent acquisition, employee welfare, workplace culture, and company onboarding.'
+        },
+        {
+          id: 'pr',
+          title: 'PR',
+          department: 'PUBLIC RELATIONS',
+          location: 'EGYPT / HYBRID',
+          type: 'FULL-TIME',
+          level: 'MID-SENIOR',
+          workplace: 'Hybrid',
+          description: 'Build strategic PR partnerships, press coverage, and high-impact media events.'
+        },
+        {
+          id: 'assistance',
+          title: 'Assistance',
+          department: 'OPERATIONS',
+          location: 'ISMAILIA, EGYPT',
+          type: 'FULL-TIME',
+          level: 'ENTRY-MID',
+          workplace: 'On-site',
+          description: 'Provide executive coordination, administrative workflow, and day-to-day operations support.'
+        },
+        {
+          id: 'web-developer',
+          title: 'web Developer',
           department: 'ENGINEERING',
           location: 'ISMAILIA / REMOTE',
           type: 'FULL-TIME',
           level: 'SENIOR LEVEL',
+          workplace: 'Remote / Hybrid',
+          description: 'Build modern interactive websites, high-converting landing pages, and Web applications.'
+        },
+        {
+          id: 'digital-marketing-strategis',
+          title: 'Digital Marketing strategis',
+          department: 'STRATEGY & MARKETING',
+          location: 'EGYPT / HYBRID',
+          type: 'FULL-TIME',
+          level: 'SENIOR LEVEL',
           workplace: 'Hybrid',
-          description: 'Build interactive WebGL 3D web experiences, smooth single-page applications, and high-converting creative engines.'
+          description: 'Architect comprehensive 360 marketing strategies, paid ad campaigns, and brand growth.'
         }
       ];
 

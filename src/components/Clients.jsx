@@ -39,11 +39,11 @@ export default function Clients() {
         {/* Container for Client Marquee (Two Lines - Always LTR for perfect mathematical marquee symmetry) */}
         <div
           dir="ltr"
-          className="relative rounded-2xl bg-neutral-100/90 dark:bg-[#111116] border border-neutral-200/80 dark:border-white/10 p-6 sm:p-8 lg:p-10 overflow-hidden shadow-sm dark:shadow-2xl"
+          className="relative rounded-2xl bg-white dark:bg-[#111116] border border-neutral-200/80 dark:border-white/10 p-6 sm:p-8 lg:p-10 overflow-hidden shadow-sm dark:shadow-2xl"
         >
           {/* Gradient edge masks */}
-          <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-28 md:w-36 bg-gradient-to-r from-neutral-100 dark:from-[#111116] to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-28 md:w-36 bg-gradient-to-l from-neutral-100 dark:from-[#111116] to-transparent z-10 pointer-events-none" />
+          <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-28 md:w-36 bg-gradient-to-r from-white dark:from-[#111116] to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-28 md:w-36 bg-gradient-to-l from-white dark:from-[#111116] to-transparent z-10 pointer-events-none" />
 
           {/* Marquee Line 1 (Scrolls Left) */}
           <div className="flex overflow-hidden py-3 select-none marquee-container w-full">
