@@ -20,8 +20,20 @@ import {
   SERVICES_SOCIAL_PAGES_OPTIONS
 } from '../services/googleSheetService';
 
-export default function ContactPage({ onBackToHome, onOpenPolicy, initialService }) {
+export default function ContactPage({ onBackToHome, onBack, onOpenPolicy, initialService }) {
   const { isRtl, isDark, t } = useThemeLanguage();
+
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+    } else if (onBackToHome) {
+      onBackToHome();
+    } else if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.location.hash = '#home';
+    }
+  };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -98,7 +110,7 @@ export default function ContactPage({ onBackToHome, onOpenPolicy, initialService
   };
 
   const socialLinks = [
-    { name: 'WhatsApp', handle: '+20 101 018 5181', icon: '/assets/contact/WhatsApp.png', href: links.whatsapp },
+    { name: 'WhatsApp', handle: '+20 01040701880', icon: '/assets/contact/WhatsApp.png', href: links.whatsapp },
     { name: 'Telegram', handle: '@devotix', icon: '/assets/contact/Telegram.png', href: links.telegram },
     { name: 'Instagram', handle: '@devotixmedia', icon: '/assets/contact/Instagram.png', href: links.instagram },
     { name: 'Facebook', handle: '@devotixmedia', icon: '/assets/contact/Facebook.png', href: links.facebook },
@@ -118,11 +130,11 @@ export default function ContactPage({ onBackToHome, onOpenPolicy, initialService
           {/* Top Bar with Back Link */}
           <div>
             <button
-              onClick={onBackToHome}
-              className="inline-flex items-center space-x-1 rtl:space-x-reverse text-[10.5px] font-bold text-neutral-600 dark:text-neutral-400 hover:text-brand-red transition-colors uppercase cursor-pointer group"
+              onClick={handleBack}
+              className="inline-flex items-center space-x-1 rtl:space-x-reverse text-xs sm:text-sm font-semibold text-black dark:text-white hover:text-brand-red transition-colors cursor-pointer group"
             >
-              <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform rtl:rotate-180" />
-              <span>{t('nav.backToHome', 'Back to Home')}</span>
+              <ArrowLeft className="w-3.5 h-3.5 text-black dark:text-white group-hover:text-brand-red group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform rtl:rotate-180" />
+              <span>{t('nav.backToPrevious', 'Back to previous page')}</span>
             </button>
           </div>
 
@@ -573,8 +585,12 @@ export default function ContactPage({ onBackToHome, onOpenPolicy, initialService
                     <span className="text-[9px] font-bold text-neutral-400 dark:text-neutral-500 block leading-tight">
                       {s.name}
                     </span>
-                    <span className="text-[10.5px] sm:text-[11px] font-extrabold text-neutral-900 dark:text-white group-hover:text-brand-red transition-colors block leading-tight truncate mt-0.5">
-                      {s.handle}
+                    <span
+                      dir="ltr"
+                      style={{ unicodeBidi: 'isolate', direction: 'ltr' }}
+                      className="text-[10.5px] sm:text-[11px] font-extrabold text-neutral-900 dark:text-white group-hover:text-brand-red transition-colors inline-block leading-tight truncate mt-0.5"
+                    >
+                      {s.handle.startsWith('+') ? '\u200E' : ''}{s.handle}
                     </span>
                   </div>
                 </a>

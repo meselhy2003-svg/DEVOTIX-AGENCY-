@@ -4,12 +4,25 @@ import Footer from '../components/Footer';
 
 export default function PortfolioPage({
   onBackToHome,
+  onBack,
   onOpenContact,
   onSelectProject,
   onOpenPolicy,
   onViewProjectDetail,
   onNavigateSoftwareEngineering
 }) {
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+    } else if (onBackToHome) {
+      onBackToHome();
+    } else if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.location.hash = '#home';
+    }
+  };
+
   const [activeTab, setActiveTab] = useState('media'); // 'media' | 'software'
 
   const featuredProject = activeTab === 'software' ? {
@@ -158,11 +171,11 @@ export default function PortfolioPage({
           {/* Back Link */}
           <div className="mb-8">
             <button
-              onClick={onBackToHome}
-              className="inline-flex items-center space-x-1.5 text-sm font-semibold text-neutral-800 hover:text-brand-red transition-colors cursor-pointer group"
+              onClick={handleBack}
+              className="inline-flex items-center space-x-1.5 text-sm font-semibold text-black hover:text-brand-red transition-colors cursor-pointer group"
             >
-              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-              <span>Back</span>
+              <ArrowLeft className="w-4 h-4 text-black group-hover:text-brand-red group-hover:-translate-x-1 transition-transform" />
+              <span>Back to previous page</span>
             </button>
           </div>
 

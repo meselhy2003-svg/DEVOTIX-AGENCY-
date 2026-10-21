@@ -42,7 +42,7 @@ export default function Graphic({ onNavigateGallery, onSelectGraphic }) {
         {/* Section Header */}
         <div className="text-center max-w-xl mx-auto mb-6 sm:mb-8 pb-3 border-b border-neutral-200/80 dark:border-white/10">
           <TitleAccent type="graphic" />
-          <p className="mt-2 text-xs sm:text-sm md:text-[14.5px] text-neutral-600 dark:text-neutral-400 font-medium uppercase tracking-wider leading-relaxed">
+          <p className="mt-2 rtl:mt-3.5 text-xs sm:text-sm md:text-[14.5px] text-neutral-600 dark:text-neutral-400 font-medium uppercase tracking-wider leading-relaxed rtl:leading-[1.85]">
             {t('graphic.subtitle', 'Brand identity, digital art direction, packaging, and UI/UX design.')}
           </p>
         </div>

@@ -49,7 +49,7 @@ export default function PolicyModal({ type, onClose }) {
         </div>
 
         {/* Content */}
-        <div className="overflow-y-auto p-6 sm:p-8 space-y-4 text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed">
+        <div className="overflow-y-auto p-6 sm:p-8 space-y-4 text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed rtl:leading-[1.85]">
           {isRtl ? (
             isPrivacy ? (
               <>

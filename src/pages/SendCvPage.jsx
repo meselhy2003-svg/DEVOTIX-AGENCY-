@@ -7,9 +7,22 @@ import { DEVOTIX_JOB_POSITIONS, EXPERIENCE_YEARS_OPTIONS } from '../services/goo
 
 export default function SendCvPage({
   onBackToCareer,
+  onBack,
   onOpenPolicy
 }) {
   const { t, isRtl } = useThemeLanguage();
+
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+    } else if (onBackToCareer) {
+      onBackToCareer();
+    } else if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.location.hash = '#career';
+    }
+  };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -76,11 +89,11 @@ export default function SendCvPage({
         {/* Back Link */}
         <div className="mb-6 sm:mb-8">
           <button
-            onClick={onBackToCareer}
-            className="inline-flex items-center space-x-1.5 rtl:space-x-reverse text-xs font-bold text-neutral-600 dark:text-neutral-400 hover:text-brand-red dark:hover:text-brand-red transition-colors cursor-pointer group"
+            onClick={handleBack}
+            className="inline-flex items-center space-x-1.5 rtl:space-x-reverse text-xs sm:text-sm font-semibold text-black dark:text-white hover:text-brand-red dark:hover:text-brand-red transition-colors cursor-pointer group"
           >
-            <ArrowLeft className="w-3.5 h-3.5 rtl:rotate-180 group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform" />
-            <span>{isRtl ? 'العودة لصفحة الوظائف' : 'Back to Careers'}</span>
+            <ArrowLeft className="w-3.5 h-3.5 text-black dark:text-white group-hover:text-brand-red dark:group-hover:text-brand-red rtl:rotate-180 group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform" />
+            <span>{t('nav.backToPrevious', 'Back to previous page')}</span>
           </button>
         </div>
 

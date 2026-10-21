@@ -32,6 +32,8 @@ export default function SoftwareCaseStudyPage({
       onBackToHome('work');
     } else if (onBackToPortfolio) {
       onBackToPortfolio();
+    } else if (window.history.length > 1) {
+      window.history.back();
     } else {
       window.location.hash = '#work';
     }
@@ -52,10 +54,10 @@ export default function SoftwareCaseStudyPage({
         <div className="flex items-center justify-between">
           <button
             onClick={handleBack}
-            className="inline-flex items-center space-x-1.5 rtl:space-x-reverse text-xs font-bold text-neutral-600 dark:text-neutral-400 hover:text-brand-red dark:hover:text-brand-red transition-colors uppercase cursor-pointer group"
+            className="inline-flex items-center space-x-1.5 rtl:space-x-reverse text-xs sm:text-sm font-semibold text-black dark:text-white hover:text-brand-red dark:hover:text-brand-red transition-colors cursor-pointer group"
           >
-            <ArrowLeft className="w-3.5 h-3.5 rtl:rotate-180 group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform" />
-            <span>{t('pages.softwareCaseStudy.backToProjects')}</span>
+            <ArrowLeft className="w-3.5 h-3.5 text-black dark:text-white group-hover:text-brand-red dark:group-hover:text-brand-red rtl:rotate-180 group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform" />
+            <span>{t('nav.backToPrevious', 'Back to previous page')}</span>
           </button>
 
           <button

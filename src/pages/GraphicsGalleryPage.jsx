@@ -6,11 +6,24 @@ import { useThemeLanguage } from '../context/ThemeLanguageContext';
 
 export default function GraphicsGalleryPage({
   onBackToHome,
+  onBack,
   onSelectGraphic,
   onOpenPolicy,
   initialCategory = 'all',
 }) {
   const { isRtl, isDark, t } = useThemeLanguage();
+
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+    } else if (onBackToHome) {
+      onBackToHome();
+    } else if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.location.hash = '#home';
+    }
+  };
   const [graphicsList, setGraphicsList] = useState(getGraphicsData);
   const [activeCategory, setActiveCategory] = useState(initialCategory || 'all');
 
@@ -57,13 +70,13 @@ export default function GraphicsGalleryPage({
         {/* Top Back Navigation Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 sm:mb-12 pb-6 border-b border-neutral-200 dark:border-neutral-900">
           <button
-            onClick={onBackToHome}
-            className="inline-flex items-center space-x-2 rtl:space-x-reverse text-xs font-black uppercase tracking-wider text-neutral-600 dark:text-neutral-400 hover:text-brand-red dark:hover:text-white transition-colors cursor-pointer group w-fit"
+            onClick={handleBack}
+            className="inline-flex items-center space-x-2 rtl:space-x-reverse text-xs sm:text-sm font-semibold text-black dark:text-white hover:text-brand-red dark:hover:text-brand-red transition-colors cursor-pointer group w-fit"
           >
-            <div className="w-8 h-8 rounded-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 flex items-center justify-center group-hover:bg-brand-red group-hover:border-brand-red group-hover:text-white transition-all shadow-2xs">
+            <div className="w-8 h-8 rounded-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 flex items-center justify-center group-hover:bg-brand-red group-hover:border-brand-red text-black dark:text-white group-hover:text-white transition-all shadow-2xs">
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 rtl:group-hover:translate-x-0.5 transition-transform rtl:rotate-180" />
             </div>
-            <span>{isRtl ? 'العودة للرئيسية / التصاميم' : 'Back to Home / Graphics'}</span>
+            <span>{isRtl ? 'العودة للصفحة السابقة' : 'Back to previous page'}</span>
           </button>
 
           {/* Category Filter Pills */}
@@ -182,11 +195,11 @@ export default function GraphicsGalleryPage({
           </div>
 
           <button
-            onClick={onBackToHome}
+            onClick={handleBack}
             className="px-6 py-2.5 bg-brand-red hover:bg-brand-redHover text-white text-xs font-black uppercase tracking-wider rounded-lg shadow-lg shadow-red-600/30 flex items-center space-x-2 rtl:space-x-reverse transition-all cursor-pointer transform hover:scale-105"
           >
             <ArrowLeft className="w-3.5 h-3.5 rtl:rotate-180" />
-            <span>{t('nav.backToHome', 'Back to Home')}</span>
+            <span>{t('nav.backToPrevious', 'Back to previous page')}</span>
           </button>
         </div>
       </main>

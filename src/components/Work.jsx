@@ -26,7 +26,7 @@ export default function Work({ onSelectProject, onRequestSimilarWork }) {
             <TitleAccent type="work" />
           </div>
           <div className="sm:max-w-md">
-            <p className="text-xs sm:text-sm md:text-[14.5px] text-neutral-600 dark:text-neutral-400 font-medium uppercase tracking-wider leading-relaxed">
+            <p className="text-xs sm:text-sm md:text-[14.5px] text-neutral-600 dark:text-neutral-400 font-medium uppercase tracking-wider leading-relaxed rtl:leading-[1.85]">
               {t('work.subtitle', 'Custom software engineering, bespoke web platforms, and digital product architecture built for market leaders.')}
             </p>
           </div>

@@ -32,9 +32,53 @@
   [dir="rtl"] body {
     font-family: 'Noto Kufi Arabic', 'Cairo', 'Montserrat', -apple-system, sans-serif;
     font-size: 17px;
-    line-height: 1.75;
+    line-height: 1.8;
     letter-spacing: normal;
     word-spacing: 0.05em;
+  }
+
+  /* Arabic typography enhancements - generous line-height to prevent letter/dot collisions */
+  [dir="rtl"] h1 {
+    line-height: 1.35;
+  }
+
+  [dir="rtl"] h2 {
+    line-height: 1.4;
+  }
+
+  [dir="rtl"] h3 {
+    line-height: 1.45;
+  }
+
+  [dir="rtl"] h4,
+  [dir="rtl"] h5,
+  [dir="rtl"] h6 {
+    line-height: 1.5;
+  }
+
+  [dir="rtl"] p {
+    line-height: 1.8;
+  }
+
+  /* Adjust line-height utility classes only when rendered in RTL (Arabic) */
+  [dir="rtl"] .leading-tight {
+    line-height: 1.38 !important;
+  }
+
+  [dir="rtl"] .leading-snug {
+    line-height: 1.45 !important;
+  }
+
+  [dir="rtl"] .leading-normal {
+    line-height: 1.65 !important;
+  }
+
+  [dir="rtl"] .leading-relaxed {
+    line-height: 1.85 !important;
+  }
+
+  [dir="rtl"] .leading-loose {
+    line-height: 2 !important;
   }
 
   /* Dark theme body */

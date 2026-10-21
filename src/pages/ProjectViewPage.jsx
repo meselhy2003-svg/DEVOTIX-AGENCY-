@@ -5,8 +5,20 @@ import { useThemeLanguage } from '../context/ThemeLanguageContext';
 import CloudImg from '../components/CloudImg';
 import { cldGrid } from '../utils/cloudinaryUrl';
 
-export default function ProjectViewPage({ project, onBackToPortfolio, onPlayVideo, onOpenLightbox, onOpenPolicy }) {
+export default function ProjectViewPage({ project, onBackToPortfolio, onBack, onPlayVideo, onOpenLightbox, onOpenPolicy }) {
   const { t, isRtl } = useThemeLanguage();
+
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+    } else if (onBackToPortfolio) {
+      onBackToPortfolio();
+    } else if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.location.hash = '#home';
+    }
+  };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -107,11 +119,11 @@ export default function ProjectViewPage({ project, onBackToPortfolio, onPlayVide
         <div className="max-w-5xl mx-auto w-full my-auto">
           {/* Back Button */}
           <button
-            onClick={onBackToPortfolio}
-            className="inline-flex items-center space-x-1.5 rtl:space-x-reverse text-xs font-bold text-neutral-600 dark:text-neutral-400 hover:text-brand-red dark:hover:text-brand-red transition-colors uppercase mb-6 group"
+            onClick={handleBack}
+            className="inline-flex items-center space-x-1.5 rtl:space-x-reverse text-xs sm:text-sm font-semibold text-black dark:text-white hover:text-brand-red dark:hover:text-brand-red transition-colors mb-6 group cursor-pointer"
           >
-            <ArrowLeft className="w-3.5 h-3.5 rtl:rotate-180 group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform" />
-            <span>{t('pages.projectView.backToPortfolio')}</span>
+            <ArrowLeft className="w-3.5 h-3.5 text-black dark:text-white group-hover:text-brand-red dark:group-hover:text-brand-red rtl:rotate-180 group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform" />
+            <span>{t('nav.backToPrevious', 'Back to previous page')}</span>
           </button>
 
           {/* Left Red Vertical Accent Line */}

@@ -5,14 +5,29 @@ import { useThemeLanguage } from '../context/ThemeLanguageContext';
  * Renders uppercase text with specific letters highlighted in Devotix red (#FF1E27)
  * matching the design mockup in both English and Arabic.
  */
-export default function TitleAccent({ type, className = "" }) {
+export default function TitleAccent({ type, title, subtitle, className = "" }) {
   const { isRtl } = useThemeLanguage();
+
+  if (title) {
+    return (
+      <div className={`space-y-2 rtl:space-y-3 ${className}`}>
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight font-display text-neutral-900 dark:text-white leading-tight rtl:leading-[1.38]">
+          {title}
+        </h2>
+        {subtitle && (
+          <p className="mt-2 rtl:mt-3.5 text-xs sm:text-sm md:text-[14.5px] text-neutral-600 dark:text-neutral-400 font-medium uppercase tracking-wider leading-relaxed rtl:leading-[1.8] max-w-2xl mx-auto">
+            {subtitle}
+          </p>
+        )}
+      </div>
+    );
+  }
 
   if (isRtl) {
     switch (type) {
       case 'work':
         return (
-          <h2 className={`text-2xl sm:text-3xl md:text-4xl lg:text-[42px] font-black tracking-tight leading-tight font-display ${className}`}>
+          <h2 className={`text-2xl sm:text-3xl md:text-4xl lg:text-[42px] font-black tracking-tight leading-[1.4] sm:leading-[1.35] font-display ${className}`}>
             مشاريع <span className="text-brand-red">ه</span>ندسة
             <br />
             <span className="text-brand-red">ا</span>لبرمجيات.

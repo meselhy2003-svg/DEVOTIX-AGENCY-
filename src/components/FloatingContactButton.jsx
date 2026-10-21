@@ -19,7 +19,7 @@ export default function FloatingContactButton({ onNavigateContact, currentPage =
     >
       <button
         onClick={handleClick}
-        className="group relative flex items-center gap-1.5 sm:gap-2.5 px-3 py-2.5 sm:px-5 sm:py-3 rounded-full bg-brand-red hover:bg-brand-redHover text-white shadow-xl shadow-red-600/40 hover:shadow-red-600/70 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer border-2 border-white/25 overflow-hidden touch-manipulation"
+        className="group relative flex items-center gap-1 sm:gap-2.5 px-2.5 py-1.5 sm:px-5 sm:py-3 rounded-full bg-brand-red hover:bg-brand-redHover text-white shadow-xl shadow-red-600/40 hover:shadow-red-600/70 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer border sm:border-2 border-white/25 overflow-hidden touch-manipulation"
         aria-label="Navigate to Contact Form"
       >
         {/* Ambient background shimmer */}
@@ -30,17 +30,17 @@ export default function FloatingContactButton({ onNavigateContact, currentPage =
 
         {/* Action Icon */}
         <div className="relative z-10 flex items-center justify-center">
-          <Send className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform rtl:group-hover:-translate-x-0.5" />
+          <Send className="w-3 h-3 sm:w-4 sm:h-4 text-white transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform rtl:group-hover:-translate-x-0.5" />
         </div>
 
         {/* Contact Text Label */}
-        <span className="relative z-10 font-black text-[10.5px] sm:text-xs tracking-wide uppercase font-display whitespace-nowrap">
+        <span className="relative z-10 font-black text-[9.5px] sm:text-xs tracking-wide uppercase font-display whitespace-nowrap">
           {isRtl ? 'اطلب مشروعك' : "START PROJECT"}
         </span>
 
         {/* Arrow Accent */}
-        <div className="relative z-10 w-4 h-4 sm:w-4.5 sm:h-4.5 rounded-full bg-white/20 flex items-center justify-center transition-transform group-hover:rotate-45">
-          <ArrowUpRight className="w-2.5 h-2.5 text-white rtl:rotate-[-90deg]" />
+        <div className="relative z-10 w-3.5 h-3.5 sm:w-4.5 sm:h-4.5 rounded-full bg-white/20 flex items-center justify-center transition-transform group-hover:rotate-45">
+          <ArrowUpRight className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white rtl:rotate-[-90deg]" />
         </div>
       </button>
     </div>

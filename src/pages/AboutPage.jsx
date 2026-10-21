@@ -3,8 +3,20 @@ import { ArrowLeft } from 'lucide-react';
 import Footer from '../components/Footer';
 import { useThemeLanguage } from '../context/ThemeLanguageContext';
 
-export default function AboutPage({ onBackToHome, onOpenContact, onOpenPolicy }) {
+export default function AboutPage({ onBackToHome, onBack, onOpenContact, onOpenPolicy }) {
   const { isRtl, isDark, t } = useThemeLanguage();
+
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+    } else if (onBackToHome) {
+      onBackToHome();
+    } else if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.location.hash = '#home';
+    }
+  };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -34,11 +46,11 @@ export default function AboutPage({ onBackToHome, onOpenContact, onOpenPolicy })
           {/* Back Button */}
           <div className="mb-3 sm:mb-4">
             <button
-              onClick={onBackToHome}
-              className="inline-flex items-center space-x-1.5 rtl:space-x-reverse text-xs font-bold text-neutral-600 dark:text-neutral-400 hover:text-brand-red dark:hover:text-brand-red transition-colors uppercase group cursor-pointer"
+              onClick={handleBack}
+              className="inline-flex items-center space-x-1.5 rtl:space-x-reverse text-sm font-semibold text-black dark:text-white hover:text-brand-red dark:hover:text-brand-red transition-colors cursor-pointer group"
             >
-              <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform rtl:rotate-180" />
-              <span>{t('nav.backToHome', 'Back to Home')}</span>
+              <ArrowLeft className="w-4 h-4 text-black dark:text-white group-hover:text-brand-red dark:group-hover:text-brand-red group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform rtl:rotate-180" />
+              <span>{t('nav.backToPrevious', 'Back to previous page')}</span>
             </button>
           </div>
 

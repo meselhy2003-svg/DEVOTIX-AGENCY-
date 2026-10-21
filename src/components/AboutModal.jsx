@@ -51,12 +51,12 @@ export default function AboutModal({ isOpen, onClose, onOpenContact }) {
         {/* Content */}
         <div className="overflow-y-auto p-6 sm:p-8 space-y-6">
           <div>
-            <h4 className="text-base sm:text-lg font-black uppercase tracking-tight text-neutral-900 dark:text-white font-display">
+            <h4 className="text-base sm:text-lg font-black uppercase tracking-tight text-neutral-900 dark:text-white font-display rtl:leading-[1.4]">
               {isRtl
                 ? 'نصنع الحضور الرقمي الاستثنائي للعلامات التجارية الطموحة.'
                 : 'WE ENGINEER DIGITAL VISIBILITY FOR VISIONARY BRANDS.'}
             </h4>
-            <p className="mt-2 text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed font-normal">
+            <p className="mt-2 rtl:mt-3 text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed rtl:leading-[1.85] font-normal">
               {isRtl
                 ? 'تأسست ديفوتيكس ميديا على مبدأ جوهري: التسويق العادي غير مرئي. ندمج بين الإنتاج السينمائي فائق الدقة، وهندسة البرمجيات المتطورة، والحملات الإعلانية الموجهة، وأنظمة الهوية الراقية لضمان تفوق عملائنا في أسواقهم.'
                 : 'Devotix Media was founded on a singular conviction: ordinary marketing is invisible. We combine cinema-grade filmmaking, cutting-edge software engineering, performance media buying, and elite brand identity systems to ensure our clients dominate their markets.'}

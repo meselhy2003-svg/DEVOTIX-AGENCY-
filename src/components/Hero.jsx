@@ -45,97 +45,102 @@ export default function Hero({ onOpenPortfolio, onOpenContact, onScrollToWork, o
       </div>
 
       {/* Hero Content */}
-      <div className="relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center my-auto">
-        {/* Prominent Sleek Headline */}
-        {isRtl ? (
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-[1.12] text-black dark:text-white font-display">
-            خلّي براندك
-            <br />
-            <span className="bg-[linear-gradient(90deg,#000000_5%,#1F2937_30%,#4B5563_65%,#6B7280_100%)] dark:bg-[linear-gradient(90deg,#FFFFFF_5%,#E4E4E7_30%,#71717A_65%,#3F3F46_100%)] bg-clip-text text-transparent inline-block drop-shadow-sm">
-              مستحيل
+      <div className="relative z-10 max-w-6xl w-full mx-auto my-auto flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-14 px-2 sm:px-4">
+        {/* Text Column (Beside video on desktop) */}
+        <div className="flex-1 text-center lg:text-start flex flex-col items-center lg:items-start max-w-2xl">
+          {/* Prominent Sleek Headline */}
+          {isRtl ? (
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-[1.4] sm:leading-[1.35] md:leading-[1.3] text-black dark:text-white font-display">
+              خلّي براندك
               <br />
-              يتجاهلوه.
-            </span>
-          </h1>
-        ) : (
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight uppercase leading-[1.06] text-black dark:text-white font-display">
-            MAKE YOUR BRAND
-            <br />
-            <span className="bg-[linear-gradient(90deg,#000000_5%,#1F2937_30%,#4B5563_65%,#6B7280_100%)] dark:bg-[linear-gradient(90deg,#FFFFFF_5%,#E4E4E7_30%,#71717A_65%,#3F3F46_100%)] bg-clip-text text-transparent inline-block drop-shadow-sm">
-              IMPOSSIBLE TO
+              <span className="bg-[linear-gradient(90deg,#000000_5%,#1F2937_30%,#4B5563_65%,#6B7280_100%)] dark:bg-[linear-gradient(90deg,#FFFFFF_5%,#E4E4E7_30%,#71717A_65%,#3F3F46_100%)] bg-clip-text text-transparent inline-block drop-shadow-sm">
+                مستحيل
+                <br />
+                يتجاهلوه.
+              </span>
+            </h1>
+          ) : (
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight uppercase leading-[1.06] text-black dark:text-white font-display">
+              MAKE YOUR BRAND
               <br />
-              IGNORE.
-            </span>
-          </h1>
-        )}
+              <span className="bg-[linear-gradient(90deg,#000000_5%,#1F2937_30%,#4B5563_65%,#6B7280_100%)] dark:bg-[linear-gradient(90deg,#FFFFFF_5%,#E4E4E7_30%,#71717A_65%,#3F3F46_100%)] bg-clip-text text-transparent inline-block drop-shadow-sm">
+                IMPOSSIBLE TO
+                <br />
+                IGNORE.
+              </span>
+            </h1>
+          )}
 
-        {/* Subtitle */}
-        <p className="mt-4 sm:mt-5 max-w-xl text-xs sm:text-sm md:text-base text-neutral-700 dark:text-neutral-300 font-medium tracking-wide uppercase leading-relaxed text-center px-4">
-          {t('hero.tagline', 'WE ARE A FULL-SERVICE CREATIVE MEDIA AGENCY DRIVEN BY DATA, CRAFTED WITH PASSION, AND COMMITTED TO MAKING BRANDS UNFORGETTABLE.')}
-        </p>
+          {/* Subtitle */}
+          <p className="mt-4 sm:mt-5 max-w-xl text-xs sm:text-sm md:text-base text-neutral-700 dark:text-neutral-300 font-medium tracking-wide uppercase leading-relaxed rtl:leading-[1.85] text-center lg:text-start">
+            {t('hero.tagline', 'WE ARE A FULL-SERVICE CREATIVE MEDIA AGENCY DRIVEN BY DATA, CRAFTED WITH PASSION, AND COMMITTED TO MAKING BRANDS UNFORGETTABLE.')}
+          </p>
 
-        {/* Two Call-to-Action Buttons */}
-        <div className="mt-6 sm:mt-7 flex flex-row items-center gap-3.5 w-auto justify-center">
-          <button
-            onClick={onScrollToWork}
-            className="px-6 py-2.5 sm:px-7 sm:py-3 bg-brand-red hover:bg-brand-redHover text-white text-xs sm:text-sm font-bold uppercase tracking-wider rounded-md transition-all duration-300 transform hover:scale-105 shadow-md shadow-red-600/30 flex items-center justify-center space-x-2 rtl:space-x-reverse cursor-pointer"
-          >
-            <span>{t('hero.exploreWork', 'EXPLORE OUR PROJECTS')}</span>
-            <ArrowRight className="w-3.5 h-3.5 rtl:rotate-180" />
-          </button>
+          {/* Two Call-to-Action Buttons */}
+          <div className="mt-6 sm:mt-7 flex flex-row items-center gap-3.5 w-auto justify-center lg:justify-start">
+            <button
+              onClick={onScrollToWork}
+              className="px-6 py-2.5 sm:px-7 sm:py-3 bg-brand-red hover:bg-brand-redHover text-white text-xs sm:text-sm font-bold uppercase tracking-wider rounded-md transition-all duration-300 transform hover:scale-105 shadow-md shadow-red-600/30 flex items-center justify-center space-x-2 rtl:space-x-reverse cursor-pointer"
+            >
+              <span>{t('hero.exploreWork', 'EXPLORE OUR PROJECTS')}</span>
+              <ArrowRight className="w-3.5 h-3.5 rtl:rotate-180" />
+            </button>
 
-          <button
-            onClick={onOpenContact}
-            className="px-6 py-2.5 sm:px-7 sm:py-3 bg-white/60 dark:bg-transparent hover:bg-white dark:hover:bg-white/10 text-neutral-900 dark:text-white border border-neutral-300 dark:border-white/40 hover:border-neutral-900 dark:hover:border-white text-xs sm:text-sm font-bold uppercase tracking-wider rounded-md transition-all duration-300 backdrop-blur-sm flex items-center justify-center space-x-2 rtl:space-x-reverse group cursor-pointer shadow-sm dark:shadow-none"
-          >
-            <span>{t('nav.letsTalk', "LET'S TALK")}</span>
-            <ArrowUpRight className="w-3.5 h-3.5 text-neutral-900 dark:text-white group-hover:scale-110 transition-transform rtl:rotate-[-90deg]" />
-          </button>
+            <button
+              onClick={onOpenContact}
+              className="px-6 py-2.5 sm:px-7 sm:py-3 bg-white/60 dark:bg-transparent hover:bg-white dark:hover:bg-white/10 text-neutral-900 dark:text-white border border-neutral-300 dark:border-white/40 hover:border-neutral-900 dark:hover:border-white text-xs sm:text-sm font-bold uppercase tracking-wider rounded-md transition-all duration-300 backdrop-blur-sm flex items-center justify-center space-x-2 rtl:space-x-reverse group cursor-pointer shadow-sm dark:shadow-none"
+            >
+              <span>{t('nav.letsTalk', "LET'S TALK")}</span>
+              <ArrowUpRight className="w-3.5 h-3.5 text-neutral-900 dark:text-white group-hover:scale-110 transition-transform rtl:rotate-[-90deg]" />
+            </button>
+          </div>
         </div>
 
-        {/* Small Video after EXPLORE OUR PORTFOLIO button */}
-        <div
-          onClick={handlePlayShowreel}
-          className="mt-6 relative w-full max-w-[140px] sm:max-w-[160px] aspect-[9/16] rounded-2xl overflow-hidden border border-neutral-300 dark:border-neutral-800 hover:border-brand-red/80 shadow-[0_10px_25px_rgba(0,0,0,0.15)] dark:shadow-[0_10px_30px_rgba(0,0,0,0.8)] cursor-pointer group transition-all duration-300 transform hover:scale-105"
-        >
-          <video
-            src="/assets/hero/who_.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            ref={(el) => {
-              if (el) {
-                el.defaultMuted = true;
-                el.muted = true;
-                el.play().catch(() => { });
-              }
-            }}
-            className="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
+        {/* Video Column (Beside text on desktop) */}
+        <div className="shrink-0 flex flex-col items-center justify-center mt-6 lg:mt-0">
+          <div
+            onClick={handlePlayShowreel}
+            className="relative w-full max-w-[215px] sm:max-w-[230px] lg:max-w-[240px] xl:max-w-[260px] aspect-[9/16] rounded-2xl overflow-hidden border border-neutral-300 dark:border-neutral-800 hover:border-brand-red/80 shadow-[0_15px_35px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.8)] cursor-pointer group transition-all duration-300 transform hover:scale-105"
+          >
+            <video
+              src="/assets/hero/who_.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              ref={(el) => {
+                if (el) {
+                  el.defaultMuted = true;
+                  el.muted = true;
+                  el.play().catch(() => { });
+                }
+              }}
+              className="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
 
-          {/* Central Pulsing Play Button */}
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-brand-red text-white flex items-center justify-center shadow-lg shadow-red-600/50 group-hover:scale-110 transition-transform">
-              <Play className="w-4 h-4 fill-white translate-x-0.5 rtl:-translate-x-0.5" />
+            {/* Central Pulsing Play Button */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="w-11 h-11 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded-full bg-brand-red text-white flex items-center justify-center shadow-lg shadow-red-600/50 group-hover:scale-110 transition-transform">
+                <Play className="w-4.5 h-4.5 sm:w-5 sm:h-5 fill-white translate-x-0.5 rtl:-translate-x-0.5" />
+              </div>
             </div>
-          </div>
 
-          {/* Top/Bottom Badges */}
-          <div className="absolute top-2.5 left-2.5 rtl:left-auto rtl:right-2.5 pointer-events-none">
-            <span className="px-2.5 py-0.5 bg-black/70 backdrop-blur-md rounded-full text-[9px] sm:text-[10px] font-extrabold uppercase tracking-widest text-white border border-white/10">
-              REEL
-            </span>
-          </div>
-          <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none">
-            <span className="text-[10px] sm:text-xs font-extrabold uppercase tracking-wider text-white">
-              {t('hero.watchReel', 'WATCH REEL')}
-            </span>
-            <span className="text-[9.5px] font-mono text-neutral-300">
-              1:00
-            </span>
+            {/* Top/Bottom Badges */}
+            <div className="absolute top-2.5 left-2.5 rtl:left-auto rtl:right-2.5 pointer-events-none">
+              <span className="px-2.5 py-0.5 bg-black/70 backdrop-blur-md rounded-full text-[9px] sm:text-[10px] font-extrabold uppercase tracking-widest text-white border border-white/10">
+                REEL
+              </span>
+            </div>
+            <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none">
+              <span className="text-[10px] sm:text-xs font-extrabold uppercase tracking-wider text-white">
+                {t('hero.watchReel', 'WATCH REEL')}
+              </span>
+              <span className="text-[9.5px] font-mono text-neutral-300">
+                1:00
+              </span>
+            </div>
           </div>
         </div>
       </div>

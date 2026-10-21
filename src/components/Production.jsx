@@ -75,7 +75,7 @@ export default function Production({ onPlayVideo }) {
         {/* Section Header */}
         <div className="text-center max-w-xl mx-auto mb-6 sm:mb-8 pb-3 border-b border-neutral-300/80 dark:border-white/10">
           <TitleAccent type="production" />
-          <p className="mt-2 text-xs sm:text-sm md:text-[14.5px] text-neutral-600 dark:text-neutral-400 font-medium uppercase tracking-wider leading-relaxed">
+          <p className="mt-2 rtl:mt-3.5 text-xs sm:text-sm md:text-[14.5px] text-neutral-600 dark:text-neutral-400 font-medium uppercase tracking-wider leading-relaxed rtl:leading-[1.85]">
             {isRtl
               ? 'أفلام سينمائية ترويجية، ريلز وشورتس، مونتاج احترافي، وأفكار إعلانية متكاملة.'
               : 'Promos, vertical reels, post-production editing, and creative advertising campaigns.'}

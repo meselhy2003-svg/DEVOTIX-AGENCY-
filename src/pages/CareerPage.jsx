@@ -5,12 +5,25 @@ import { useThemeLanguage } from '../context/ThemeLanguageContext';
 
 export default function CareerPage({
   onBackToHome,
+  onBack,
   onOpenContact,
   onOpenPolicy,
   onApplyRole,
   onNavigateSendCv
 }) {
   const { isRtl, isDark, t } = useThemeLanguage();
+
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+    } else if (onBackToHome) {
+      onBackToHome();
+    } else if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.location.hash = '#home';
+    }
+  };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -342,11 +355,11 @@ export default function CareerPage({
           {/* Back Link */}
           <div className="mb-10">
             <button
-              onClick={onBackToHome}
-              className="inline-flex items-center space-x-1.5 rtl:space-x-reverse text-sm font-semibold text-neutral-600 dark:text-neutral-400 hover:text-brand-red transition-colors cursor-pointer group"
+              onClick={handleBack}
+              className="inline-flex items-center space-x-1.5 rtl:space-x-reverse text-sm font-semibold text-black dark:text-white hover:text-brand-red dark:hover:text-brand-red transition-colors cursor-pointer group"
             >
-              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform rtl:rotate-180" />
-              <span>{t('nav.backToHome', 'Back to Home')}</span>
+              <ArrowLeft className="w-4 h-4 text-black dark:text-white group-hover:text-brand-red dark:group-hover:text-brand-red group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform rtl:rotate-180" />
+              <span>{t('nav.backToPrevious', 'Back to previous page')}</span>
             </button>
           </div>
 

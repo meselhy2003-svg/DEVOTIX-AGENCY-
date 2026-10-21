@@ -84,9 +84,7 @@ export default function RightSlideBar({ currentPage = 'home' }) {
   return (
     <aside
       aria-label="Page Slide Navigation"
-      className={`fixed ${
-        isRtl ? 'left-3 sm:left-4' : 'right-3 sm:right-4'
-      } top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-center select-none`}
+      className="fixed left-3 sm:left-4 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-center select-none"
     >
       {/* Background Track Line */}
       <div className={`relative flex flex-col items-center py-2 px-1.5 rounded-full ${
@@ -134,15 +132,11 @@ export default function RightSlideBar({ currentPage = 'home' }) {
 
                 {/* Floating Tooltip on Hover */}
                 <div
-                  className={`absolute ${
-                    isRtl ? 'left-6 group-hover:translate-x-1' : 'right-6 group-hover:-translate-x-1'
-                  } px-2.5 py-1 rounded bg-black/90 text-white border border-white/15 text-[10px] font-bold uppercase tracking-wider whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-all duration-200 shadow-xl backdrop-blur-sm`}
+                  className="absolute left-6 group-hover:translate-x-1 px-2.5 py-1 rounded bg-black/90 text-white border border-white/15 text-[10px] font-bold uppercase tracking-wider whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-all duration-200 shadow-xl backdrop-blur-sm"
                 >
                   {sec.label}
                   <div
-                    className={`absolute ${
-                      isRtl ? 'left-[-4px] border-l border-b' : 'right-[-4px] border-r border-t'
-                    } top-1/2 -translate-y-1/2 w-2 h-2 bg-black/90 rotate-45 border-white/15`}
+                    className="absolute left-[-4px] top-1/2 -translate-y-1/2 w-2 h-2 bg-black/90 rotate-45 border-l border-b border-white/15"
                   />
                 </div>
               </button>

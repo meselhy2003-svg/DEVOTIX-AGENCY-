@@ -158,7 +158,7 @@ export default function AdminDashboardPage({ onNavigateHome }) {
         heardFrom: 'لوحة التحكم',
         businessType: 'Devotix Media',
         country: 'EGYPT',
-        phone: '+20 101 018 5181',
+        phone: '+20 01040701880',
         email: socials.projectRequestEmail || 'test@devotix.com',
         serviceNeeded: 'الإنتاج السينمائي وصناعة الفيديو',
         hasSocialPages: 'نعم',
@@ -1093,17 +1093,17 @@ export default function AdminDashboardPage({ onNavigateHome }) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {[
                     { key: 'instagram', label: 'Instagram URL', icon: Share2, placeholder: 'https://instagram.com/devotixmedia' },
-                    { key: 'tiktok', label: 'TikTok URL', icon: Flame, placeholder: 'https://tiktok.com/@devotixmedia' },
-                    { key: 'facebook', label: 'Facebook Page', icon: Share2, placeholder: 'https://facebook.com/devotixmedia' },
+                    { key: 'tiktok', label: 'TikTok URL', icon: Flame, placeholder: 'https://www.tiktok.com/@devotixmedia?_r=1&_t=ZS-9AkGaTdDsJw' },
+                    { key: 'facebook', label: 'Facebook Page', icon: Share2, placeholder: 'https://www.facebook.com/share/19WVUUkcVE/' },
                     { key: 'linkedin', label: 'LinkedIn Company', icon: Share2, placeholder: 'https://linkedin.com/company/devotixmedia' },
                     { key: 'youtube', label: 'YouTube Channel', icon: Video, placeholder: 'https://youtube.com/@devotixmedia' },
                     { key: 'twitter', label: 'X (Twitter) URL', icon: Share2, placeholder: 'https://twitter.com/devotixmedia' },
                     { key: 'behance', label: 'Behance Portfolio', icon: ImageIcon, placeholder: 'https://behance.net/devotix' },
                     { key: 'email', label: 'General Official Email', icon: Mail, placeholder: 'devotixm@gmail.com' },
-                    { key: 'whatsappEgypt', label: 'WhatsApp Egypt Link / Number', icon: Phone, placeholder: 'https://wa.me/201010185181' },
-                    { key: 'whatsappSaudi', label: 'WhatsApp Saudi Link / Number', icon: Phone, placeholder: 'https://wa.me/966558661845' },
-                    { key: 'phoneEgypt', label: 'Direct Phone (Egypt)', icon: Phone, placeholder: '+20 101 018 5181' },
-                    { key: 'phoneSaudi', label: 'Direct Phone (Saudi Arabia)', icon: Phone, placeholder: '+966 55 866 1845' },
+                    { key: 'whatsappEgypt', label: 'WhatsApp Egypt Link / Number', icon: Phone, placeholder: 'https://wa.me/201040701880' },
+                    { key: 'whatsappSaudi', label: 'WhatsApp Saudi Link / Number', icon: Phone, placeholder: 'https://wa.me/966599306098' },
+                    { key: 'phoneEgypt', label: 'Direct Phone (Egypt)', icon: Phone, placeholder: '+20 01040701880' },
+                    { key: 'phoneSaudi', label: 'Direct Phone (Saudi Arabia)', icon: Phone, placeholder: '+966 59 930 6098' },
                   ].map((item) => (
                     <div key={item.key} className="p-4 rounded-xl bg-neutral-50 dark:bg-white/[0.03] border border-neutral-200 dark:border-white/10 space-y-2">
                       <div className="flex items-center justify-between">

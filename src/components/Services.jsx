@@ -138,7 +138,7 @@ export default function Services({ onSelectService }) {
         {/* Section Header */}
         <div className="text-center max-w-xl mx-auto mb-6 sm:mb-8">
           <TitleAccent type="services" />
-          <p className="mt-2 text-xs sm:text-sm md:text-[14.5px] text-neutral-600 dark:text-neutral-400 font-medium uppercase tracking-wider leading-relaxed">
+          <p className="mt-2 rtl:mt-3.5 text-xs sm:text-sm md:text-[14.5px] text-neutral-600 dark:text-neutral-400 font-medium uppercase tracking-wider leading-relaxed rtl:leading-[1.85]">
             {t('services.subtitle', 'Strategy, production, and data to scale modern brands.')}
           </p>
         </div>
@@ -178,7 +178,7 @@ export default function Services({ onSelectService }) {
                   <h3 className="text-sm sm:text-base lg:text-lg font-black uppercase tracking-tight text-white transition-colors font-display line-clamp-1 mb-1">
                     {service.title}
                   </h3>
-                  <p className="text-xs sm:text-sm text-neutral-300 font-medium leading-normal max-w-xs group-hover:text-white transition-colors line-clamp-2">
+                  <p className="text-xs sm:text-sm text-neutral-300 font-medium leading-normal rtl:leading-[1.7] max-w-xs group-hover:text-white transition-colors line-clamp-2">
                     {service.description}
                   </p>
                 </div>

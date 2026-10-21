@@ -180,6 +180,14 @@ function AppContent() {
     window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
+  const navigateBack = () => {
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      navigateToHome('home');
+    }
+  };
+
   const navigateToHome = (targetSection = 'home') => {
     window.location.hash = `#${targetSection}`;
     setCurrentPage('home');
@@ -238,23 +246,27 @@ function AppContent() {
       {currentPage === 'contact' ? (
         <ContactPage
           initialService={selectedServiceForContact}
-          onBackToHome={() => navigateToHome('home')}
+          onBackToHome={navigateBack}
+          onBack={navigateBack}
           onOpenPolicy={(type) => setPolicyType(type)}
         />
       ) : currentPage === 'job-apply' ? (
         <JobApplyPage
           role={selectedJobRole}
-          onBackToCareer={navigateToCareer}
+          onBackToCareer={navigateBack}
+          onBack={navigateBack}
           onOpenPolicy={(type) => setPolicyType(type)}
         />
       ) : currentPage === 'send-cv' ? (
         <SendCvPage
-          onBackToCareer={navigateToCareer}
+          onBackToCareer={navigateBack}
+          onBack={navigateBack}
           onOpenPolicy={(type) => setPolicyType(type)}
         />
       ) : currentPage === 'career' ? (
         <CareerPage
-          onBackToHome={() => navigateToHome('home')}
+          onBackToHome={navigateBack}
+          onBack={navigateBack}
           onOpenContact={navigateToContact}
           onApplyRole={(role) => navigateToJobApply(role)}
           onNavigateSendCv={navigateToSendCv}
@@ -262,23 +274,25 @@ function AppContent() {
         />
       ) : currentPage === 'about' ? (
         <AboutPage
-          onBackToHome={() => navigateToHome('home')}
+          onBackToHome={navigateBack}
+          onBack={navigateBack}
           onOpenContact={navigateToContact}
           onOpenPolicy={(type) => setPolicyType(type)}
         />
       ) : currentPage === 'software-engineering' ? (
         <SoftwareCaseStudyPage
           project={selectedProjectDetail}
-          onBack={() => navigateToHome('work')}
-          onBackToHome={() => navigateToHome('work')}
-          onBackToPortfolio={() => navigateToHome('work')}
+          onBack={navigateBack}
+          onBackToHome={navigateBack}
+          onBackToPortfolio={navigateBack}
           onOpenContact={navigateToContact}
           onOpenPolicy={(type) => setPolicyType(type)}
         />
       ) : currentPage === 'project-view' ? (
         <ProjectViewPage
           project={selectedProjectDetail}
-          onBackToPortfolio={() => navigateToHome('work')}
+          onBackToPortfolio={navigateBack}
+          onBack={navigateBack}
           onPlayVideo={(video) => setActiveVideo(video)}
           onOpenLightbox={(photos, index) => setLightboxData({ photos, index })}
           onOpenPolicy={(type) => setPolicyType(type)}
@@ -286,21 +300,24 @@ function AppContent() {
       ) : currentPage === 'photography-gallery' ? (
         <PhotographyGalleryPage
           gallery={selectedPhotoGallery}
-          onBackToHome={() => navigateToHome('photography')}
+          onBackToHome={navigateBack}
+          onBack={navigateBack}
           onOpenLightbox={(photos, index) => setLightboxData({ photos, index })}
           onOpenPolicy={(type) => setPolicyType(type)}
         />
       ) : currentPage === 'graphics-gallery' ? (
         <GraphicsGalleryPage
           initialCategory={selectedGraphicsCategory}
-          onBackToHome={() => navigateToHome('graphic')}
+          onBackToHome={navigateBack}
+          onBack={navigateBack}
           onSelectGraphic={navigateToGraphicSingleView}
           onOpenPolicy={(type) => setPolicyType(type)}
         />
       ) : currentPage === 'graphic-view' ? (
         <GraphicSingleViewPage
           graphic={selectedGraphic}
-          onBackToGallery={navigateToGraphicsGallery}
+          onBackToGallery={navigateBack}
+          onBack={navigateBack}
           onSelectGraphic={navigateToGraphicSingleView}
           onOpenPolicy={(type) => setPolicyType(type)}
         />
