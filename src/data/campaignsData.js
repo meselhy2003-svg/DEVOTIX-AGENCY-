@@ -143,6 +143,10 @@ export const getCampaignsData = getSavedCampaigns;
 export function saveCampaignsData(campaigns, syncCloud = true) {
   if (typeof window === 'undefined') return;
   try {
+    if (!Array.isArray(campaigns) || campaigns.length === 0) {
+      console.warn('saveCampaignsData: ignored empty or invalid array');
+      return;
+    }
     localStorage.setItem('devotix_campaigns', JSON.stringify(campaigns));
     window.dispatchEvent(new CustomEvent('devotix_campaigns_updated', { detail: campaigns }));
     if (syncCloud) {

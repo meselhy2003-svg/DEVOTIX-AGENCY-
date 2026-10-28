@@ -62,84 +62,98 @@ export default function VideoModal({ video, onClose }) {
 
         {/* Video Player Display Container */}
         <div dir="ltr" className={`relative ${isVertical ? 'aspect-[9/16] max-h-[82vh]' : 'aspect-video'} bg-black flex items-center justify-center overflow-hidden`}>
-          {video.youtubeId || (video.url && video.url.includes('youtu')) || (video.videoUrl && video.videoUrl.includes('youtu')) ? (
-            <iframe
-              key={video.youtubeId || video.url || video.videoUrl}
-              src={`https://www.youtube.com/embed/${video.youtubeId || (video.url || video.videoUrl).match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/)?.[1]}?autoplay=1&rel=0&modestbranding=1&playsinline=1`}
-              title={video.title || 'Video Player'}
-              className="w-full h-full border-0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            />
-          ) : video.videoSrc || video.videoUrl ? (
-            <video
-              key={video.videoSrc || video.videoUrl}
-              controls
-              autoPlay
-              playsInline
-              preload="auto"
-              onLoadedMetadata={(e) => {
-                if (e.currentTarget.videoWidth && e.currentTarget.videoHeight) {
-                  if (e.currentTarget.videoHeight > e.currentTarget.videoWidth) {
-                    setIsVertical(true);
-                  }
-                }
-              }}
-              ref={(el) => {
-                videoRef.current = el;
-                if (el) {
-                  el.play().catch(() => { });
-                }
-              }}
-              className="video-modal-player w-full h-full object-cover object-center"
-            >
-              <source
-                src={video.videoSrc || video.videoUrl}
-                type={(video.videoSrc || video.videoUrl).endsWith('.mov') ? 'video/quicktime' : 'video/mp4'}
-              />
-              {(video.videoSrc || video.videoUrl).endsWith('.mov') && (
-                <source src="/assets/production/video1.mp4" type="video/mp4" />
-              )}
-            </video>
-          ) : (
-            <>
-              <img
-                src={video.image || '/assets/production/featured-car.png'}
-                alt={video.title || 'Video preview'}
-                className="video-modal-player filter brightness-75"
-              />
+          {(() => {
+            const ytId = video.youtubeId || (typeof (video.url || video.videoUrl) === 'string' ? (video.url || video.videoUrl).match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/)?.[1] : '');
+            if (ytId) {
+              return (
+                <iframe
+                  key={ytId}
+                  src={`https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`}
+                  title={video.title || 'Video Player'}
+                  className="w-full h-full border-0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              );
+            }
+            if (video.videoSrc || video.videoUrl) {
+              const src = video.videoSrc || video.videoUrl;
+              return (
+                <video
+                  key={src}
+                  controls
+                  autoPlay
+                  playsInline
+                  preload="auto"
+                  onLoadedMetadata={(e) => {
+                    if (e.currentTarget.videoWidth && e.currentTarget.videoHeight) {
+                      if (e.currentTarget.videoHeight > e.currentTarget.videoWidth) {
+                        setIsVertical(true);
+                      }
+                    }
+                  }}
+                  ref={(el) => {
+                    videoRef.current = el;
+                    if (el) {
+                      el.play().catch(() => { });
+                    }
+                  }}
+                  className="video-modal-player w-full h-full object-cover object-center"
+                >
+                  <source
+                    src={src}
+                    type={src.endsWith('.mov') ? 'video/quicktime' : 'video/mp4'}
+                  />
+                  {src.endsWith('.mov') && (
+                    <source src="/assets/production/video1.mp4" type="video/mp4" />
+                  )}
+                </video>
+              );
+            }
+            return (
+              <>
+                <img
+                  src={video.image || '/assets/production/featured-car.png'}
+                  alt={video.title || 'Video preview'}
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = '/assets/services/video-photography.png';
+                  }}
+                  className="video-modal-player filter brightness-75"
+                />
 
-              {/* Simulated HD video player overlay */}
-              <div className="absolute inset-0 flex flex-col justify-between p-6 bg-gradient-to-t from-black/80 via-transparent to-black/40">
-                <div className="flex items-center justify-between text-xs text-neutral-400">
-                  <span className="bg-brand-red text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">
-                    4K HDR CINEMA
-                  </span>
-                  <span className="font-mono">{video.duration || '02:45'}</span>
-                </div>
-
-                {/* Play Button Indicator in Modal */}
-                <div className="self-center flex flex-col items-center gap-3">
-                  <div className="w-20 h-20 rounded-full bg-brand-red text-white flex items-center justify-center shadow-2xl cursor-pointer hover:scale-110 transition-transform">
-                    <Play className="w-8 h-8 fill-current translate-x-0.5 rtl:-translate-x-0.5" />
+                {/* Simulated HD video player overlay */}
+                <div className="absolute inset-0 flex flex-col justify-between p-6 bg-gradient-to-t from-black/80 via-transparent to-black/40">
+                  <div className="flex items-center justify-between text-xs text-neutral-400">
+                    <span className="bg-brand-red text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">
+                      4K HDR CINEMA
+                    </span>
+                    <span className="font-mono">{video.duration || '02:45'}</span>
                   </div>
-                  <p className="text-xs uppercase tracking-widest text-neutral-300 font-semibold">
-                    {isRtl ? 'انقر لبدء البث عالي الدقة' : 'Click to Start High-Definition Stream'}
-                  </p>
-                </div>
 
-                {/* Simulated Player Controls Bar */}
-                <div className="w-full bg-neutral-900/80 backdrop-blur-md rounded-lg p-3 flex items-center space-x-4 rtl:space-x-reverse border border-white/10">
-                  <Play className="w-4 h-4 text-white fill-white cursor-pointer hover:text-brand-red" />
-                  <div className="flex-1 h-1.5 bg-neutral-700 rounded-full overflow-hidden">
-                    <div className="w-1/3 h-full bg-brand-red rounded-full" />
+                  {/* Play Button Indicator in Modal */}
+                  <div className="self-center flex flex-col items-center gap-3">
+                    <div className="w-20 h-20 rounded-full bg-brand-red text-white flex items-center justify-center shadow-2xl cursor-pointer hover:scale-110 transition-transform">
+                      <Play className="w-8 h-8 fill-current translate-x-0.5 rtl:-translate-x-0.5" />
+                    </div>
+                    <p className="text-xs uppercase tracking-widest text-neutral-300 font-semibold">
+                      {isRtl ? 'انقر لبدء البث عالي الدقة' : 'Click to Start High-Definition Stream'}
+                    </p>
                   </div>
-                  <span className="text-[11px] font-mono text-neutral-300">00:42 / {video.duration || '02:45'}</span>
-                  <Volume2 className="w-4 h-4 text-neutral-300 cursor-pointer hover:text-white" />
+
+                  {/* Simulated Player Controls Bar */}
+                  <div className="w-full bg-neutral-900/80 backdrop-blur-md rounded-lg p-3 flex items-center space-x-4 rtl:space-x-reverse border border-white/10">
+                    <Play className="w-4 h-4 text-white fill-white cursor-pointer hover:text-brand-red" />
+                    <div className="flex-1 h-1.5 bg-neutral-700 rounded-full overflow-hidden">
+                      <div className="w-1/3 h-full bg-brand-red rounded-full" />
+                    </div>
+                    <span className="text-[11px] font-mono text-neutral-300">00:42 / {video.duration || '02:45'}</span>
+                    <Volume2 className="w-4 h-4 text-neutral-300 cursor-pointer hover:text-white" />
+                  </div>
                 </div>
-              </div>
-            </>
-          )}
+              </>
+            );
+          })()}
         </div>
       </div>
     </div>

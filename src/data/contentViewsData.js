@@ -149,6 +149,10 @@ export function getContentViewsData() {
 export function saveContentViewsData(items, syncCloud = true) {
   if (typeof window === 'undefined') return;
   try {
+    if (!Array.isArray(items) || items.length === 0) {
+      console.warn('saveContentViewsData: ignored empty or invalid array');
+      return;
+    }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
     window.dispatchEvent(new CustomEvent('devotix_content_views_updated', { detail: items }));
     if (syncCloud) {

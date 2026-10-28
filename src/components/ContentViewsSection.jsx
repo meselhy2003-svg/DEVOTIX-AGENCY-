@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import TitleAccent from './TitleAccent';
 import { Eye, TrendingUp, Play, Heart, Share2, Flame, Sparkles } from 'lucide-react';
 import { useThemeLanguage } from '../context/ThemeLanguageContext';
-import { getContentViewsData } from '../data/contentViewsData';
+import { getContentViewsData, DEFAULT_CONTENT_VIEWS_DATA } from '../data/contentViewsData';
 
 export default function ContentViewsSection({ onPlayVideo }) {
   const { isRtl, isDark, t } = useThemeLanguage();
@@ -11,7 +11,7 @@ export default function ContentViewsSection({ onPlayVideo }) {
 
   useEffect(() => {
     const handleUpdate = (e) => {
-      if (e.detail) {
+      if (Array.isArray(e.detail) && e.detail.length > 0) {
         setItems(e.detail);
       } else {
         setItems(getContentViewsData());
@@ -28,7 +28,8 @@ export default function ContentViewsSection({ onPlayVideo }) {
     { id: 'shorts', label: isRtl ? 'يوتيوب شورتس' : 'YouTube Shorts' },
   ];
 
-  const filteredItems = items.filter((item) => {
+  const safeItems = (Array.isArray(items) && items.length > 0) ? items : DEFAULT_CONTENT_VIEWS_DATA;
+  const filteredItems = safeItems.filter((item) => {
     if (activeFilter === 'all') return true;
     if (activeFilter === 'reels') return item.platform === 'instagram';
     if (activeFilter === 'tiktok') return item.platform === 'tiktok';
@@ -148,6 +149,10 @@ export default function ContentViewsSection({ onPlayVideo }) {
                 <img
                   src={item.image}
                   alt={isRtl ? item.titleAr : item.title}
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = '/assets/services/video-photography.png';
+                  }}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
                 />

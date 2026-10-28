@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import TitleAccent from './TitleAccent';
 import { Play, X, Film, ArrowUpRight, Maximize2 } from 'lucide-react';
 import { useThemeLanguage } from '../context/ThemeLanguageContext';
-import { getProductionGalleries } from '../data/productionData';
+import { getProductionGalleries, DEFAULT_PRODUCTION_GALLERIES } from '../data/productionData';
 
 export default function Production({ onPlayVideo }) {
   const { isRtl, t } = useThemeLanguage();
@@ -12,7 +12,7 @@ export default function Production({ onPlayVideo }) {
 
   useEffect(() => {
     const handleUpdate = (e) => {
-      if (e.detail) {
+      if (Array.isArray(e.detail) && e.detail.length > 0) {
         setGalleries(e.detail);
       } else {
         setGalleries(getProductionGalleries());
@@ -41,10 +41,11 @@ export default function Production({ onPlayVideo }) {
     };
   }, [selectedGallery]);
 
-  const cover1 = galleries[0] || {}; // REELS
-  const cover2 = galleries[1] || {}; // PROMOS
-  const cover3 = galleries[2] || {}; // EDITS VIDEOS
-  const cover4 = galleries[3] || {}; // IDEAS & ADS
+  const safeGalleries = (Array.isArray(galleries) && galleries.length > 0) ? galleries : DEFAULT_PRODUCTION_GALLERIES;
+  const cover1 = safeGalleries[0] || DEFAULT_PRODUCTION_GALLERIES[0] || { videos: [] };
+  const cover2 = safeGalleries[1] || DEFAULT_PRODUCTION_GALLERIES[1] || { videos: [] };
+  const cover3 = safeGalleries[2] || DEFAULT_PRODUCTION_GALLERIES[2] || { videos: [] };
+  const cover4 = safeGalleries[3] || DEFAULT_PRODUCTION_GALLERIES[3] || { videos: [] };
 
   const handleOpenGallery = (gallery) => {
     setSelectedGallery(gallery);
@@ -92,6 +93,10 @@ export default function Production({ onPlayVideo }) {
             <img
               src={cover1.coverImage}
               alt={cover1.title}
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = '/assets/services/video-photography.png';
+              }}
               className="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-90 group-hover:opacity-95 transition-opacity" />
@@ -121,7 +126,7 @@ export default function Production({ onPlayVideo }) {
                 {isRtl ? cover1.titleAr : cover1.title}
               </h4>
               <p className="text-[11px] sm:text-xs text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
-                <span>{cover1.videos.length} {isRtl ? 'فيديوهات ريلز' : 'REELS'}</span>
+                <span>{cover1?.videos?.length ?? 0} {isRtl ? 'فيديوهات ريلز' : 'REELS'}</span>
                 <span className="hidden xs:inline">• {isRtl ? 'انقر للمشاهدة' : 'Click to View'}</span>
               </p>
             </div>
@@ -137,6 +142,10 @@ export default function Production({ onPlayVideo }) {
               <img
                 src={cover2.coverImage}
                 alt={cover2.title}
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = '/assets/services/video-photography.png';
+                }}
                 className="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-90 group-hover:opacity-95 transition-opacity" />
@@ -166,7 +175,7 @@ export default function Production({ onPlayVideo }) {
                   {isRtl ? cover2.titleAr : cover2.title}
                 </h4>
                 <p className="text-[11px] sm:text-xs text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
-                  <span>{cover2.videos.length} {isRtl ? 'أفلام برومو' : 'FILMS'}</span>
+                  <span>{cover2?.videos?.length ?? 0} {isRtl ? 'أفلام برومو' : 'FILMS'}</span>
                   <span className="hidden xs:inline">• {isRtl ? 'انقر للمشاهدة' : 'Click to View'}</span>
                 </p>
               </div>
@@ -180,6 +189,10 @@ export default function Production({ onPlayVideo }) {
               <img
                 src={cover3.coverImage}
                 alt={cover3.title}
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = '/assets/services/video-photography.png';
+                }}
                 className="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-90 group-hover:opacity-95 transition-opacity" />
@@ -209,7 +222,7 @@ export default function Production({ onPlayVideo }) {
                   {isRtl ? cover3.titleAr : cover3.title}
                 </h4>
                 <p className="text-[11px] sm:text-xs text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
-                  <span>{cover3.videos.length} {isRtl ? 'أعمال مونتاج' : 'EDITS'}</span>
+                  <span>{cover3?.videos?.length ?? 0} {isRtl ? 'أعمال مونتاج' : 'EDITS'}</span>
                   <span className="hidden xs:inline">• {isRtl ? 'انقر للمشاهدة' : 'Click to View'}</span>
                 </p>
               </div>
@@ -224,6 +237,10 @@ export default function Production({ onPlayVideo }) {
             <img
               src={cover4.coverImage}
               alt={cover4.title}
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = '/assets/services/video-photography.png';
+              }}
               className="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-90 group-hover:opacity-95 transition-opacity" />
@@ -253,7 +270,7 @@ export default function Production({ onPlayVideo }) {
                 {isRtl ? cover4.titleAr : cover4.title}
               </h4>
               <p className="text-[11px] sm:text-xs text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
-                <span>{cover4.videos.length} {isRtl ? 'حملات إعلانية' : 'ADS'}</span>
+                <span>{cover4?.videos?.length ?? 0} {isRtl ? 'حملات إعلانية' : 'ADS'}</span>
                 <span className="hidden xs:inline">• {isRtl ? 'انقر للمشاهدة' : 'Click to View'}</span>
               </p>
             </div>
@@ -285,7 +302,7 @@ export default function Production({ onPlayVideo }) {
                   </span>
                   <span className="text-neutral-400 dark:text-neutral-500">•</span>
                   <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
-                    {selectedGallery.videos.length} {isRtl ? 'أعمال معروضة' : 'PRODUCTIONS'}
+                    {selectedGallery?.videos?.length ?? 0} {isRtl ? 'أعمال معروضة' : 'PRODUCTIONS'}
                   </span>
                 </div>
 
@@ -301,7 +318,7 @@ export default function Production({ onPlayVideo }) {
               <div className="flex items-center space-x-2 sm:space-x-3 rtl:space-x-reverse flex-shrink-0">
                 {/* Quick Gallery Switcher Pills */}
                 <div className="flex items-center space-x-1.5 rtl:space-x-reverse p-1 bg-neutral-100 dark:bg-black/60 rounded-xl border border-neutral-200 dark:border-neutral-800 overflow-x-auto max-w-full">
-                  {PRODUCTION_GALLERIES.map((gal) => (
+                  {safeGalleries.map((gal) => (
                     <button
                       key={gal.id}
                       onClick={() => {
@@ -343,7 +360,7 @@ export default function Production({ onPlayVideo }) {
                     : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
                 }`}
               >
-                {selectedGallery.videos.map((video) => {
+                {(selectedGallery?.videos || []).map((video) => {
                   const isInlineActive = activeInlineVideoId === video.id;
                   return (
                     <div
@@ -372,6 +389,10 @@ export default function Production({ onPlayVideo }) {
                             <img
                               src={video.image}
                               alt={video.title}
+                              onError={(e) => {
+                                e.currentTarget.onerror = null;
+                                e.currentTarget.src = '/assets/services/video-photography.png';
+                              }}
                               className="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover/thumb:scale-105 filter brightness-90 group-hover/thumb:brightness-100"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />

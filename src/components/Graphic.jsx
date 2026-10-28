@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TitleAccent from './TitleAccent';
 import { ArrowUpRight, Layers } from 'lucide-react';
-import { getGraphicsData } from '../data/graphicsData';
+import { getGraphicsData, GRAPHICS_DATA } from '../data/graphicsData';
 import { useThemeLanguage } from '../context/ThemeLanguageContext';
 
 export default function Graphic({ onNavigateGallery, onSelectGraphic }) {
@@ -10,7 +10,7 @@ export default function Graphic({ onNavigateGallery, onSelectGraphic }) {
 
   useEffect(() => {
     const handleUpdate = (e) => {
-      if (e.detail) {
+      if (Array.isArray(e.detail) && e.detail.length > 0) {
         setGraphics(e.detail);
       } else {
         setGraphics(getGraphicsData());
@@ -20,10 +20,11 @@ export default function Graphic({ onNavigateGallery, onSelectGraphic }) {
     return () => window.removeEventListener('devotix_graphics_updated', handleUpdate);
   }, []);
 
-  const cover1 = graphics.find(g => g.id === 'egycolor-brand-cover') || graphics[0] || {};
-  const coverSocial = graphics.find(g => g.categoryFilter === 'social') || graphics[1] || {};
-  const cover2 = graphics.find(g => g.id === 'meltix-burger-cover') || graphics[2] || {};
-  const cover3 = graphics.find(g => g.id === 'carhub-ui-showcase') || graphics[3] || {};
+  const safeGraphics = (Array.isArray(graphics) && graphics.length > 0) ? graphics : GRAPHICS_DATA;
+  const cover1 = safeGraphics.find(g => g.id === 'egycolor-brand-cover') || safeGraphics[0] || {};
+  const coverSocial = safeGraphics.find(g => g.categoryFilter === 'social') || safeGraphics[1] || {};
+  const cover2 = safeGraphics.find(g => g.id === 'meltix-burger-cover') || safeGraphics[2] || {};
+  const cover3 = safeGraphics.find(g => g.id === 'carhub-ui-showcase') || safeGraphics[3] || {};
 
   const handleCoverClick = (graphic, category = 'all') => {
     if (onNavigateGallery) {

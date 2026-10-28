@@ -655,6 +655,10 @@ export function getPhotographyGalleries() {
 export function savePhotographyGalleries(galleries, syncCloud = true) {
   if (typeof window === 'undefined') return;
   try {
+    if (!Array.isArray(galleries) || galleries.length === 0) {
+      console.warn('savePhotographyGalleries: ignored empty or invalid array');
+      return;
+    }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(galleries));
     window.dispatchEvent(new CustomEvent('devotix_photography_updated', { detail: galleries }));
     if (syncCloud) {

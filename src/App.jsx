@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import { ThemeLanguageProvider, useThemeLanguage } from './context/ThemeLanguageContext';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -425,10 +425,63 @@ function AppContent() {
   );
 }
 
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('App ErrorBoundary caught an error:', error, errorInfo);
+  }
+
+  handleReload = () => {
+    try {
+      localStorage.removeItem('devotix_production_galleries');
+      localStorage.removeItem('devotix_photography_galleries');
+      localStorage.removeItem('devotix_graphics');
+      localStorage.removeItem('devotix_content_views');
+      localStorage.removeItem('devotix_campaigns');
+    } catch (e) {}
+    window.location.reload();
+  };
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen bg-[#070709] text-white flex flex-col items-center justify-center p-6 text-center select-none">
+          <div className="w-16 h-16 rounded-2xl bg-brand-red/10 border border-brand-red/30 flex items-center justify-center text-brand-red mb-4">
+            <span className="text-2xl font-black">!</span>
+          </div>
+          <h1 className="text-2xl font-black uppercase tracking-tight font-display mb-2">
+            DEVOTIX MEDIA
+          </h1>
+          <p className="text-neutral-400 text-sm max-w-md mb-6">
+            حدث خطأ غير متوقع أثناء معالجة البيانات. اضغط على الزر أدناه لإعادة تحميل الصفحة واستعادة المحتوى الأصلي.
+          </p>
+          <button
+            onClick={this.handleReload}
+            className="px-6 py-2.5 rounded-lg bg-brand-red hover:bg-brand-redHover text-white text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shadow-lg shadow-red-600/30"
+          >
+            تحديث الصفحة / Refresh
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 export default function App() {
   return (
-    <ThemeLanguageProvider>
-      <AppContent />
-    </ThemeLanguageProvider>
+    <ErrorBoundary>
+      <ThemeLanguageProvider>
+        <AppContent />
+      </ThemeLanguageProvider>
+    </ErrorBoundary>
   );
 }

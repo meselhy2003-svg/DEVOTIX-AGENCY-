@@ -38,9 +38,10 @@ export default function MoreVideosModal({ isOpen, onClose, onPlayVideo, allVideo
     { id: 'food', labelEn: 'FOOD & BEVERAGE', labelAr: 'الأطعمة والمشروبات' },
   ];
 
+  const safeVideos = Array.isArray(allVideos) ? allVideos : [];
   const filteredVideos = activeCategory === 'all'
-    ? allVideos
-    : allVideos.filter((v) => v.group === activeCategory);
+    ? safeVideos
+    : safeVideos.filter((v) => v?.group === activeCategory);
 
   return (
     <div className="more-videos-backdrop animate-fadeIn" onClick={onClose}>

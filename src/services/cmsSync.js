@@ -6,15 +6,15 @@ import {
   fetchAllCmsDataFromSupabase,
   saveCmsKeyToSupabase,
   bulkSyncToSupabase,
-} from './supabaseClient';
+} from './supabaseClient.js';
 
-import { getPhotographyGalleries, savePhotographyGalleries } from '../data/photographyData';
-import { getGraphicsData, saveGraphicsData } from '../data/graphicsData';
-import { getSocialLinks, saveSocialLinks } from '../data/socialLinks';
-import { getContentViewsData, saveContentViewsData } from '../data/contentViewsData';
-import { getProductionGalleries, saveProductionGalleries } from '../data/productionData';
-import { getCampaignsData, saveCampaignsData } from '../data/campaignsData';
-import { getStoredLeads, saveLeads } from '../data/leadsInbox';
+import { getPhotographyGalleries, savePhotographyGalleries } from '../data/photographyData.js';
+import { getGraphicsData, saveGraphicsData } from '../data/graphicsData.js';
+import { getSocialLinks, saveSocialLinks } from '../data/socialLinks.js';
+import { getContentViewsData, saveContentViewsData } from '../data/contentViewsData.js';
+import { getProductionGalleries, saveProductionGalleries } from '../data/productionData.js';
+import { getCampaignsData, saveCampaignsData } from '../data/campaignsData.js';
+import { getStoredLeads, saveLeads } from '../data/leadsInbox.js';
 
 export const CMS_KEYS = {
   PHOTOGRAPHY: 'photography_galleries',
@@ -47,27 +47,41 @@ export async function initCmsSync(force = false) {
       return { synced: false, reason: 'empty_cloud' };
     }
 
-    // Hydrate each section if present in cloud
-    if (cloudData[CMS_KEYS.PHOTOGRAPHY] && Array.isArray(cloudData[CMS_KEYS.PHOTOGRAPHY])) {
+    // Hydrate each section if present in cloud with non-empty valid content
+    let hasValidContent = false;
+
+    if (Array.isArray(cloudData[CMS_KEYS.PHOTOGRAPHY]) && cloudData[CMS_KEYS.PHOTOGRAPHY].length > 0) {
       savePhotographyGalleries(cloudData[CMS_KEYS.PHOTOGRAPHY], false);
+      hasValidContent = true;
     }
-    if (cloudData[CMS_KEYS.GRAPHICS] && Array.isArray(cloudData[CMS_KEYS.GRAPHICS])) {
+    if (Array.isArray(cloudData[CMS_KEYS.GRAPHICS]) && cloudData[CMS_KEYS.GRAPHICS].length > 0) {
       saveGraphicsData(cloudData[CMS_KEYS.GRAPHICS], false);
+      hasValidContent = true;
     }
-    if (cloudData[CMS_KEYS.SOCIAL] && typeof cloudData[CMS_KEYS.SOCIAL] === 'object') {
+    if (cloudData[CMS_KEYS.SOCIAL] && typeof cloudData[CMS_KEYS.SOCIAL] === 'object' && Object.keys(cloudData[CMS_KEYS.SOCIAL]).length > 0) {
       saveSocialLinks(cloudData[CMS_KEYS.SOCIAL], false);
+      hasValidContent = true;
     }
-    if (cloudData[CMS_KEYS.CONTENT_VIEWS] && Array.isArray(cloudData[CMS_KEYS.CONTENT_VIEWS])) {
+    if (Array.isArray(cloudData[CMS_KEYS.CONTENT_VIEWS]) && cloudData[CMS_KEYS.CONTENT_VIEWS].length > 0) {
       saveContentViewsData(cloudData[CMS_KEYS.CONTENT_VIEWS], false);
+      hasValidContent = true;
     }
-    if (cloudData[CMS_KEYS.PRODUCTION] && Array.isArray(cloudData[CMS_KEYS.PRODUCTION])) {
+    if (Array.isArray(cloudData[CMS_KEYS.PRODUCTION]) && cloudData[CMS_KEYS.PRODUCTION].length > 0) {
       saveProductionGalleries(cloudData[CMS_KEYS.PRODUCTION], false);
+      hasValidContent = true;
     }
-    if (cloudData[CMS_KEYS.CAMPAIGNS] && Array.isArray(cloudData[CMS_KEYS.CAMPAIGNS])) {
+    if (Array.isArray(cloudData[CMS_KEYS.CAMPAIGNS]) && cloudData[CMS_KEYS.CAMPAIGNS].length > 0) {
       saveCampaignsData(cloudData[CMS_KEYS.CAMPAIGNS], false);
+      hasValidContent = true;
     }
-    if (cloudData[CMS_KEYS.LEADS] && Array.isArray(cloudData[CMS_KEYS.LEADS])) {
+    if (Array.isArray(cloudData[CMS_KEYS.LEADS]) && cloudData[CMS_KEYS.LEADS].length > 0) {
       saveLeads(cloudData[CMS_KEYS.LEADS], false);
+      hasValidContent = true;
+    }
+
+    // If cloud has no content or only empty placeholder rows, seed with local defaults
+    if (!hasValidContent) {
+      syncAllLocalDataToCloud().catch(() => {});
     }
 
     return { synced: true, count: Object.keys(cloudData).length };

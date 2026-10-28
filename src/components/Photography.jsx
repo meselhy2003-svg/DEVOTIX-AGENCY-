@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TitleAccent from './TitleAccent';
 import { ArrowUpRight, Layers, Clock } from 'lucide-react';
-import { getPhotographyGalleries } from '../data/photographyData';
+import { getPhotographyGalleries, PHOTOGRAPHY_GALLERIES } from '../data/photographyData';
 import { useThemeLanguage } from '../context/ThemeLanguageContext';
 import CloudImg from './CloudImg';
 import { cldCover } from '../utils/cloudinaryUrl';
@@ -12,7 +12,7 @@ export default function Photography({ onSelectGallery }) {
 
   useEffect(() => {
     const handleUpdate = (e) => {
-      if (e.detail) {
+      if (Array.isArray(e.detail) && e.detail.length > 0) {
         setGalleries(e.detail);
       } else {
         setGalleries(getPhotographyGalleries());
@@ -22,9 +22,10 @@ export default function Photography({ onSelectGallery }) {
     return () => window.removeEventListener('devotix_photography_updated', handleUpdate);
   }, []);
 
-  const cover1 = galleries[0] || {};
-  const cover2 = galleries[1] || {};
-  const cover3 = galleries[2] || {};
+  const safeGalleries = (Array.isArray(galleries) && galleries.length > 0) ? galleries : PHOTOGRAPHY_GALLERIES;
+  const cover1 = safeGalleries[0] || PHOTOGRAPHY_GALLERIES[0] || { photos: [] };
+  const cover2 = safeGalleries[1] || PHOTOGRAPHY_GALLERIES[1] || { photos: [] };
+  const cover3 = safeGalleries[2] || PHOTOGRAPHY_GALLERIES[2] || { photos: [] };
 
   const cover1Image = cover1.photos?.[0]?.image || cover1.coverImage;
   const cover2Image = cover2.photos?.[0]?.image || cover2.coverImage;
@@ -85,7 +86,7 @@ export default function Photography({ onSelectGallery }) {
                 {cover1.title}
               </h4>
               <p className="text-[11px] sm:text-xs text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
-                <span>{cover1.photos.length} {t('photography.photoCount', 'Photos')}</span>
+                <span>{cover1?.photos?.length ?? 0} {t('photography.photoCount', 'Photos')}</span>
                 <span className="hidden xs:inline">• {t('photography.clickToOpen', 'Click to View Full Gallery')}</span>
               </p>
             </div>
@@ -136,7 +137,7 @@ export default function Photography({ onSelectGallery }) {
                   {cover2.title}
                 </h4>
                 <p className="text-[11px] sm:text-xs text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
-                  <span>{cover2.isMock ? '— Images coming soon —' : `${cover2.photos.length} ${t('photography.photoCount', 'Photos')}`}</span>
+                  <span>{cover2.isMock ? '— Images coming soon —' : `${cover2?.photos?.length ?? 0} ${t('photography.photoCount', 'Photos')}`}</span>
                 </p>
               </div>
             </div>
@@ -184,7 +185,7 @@ export default function Photography({ onSelectGallery }) {
                   {cover3.title}
                 </h4>
                 <p className="text-[11px] sm:text-xs text-neutral-300 font-medium mt-0.5 flex items-center gap-1 group-hover:text-white transition-colors">
-                  <span>{cover3.isMock ? '— Images coming soon —' : `${cover3.photos.length} ${t('photography.photoCount', 'Photos')}`}</span>
+                  <span>{cover3.isMock ? '— Images coming soon —' : `${cover3?.photos?.length ?? 0} ${t('photography.photoCount', 'Photos')}`}</span>
                 </p>
               </div>
             </div>

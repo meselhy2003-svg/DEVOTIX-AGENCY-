@@ -408,6 +408,10 @@ export function getProductionGalleries() {
 export function saveProductionGalleries(galleries, syncCloud = true) {
   if (typeof window === 'undefined') return;
   try {
+    if (!Array.isArray(galleries) || galleries.length === 0) {
+      console.warn('saveProductionGalleries: ignored empty or invalid array');
+      return;
+    }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(galleries));
     window.dispatchEvent(new CustomEvent('devotix_production_updated', { detail: galleries }));
     if (syncCloud) {

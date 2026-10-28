@@ -6,8 +6,8 @@ const LS_SUPABASE_ANON_KEY = 'devotix_supabase_anon_key';
 
 // 1. Get current Supabase config (env variable or custom saved in dashboard)
 export function getSupabaseConfig() {
-  const envUrl = import.meta.env.VITE_SUPABASE_URL || '';
-  const envKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+  const envUrl = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_SUPABASE_URL) || (typeof process !== 'undefined' && process.env?.VITE_SUPABASE_URL) || '';
+  const envKey = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_SUPABASE_ANON_KEY) || (typeof process !== 'undefined' && process.env?.VITE_SUPABASE_ANON_KEY) || '';
 
   const savedUrl = typeof window !== 'undefined' ? localStorage.getItem(LS_SUPABASE_URL) : '';
   const savedKey = typeof window !== 'undefined' ? localStorage.getItem(LS_SUPABASE_ANON_KEY) : '';

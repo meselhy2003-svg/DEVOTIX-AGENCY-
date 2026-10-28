@@ -104,22 +104,22 @@ export default function PhotographyGalleryPage({
             </span>
             <span className="text-neutral-400 dark:text-neutral-600">•</span>
             <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 font-mono">
-              {currentGallery.photos.length} {t('photography.photoCount', 'PHOTOGRAPHS')}
+              {currentGallery?.photos?.length ?? 0} {t('photography.photoCount', 'PHOTOGRAPHS')}
             </span>
           </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-neutral-950 dark:text-white font-display leading-[1.05]">
-            {currentGallery.title}
+            {currentGallery?.title}
           </h1>
 
           <p className="mt-3 text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 font-medium max-w-3xl leading-relaxed">
-            {currentGallery.description}
+            {currentGallery?.description}
           </p>
         </div>
 
         {/* Full-Page Responsive Photo Grid (3 Columns x Vertical Scroll - Clean Photos without Text Overlays) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 sm:gap-6 lg:gap-8 items-stretch">
-          {currentGallery.photos.map((photo, index) => (
+          {(currentGallery?.photos || []).map((photo, index) => (
             <div
               key={photo.id}
               onClick={() => handlePhotoClick(index)}
@@ -148,8 +148,8 @@ export default function PhotographyGalleryPage({
         <div className="mt-16 sm:mt-20 pt-8 border-t border-neutral-200 dark:border-neutral-900 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="text-xs text-neutral-500 font-medium">
             {isRtl
-              ? `عرض جميع الصور البالغ عددها ${currentGallery.photos.length} في ${currentGallery.title}.`
-              : `Showing all ${currentGallery.photos.length} curated high-resolution photographs in ${currentGallery.title}.`}
+              ? `عرض جميع الصور البالغ عددها ${currentGallery?.photos?.length ?? 0} في ${currentGallery?.title || ''}.`
+              : `Showing all ${currentGallery?.photos?.length ?? 0} curated high-resolution photographs in ${currentGallery?.title || ''}.`}
           </div>
 
           <button
