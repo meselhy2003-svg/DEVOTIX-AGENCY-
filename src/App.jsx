@@ -12,7 +12,6 @@ import Clients from './components/Clients';
 import Footer from './components/Footer';
 import RightSlideBar from './components/RightSlideBar';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
-import FloatingContactButton from './components/FloatingContactButton';
 
 // Pages
 import ProjectViewPage from './pages/ProjectViewPage';
@@ -411,16 +410,8 @@ function AppContent() {
         onOpenContact={navigateToContact}
       />
 
-      {/* 3. Floating WhatsApp with Branch Selector (Egypt / Saudi Arabia) */}
-      <FloatingWhatsApp />
-
-      {/* 4. Persistent Global Floating Contact CTA Button */}
-      {currentPage !== 'contact' && (
-        <FloatingContactButton
-          onNavigateContact={navigateToContact}
-          currentPage={currentPage}
-        />
-      )}
+      {/* 3. Floating WhatsApp & Social Bar (with Contact CTA circle button under LinkedIn) */}
+      <FloatingWhatsApp onNavigateContact={navigateToContact} />
     </div>
   );
 }

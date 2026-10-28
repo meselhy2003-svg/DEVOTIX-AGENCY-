@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X, MessageCircle, ArrowUpRight } from 'lucide-react';
 import { useThemeLanguage } from '../context/ThemeLanguageContext';
 import { getSocialLinks } from '../data/socialLinks';
+import headsetIcon from '../assets/headset.png';
 
-export default function FloatingWhatsApp() {
+export default function FloatingWhatsApp({ onNavigateContact }) {
   const { isRtl, t } = useThemeLanguage();
   const [isWhatsAppOpen, setIsWhatsAppOpen] = useState(false);
   const [socials, setSocials] = useState(getSocialLinks);
@@ -142,6 +143,31 @@ export default function FloatingWhatsApp() {
         </svg>
       ),
     },
+    {
+      key: 'contact',
+      name: isRtl ? 'اطلب مشروعك' : 'START PROJECT',
+      bgClass: 'bg-brand-red hover:bg-brand-redHover shadow-red-600/40 border border-white/20',
+      isContactTrigger: true,
+      onClick: () => {
+        if (onNavigateContact) {
+          onNavigateContact();
+        } else {
+          const el = document.getElementById('contact');
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth' });
+          } else {
+            window.location.hash = '#contact';
+          }
+        }
+      },
+      icon: (
+        <img
+          src={headsetIcon}
+          alt={isRtl ? 'اطلب مشروعك' : 'START PROJECT'}
+          className="w-4 h-4 sm:w-5 sm:h-5 object-contain pointer-events-none drop-shadow"
+        />
+      ),
+    },
   ];
 
   return (
@@ -234,6 +260,25 @@ export default function FloatingWhatsApp() {
               {/* Tooltip on desktop */}
               <span className="hidden md:block absolute right-12 px-2 py-0.5 rounded bg-neutral-900/90 text-white text-[10px] font-bold uppercase tracking-wider whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-md border border-white/10">
                 {isRtl ? 'واتساب' : 'WhatsApp'}
+              </span>
+            </button>
+          );
+        }
+
+        if (item.isContactTrigger) {
+          return (
+            <button
+              key={item.key}
+              onClick={item.onClick}
+              className={`group relative w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center ${item.bgClass} shadow-lg text-white active:scale-90 hover:scale-110 transition-all duration-200 cursor-pointer touch-manipulation`}
+              aria-label={item.name}
+            >
+              {/* Subtle ambient pulse ring */}
+              <span className="absolute -inset-0.5 rounded-full bg-brand-red opacity-40 animate-ping pointer-events-none" />
+              {item.icon}
+              {/* Tooltip on desktop */}
+              <span className="hidden md:block absolute right-12 px-2.5 py-1 rounded bg-neutral-900/95 text-white text-[10px] font-black uppercase tracking-wider whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-xl border border-red-500/30 font-display">
+                {item.name}
               </span>
             </button>
           );
