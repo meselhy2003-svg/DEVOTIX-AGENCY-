@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X, MessageCircle, ArrowUpRight } from 'lucide-react';
 import { useThemeLanguage } from '../context/ThemeLanguageContext';
 import { getSocialLinks } from '../data/socialLinks';
-import headsetIcon from '../assets/headset.png';
+import HeadsetIcon from './HeadsetIcon';
 
 export default function FloatingWhatsApp({ onNavigateContact }) {
   const { isRtl, t } = useThemeLanguage();
@@ -161,11 +161,7 @@ export default function FloatingWhatsApp({ onNavigateContact }) {
         }
       },
       icon: (
-        <img
-          src={headsetIcon}
-          alt={isRtl ? 'اطلب مشروعك' : 'START PROJECT'}
-          className="w-4 h-4 sm:w-5 sm:h-5 object-contain pointer-events-none drop-shadow"
-        />
+        <HeadsetIcon className="w-4 h-4 sm:w-5 sm:h-5 fill-white text-white pointer-events-none drop-shadow" />
       ),
     },
   ];
