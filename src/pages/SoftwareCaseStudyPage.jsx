@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, ArrowRight, ArrowUpRight, CheckCircle } from 'lucide-react';
+import BackButton from '../components/BackButton';
 import Footer from '../components/Footer';
 import { SOFTWARE_PROJECTS } from '../data/projectsData';
 import { useThemeLanguage } from '../context/ThemeLanguageContext';
@@ -52,13 +53,7 @@ export default function SoftwareCaseStudyPage({
       <main className="max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-10 sm:space-y-14 flex-1">
         {/* Top Navigation Bar */}
         <div className="flex items-center justify-between">
-          <button
-            onClick={handleBack}
-            className="inline-flex items-center space-x-1.5 rtl:space-x-reverse text-xs sm:text-sm font-semibold text-black dark:text-white hover:text-brand-red dark:hover:text-brand-red transition-colors cursor-pointer group"
-          >
-            <ArrowLeft className="w-3.5 h-3.5 text-black dark:text-white group-hover:text-brand-red dark:group-hover:text-brand-red rtl:rotate-180 group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform" />
-            <span>{t('nav.backToPrevious', 'Back to previous page')}</span>
-          </button>
+          <BackButton onClick={handleBack} />
 
           <button
             onClick={handleRequestSimilarWork}

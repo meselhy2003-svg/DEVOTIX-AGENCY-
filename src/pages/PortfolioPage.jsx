@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import BackButton from '../components/BackButton';
 import Footer from '../components/Footer';
 
 export default function PortfolioPage({
@@ -170,13 +171,7 @@ export default function PortfolioPage({
         <div className="max-w-6xl mx-auto w-full my-auto">
           {/* Back Link */}
           <div className="mb-8">
-            <button
-              onClick={handleBack}
-              className="inline-flex items-center space-x-1.5 text-sm font-semibold text-black hover:text-brand-red transition-colors cursor-pointer group"
-            >
-              <ArrowLeft className="w-4 h-4 text-black group-hover:text-brand-red group-hover:-translate-x-1 transition-transform" />
-              <span>Back to previous page</span>
-            </button>
+            <BackButton onClick={handleBack} />
           </div>
 
           {/* Eyebrow */}

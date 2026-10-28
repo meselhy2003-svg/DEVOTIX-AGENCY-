@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { ArrowLeft, ArrowRight, ExternalLink, Sparkles, Layers, Download } from 'lucide-react';
+import BackButton from '../components/BackButton';
 import Footer from '../components/Footer';
 import { GRAPHICS_DATA } from '../data/graphicsData';
 import { useThemeLanguage } from '../context/ThemeLanguageContext';
@@ -40,15 +41,7 @@ export default function GraphicSingleViewPage({
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 w-full">
         {/* Navigation & Header Controls */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-neutral-200 dark:border-neutral-900">
-          <button
-            onClick={handleBack}
-            className="inline-flex items-center space-x-2 rtl:space-x-reverse text-xs sm:text-sm font-semibold text-black dark:text-white hover:text-brand-red dark:hover:text-brand-red transition-colors cursor-pointer group w-fit"
-          >
-            <div className="w-8 h-8 rounded-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 flex items-center justify-center group-hover:bg-brand-red group-hover:border-brand-red text-black dark:text-white group-hover:text-white transition-all shadow-2xs">
-              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 rtl:group-hover:translate-x-0.5 transition-transform rtl:rotate-180" />
-            </div>
-            <span>{isRtl ? 'العودة للصفحة السابقة' : 'Back to previous page'}</span>
-          </button>
+          <BackButton onClick={handleBack} />
 
           {/* Previous / Next Switcher */}
           <div className="flex items-center space-x-2 rtl:space-x-reverse">

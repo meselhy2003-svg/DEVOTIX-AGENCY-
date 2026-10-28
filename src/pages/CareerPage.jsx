@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, ArrowRight, ArrowUpRight, Search, MapPin, Briefcase, Clock, Sparkles, Send } from 'lucide-react';
+import BackButton from '../components/BackButton';
 import Footer from '../components/Footer';
 import { useThemeLanguage } from '../context/ThemeLanguageContext';
 
@@ -354,13 +355,7 @@ export default function CareerPage({
         <div className="max-w-6xl mx-auto w-full my-auto">
           {/* Back Link */}
           <div className="mb-10">
-            <button
-              onClick={handleBack}
-              className="inline-flex items-center space-x-1.5 rtl:space-x-reverse text-sm font-semibold text-black dark:text-white hover:text-brand-red dark:hover:text-brand-red transition-colors cursor-pointer group"
-            >
-              <ArrowLeft className="w-4 h-4 text-black dark:text-white group-hover:text-brand-red dark:group-hover:text-brand-red group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform rtl:rotate-180" />
-              <span>{t('nav.backToPrevious', 'Back to previous page')}</span>
-            </button>
+            <BackButton onClick={handleBack} />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-14 items-center">

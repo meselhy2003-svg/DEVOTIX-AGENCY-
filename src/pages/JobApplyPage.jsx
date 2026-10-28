@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, ArrowUpRight, CheckCircle2, ChevronDown, RefreshCw, Link2 } from 'lucide-react';
+import BackButton from '../components/BackButton';
 import Footer from '../components/Footer';
 import { useThemeLanguage } from '../context/ThemeLanguageContext';
 import { sendFormToOfficialEmail } from '../utils/sendEmail';
@@ -94,13 +95,7 @@ export default function JobApplyPage({
       <main className="max-w-6xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex-1 flex flex-col justify-center">
         {/* Back Link */}
         <div className="mb-3">
-          <button
-            onClick={handleBack}
-            className="inline-flex items-center space-x-1 rtl:space-x-reverse text-xs sm:text-sm font-semibold text-black dark:text-white hover:text-brand-red transition-colors cursor-pointer group"
-          >
-            <ArrowLeft className="w-3.5 h-3.5 text-black dark:text-white group-hover:text-brand-red group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform rtl:rotate-180" />
-            <span>{t('nav.backToPrevious', 'Back to previous page')}</span>
-          </button>
+          <BackButton onClick={handleBack} />
         </div>
 
         {/* 2. Job Title & Meta Info */}

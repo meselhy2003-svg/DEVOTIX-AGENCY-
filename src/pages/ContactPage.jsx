@@ -10,6 +10,7 @@ import {
   Send
 } from 'lucide-react';
 import Footer from '../components/Footer';
+import BackButton from '../components/BackButton';
 import { useThemeLanguage } from '../context/ThemeLanguageContext';
 import { getSocialLinks } from '../data/socialLinks';
 import { sendFormToOfficialEmail } from '../utils/sendEmail';
@@ -129,13 +130,7 @@ export default function ContactPage({ onBackToHome, onBack, onOpenPolicy, initia
         <div id="contact-form" className="space-y-4">
           {/* Top Bar with Back Link */}
           <div>
-            <button
-              onClick={handleBack}
-              className="inline-flex items-center space-x-1 rtl:space-x-reverse text-xs sm:text-sm font-semibold text-black dark:text-white hover:text-brand-red transition-colors cursor-pointer group"
-            >
-              <ArrowLeft className="w-3.5 h-3.5 text-black dark:text-white group-hover:text-brand-red group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform rtl:rotate-180" />
-              <span>{t('nav.backToPrevious', 'Back to previous page')}</span>
-            </button>
+            <BackButton onClick={handleBack} />
           </div>
 
           {/* Hero Title Row: Eyebrow + Headline on Left, Capabilities List on Right */}

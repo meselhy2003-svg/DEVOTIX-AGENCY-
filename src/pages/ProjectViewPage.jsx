@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { ArrowLeft, Play, ExternalLink, Maximize2 } from 'lucide-react';
+import BackButton from '../components/BackButton';
 import Footer from '../components/Footer';
 import { useThemeLanguage } from '../context/ThemeLanguageContext';
 import CloudImg from '../components/CloudImg';
@@ -118,13 +119,9 @@ export default function ProjectViewPage({ project, onBackToPortfolio, onBack, on
       <section id="view-title" className="snap-section min-h-screen flex flex-col justify-center px-4 sm:px-6 lg:px-8 bg-white dark:bg-black text-neutral-900 dark:text-white pt-16 pb-6">
         <div className="max-w-5xl mx-auto w-full my-auto">
           {/* Back Button */}
-          <button
-            onClick={handleBack}
-            className="inline-flex items-center space-x-1.5 rtl:space-x-reverse text-xs sm:text-sm font-semibold text-black dark:text-white hover:text-brand-red dark:hover:text-brand-red transition-colors mb-6 group cursor-pointer"
-          >
-            <ArrowLeft className="w-3.5 h-3.5 text-black dark:text-white group-hover:text-brand-red dark:group-hover:text-brand-red rtl:rotate-180 group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform" />
-            <span>{t('nav.backToPrevious', 'Back to previous page')}</span>
-          </button>
+          <div className="mb-6">
+            <BackButton onClick={handleBack} />
+          </div>
 
           {/* Left Red Vertical Accent Line */}
           <div className="border-l-4 rtl:border-l-0 rtl:border-r-4 border-brand-red pl-5 rtl:pl-0 rtl:pr-5 sm:pl-7 sm:rtl:pr-7 py-2">
