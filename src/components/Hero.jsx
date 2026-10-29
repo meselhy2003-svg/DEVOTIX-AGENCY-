@@ -2,6 +2,9 @@ import React from 'react';
 import { ArrowRight, ArrowUpRight, ChevronDown, Play } from 'lucide-react';
 import { useThemeLanguage } from '../context/ThemeLanguageContext';
 
+const HERO_SHOWREEL_URL = 'https://res.cloudinary.com/qs6oltzi/video/upload/v1793312365/hero/who_.mp4';
+const HERO_SHOWREEL_FALLBACK = '/assets/hero/who_.mp4';
+
 export default function Hero({ onOpenPortfolio, onOpenContact, onScrollToWork, onPlayVideo }) {
   const { isRtl, isDark, t } = useThemeLanguage();
 
@@ -13,8 +16,8 @@ export default function Hero({ onOpenPortfolio, onOpenContact, onScrollToWork, o
         category: 'COMMERCIAL PRODUCTION • REEL',
         duration: '00:30',
         image: '/assets/production/featured-car.png',
-        videoSrc: '/assets/hero/who_.mp4',
-        videoUrl: '/assets/hero/who_.mp4',
+        videoSrc: HERO_SHOWREEL_URL,
+        videoUrl: HERO_SHOWREEL_URL,
         isVertical: true,
         description: t('hero.tagline', 'Experience our 2026 director showreel featuring cinematic commercial productions and 3D VFX simulations.')
       });
@@ -103,7 +106,6 @@ export default function Hero({ onOpenPortfolio, onOpenContact, onScrollToWork, o
             className="relative w-full max-w-[215px] sm:max-w-[230px] lg:max-w-[240px] xl:max-w-[260px] aspect-[9/16] rounded-2xl overflow-hidden border border-neutral-300 dark:border-neutral-800 hover:border-brand-red/80 shadow-[0_15px_35px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.8)] cursor-pointer group transition-all duration-300 transform hover:scale-105"
           >
             <video
-              src="/assets/hero/who_.mp4"
               autoPlay
               loop
               muted
@@ -117,7 +119,10 @@ export default function Hero({ onOpenPortfolio, onOpenContact, onScrollToWork, o
                 }
               }}
               className="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
-            />
+            >
+              <source src={HERO_SHOWREEL_URL} type="video/mp4" />
+              <source src={HERO_SHOWREEL_FALLBACK} type="video/mp4" />
+            </video>
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
 
             {/* Central Pulsing Play Button */}
